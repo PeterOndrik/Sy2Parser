@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{7F6ACA0F-43B6-46DF-94C1-F3A3E2B06284}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Sy2ParserCpp</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)\bin\$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)\obj\$(Configuration)\$(Platform)\$(ProjectName)\</IntDir>
+    <TargetName>sy2parser-db</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)\bin\$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)\obj\$(Configuration)\$(Platform)\$(ProjectName)\</IntDir>
+    <TargetName>sy2parser</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>ANTLR4CPP_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>false</ConformanceMode>
+      <AdditionalIncludeDirectories>..\Antlr4Runtime.Cpp\src;..\Antlr4Generator\Cpp\Output;</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableSpecificWarnings>4251;</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;SY2PARSERCPP_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>ANTLR4CPP_EXPORTS;WIN32;NDEBUG;SY2PARSERCPP_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>..\Antlr4Runtime.Cpp\src;..\Antlr4Generator\Cpp\Output;</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4251;</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;SY2PARSERCPP_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Antlr4Generator\Cpp\Output\Sign2016BaseListener.h" />
+    <ClInclude Include="..\Antlr4Generator\Cpp\Output\Sign2016BaseVisitor.h" />
+    <ClInclude Include="..\Antlr4Generator\Cpp\Output\Sign2016Lexer.h" />
+    <ClInclude Include="..\Antlr4Generator\Cpp\Output\Sign2016Listener.h" />
+    <ClInclude Include="..\Antlr4Generator\Cpp\Output\Sign2016Parser.h" />
+    <ClInclude Include="..\Antlr4Generator\Cpp\Output\Sign2016Visitor.h" />
+    <ClInclude Include="..\Antlr4Generator\Cpp\Output\Sy2BaseListener.h" />
+    <ClInclude Include="..\Antlr4Generator\Cpp\Output\Sy2BaseVisitor.h" />
+    <ClInclude Include="..\Antlr4Generator\Cpp\Output\Sy2Lexer.h" />
+    <ClInclude Include="..\Antlr4Generator\Cpp\Output\Sy2Listener.h" />
+    <ClInclude Include="..\Antlr4Generator\Cpp\Output\Sy2Parser.h" />
+    <ClInclude Include="..\Antlr4Generator\Cpp\Output\Sy2Visitor.h" />
+    <ClInclude Include="Address.h" />
+    <ClInclude Include="Bitmask.h" />
+    <ClInclude Include="CmdValue.h" />
+    <ClInclude Include="Command.h" />
+    <ClInclude Include="CompositeNode.h" />
+    <ClInclude Include="EnumValue.h" />
+    <ClInclude Include="File.h" />
+    <ClInclude Include="FloatType.h" />
+    <ClInclude Include="IntType.h" />
+    <ClInclude Include="PtrType.h" />
+    <ClInclude Include="StorageSize.h" />
+    <ClInclude Include="StructType.h" />
+    <ClInclude Include="Sy2Node.h" />
+    <ClInclude Include="Offset.h" />
+    <ClInclude Include="LeafNode.h" />
+    <ClInclude Include="Name.h" />
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="Position.h" />
+    <ClInclude Include="Sign2016CustomListener.h" />
+    <ClInclude Include="Sign2016CustomVisitor.h" />
+    <ClInclude Include="Signature.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Sy2CustomListener.h" />
+    <ClInclude Include="Sy2CustomVisitor.h" />
+    <ClInclude Include="Symbol.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="Type.h" />
+    <ClInclude Include="TypeQualifier.h" />
+    <ClInclude Include="UIntType.h" />
+    <ClInclude Include="VoidType.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Antlr4Generator\Cpp\Output\Sign2016BaseListener.cpp" />
+    <ClCompile Include="..\Antlr4Generator\Cpp\Output\Sign2016BaseVisitor.cpp" />
+    <ClCompile Include="..\Antlr4Generator\Cpp\Output\Sign2016Lexer.cpp" />
+    <ClCompile Include="..\Antlr4Generator\Cpp\Output\Sign2016Listener.cpp" />
+    <ClCompile Include="..\Antlr4Generator\Cpp\Output\Sign2016Parser.cpp" />
+    <ClCompile Include="..\Antlr4Generator\Cpp\Output\Sign2016Visitor.cpp" />
+    <ClCompile Include="..\Antlr4Generator\Cpp\Output\Sy2BaseListener.cpp" />
+    <ClCompile Include="..\Antlr4Generator\Cpp\Output\Sy2BaseVisitor.cpp" />
+    <ClCompile Include="..\Antlr4Generator\Cpp\Output\Sy2Lexer.cpp" />
+    <ClCompile Include="..\Antlr4Generator\Cpp\Output\Sy2Listener.cpp" />
+    <ClCompile Include="..\Antlr4Generator\Cpp\Output\Sy2Parser.cpp" />
+    <ClCompile Include="..\Antlr4Generator\Cpp\Output\Sy2Visitor.cpp" />
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="Sign2016CustomListener.cpp" />
+    <ClCompile Include="Sign2016CustomVisitor.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Sy2CustomListener.cpp" />
+    <ClCompile Include="Sy2CustomVisitor.cpp" />
+    <ClCompile Include="Sy2Parser.Cpp.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -17,7 +17,7 @@ options
  */
 signature : (dataType | ptrType | function) EOF ;
 dataType : typeQualifier (voidType | boolType | intType | uintType | floatType | structType) ;
-ptrType : (typeQualifier PTR_TYPE SIZE arraySize)+ SEP (dataType | function) ;
+ptrType : (typeQualifier PTR_TYPE SIZE arraySize SEP)+ (dataType | function) ;
 function : FB SEP returnType (SEP paramType)+ SEP FE ;
 typeQualifier : (TYPE_QUALIFIER SEP)? ;
 voidType : VOID_TYPE ;
