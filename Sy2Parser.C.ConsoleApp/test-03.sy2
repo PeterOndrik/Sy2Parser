@@ -67,7 +67,7 @@ RegCmd    DATA   var3              0040DEA0    C_PTR32_C_PTR32_C_PTR32_I32
 RegCmd    DATA   var4              00409000    F32                                                       
 RegCmd    DATA   var5              00409008    F64                                                       
 RegCmd    DATA   var6              00409010    F96                                                       
-RegCmd    DATA   arr1              0040DD3C    UI16_14                                                   
+RegCmd    DATA   arr1              0040DD3C    UI16_14_3_45                                                   
 RegCmd    DATA   arr2              0040DCE0    I32_10                                                    
 RegCmd    DATA   arr3              0040DA40    F32_105                                                   
 RegCmd    DATA   arr4              0040DD5C    C_PTR32_6_C_I32                                           

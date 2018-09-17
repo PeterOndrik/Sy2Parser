@@ -37,11 +37,23 @@ public:
 	void enterPtrType(Sign2016Parser::PtrTypeContext * /*ctx*/) override;
 	void exitPtrType(Sign2016Parser::PtrTypeContext * /*ctx*/) override;
 
-	void enterSize(Sign2016Parser::SizeContext * /*ctx*/) override;
-	void exitSize(Sign2016Parser::SizeContext * /*ctx*/) override;
+	void enterFunction(Sign2016Parser::FunctionContext * /*ctx*/) override;
+	void exitFunction(Sign2016Parser::FunctionContext * /*ctx*/) override;
+
+	void enterReturnType(Sign2016Parser::ReturnTypeContext * /*ctx*/) override;
+	void exitReturnType(Sign2016Parser::ReturnTypeContext * /*ctx*/) override;
+
+	void enterParamType(Sign2016Parser::ParamTypeContext * /*ctx*/) override;
+	void exitParamType(Sign2016Parser::ParamTypeContext * /*ctx*/) override;
 
 	void enterTypeQualifier(Sign2016Parser::TypeQualifierContext *ctx) override;
 	void exitTypeQualifier(Sign2016Parser::TypeQualifierContext *ctx) override;
+
+	void enterSize(Sign2016Parser::SizeContext * /*ctx*/) override;
+	void exitSize(Sign2016Parser::SizeContext * /*ctx*/) override;
+
+	void enterArraySize(Sign2016Parser::ArraySizeContext * /*ctx*/) override;
+	void exitArraySize(Sign2016Parser::ArraySizeContext * /*ctx*/) override;
 
 private:
 	Model::Node<> &_node;

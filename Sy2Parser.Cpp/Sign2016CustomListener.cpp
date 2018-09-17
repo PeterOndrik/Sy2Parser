@@ -5,8 +5,10 @@
 #include "FloatType.h"
 #include "StructType.h"
 #include "PtrType.h"
+#include "Function.h"
 #include "TypeQualifier.h"
 #include "StorageSize.h"
+#include "ArraySize.h"
 
 using namespace std;
 using namespace antlr4;
@@ -95,6 +97,52 @@ void Sign2016CustomListener::exitPtrType(Sign2016Parser::PtrTypeContext *ctx)
 	_current = leaveNode(ctx, _current, ctx->PTR_TYPE()->getText());
 }
 
+void Sign2016CustomListener::enterFunction(Sign2016Parser::FunctionContext *ctx)
+{
+	_current = initiateNode<Model::Function>(ctx, _current);
+}
+
+void Sign2016CustomListener::exitFunction(Sign2016Parser::FunctionContext *ctx)
+{
+	_current = leaveNode(ctx, _current, ctx->FB()->getText());
+}
+
+void Sign2016CustomListener::enterReturnType(Sign2016Parser::ReturnTypeContext *ctx)
+{
+//	_current = initiateNode<Model::PtrType>(ctx, _current);
+}
+
+void Sign2016CustomListener::exitReturnType(Sign2016Parser::ReturnTypeContext *ctx)
+{}
+
+void Sign2016CustomListener::enterParamType(Sign2016Parser::ParamTypeContext *ctx)
+{
+//	_current = initiateNode<Model::PtrType>(ctx, _current);
+}
+
+void Sign2016CustomListener::exitParamType(Sign2016Parser::ParamTypeContext *ctx)
+{}
+
+void Sign2016CustomListener::enterTypeQualifier(Sign2016Parser::TypeQualifierContext *ctx)
+{
+	_current = initiateNode<Model::TypeQualifier>(ctx, _current);
+}
+
+void Sign2016CustomListener::exitTypeQualifier(Sign2016Parser::TypeQualifierContext *ctx)
+{
+	//if (ctx->TYPE_QUALIFIER())
+	//{
+		_current = leaveNode(ctx, _current, ctx->TYPE_QUALIFIER()->getText());
+	//}
+	//else
+	//{
+	//	// type qualifier is always added, if it doesn't exist it have to be removed
+	//	Model::Node<> *rem = _current;
+	//	_current = _current->parent();
+	//	_current->remove(rem);
+	//}
+}
+
 void Sign2016CustomListener::enterSize(Sign2016Parser::SizeContext *ctx)
 {
 	_current = initiateNode<Model::StorageSize>(ctx, _current);
@@ -105,22 +153,12 @@ void Sign2016CustomListener::exitSize(Sign2016Parser::SizeContext *ctx)
 	_current = leaveNode(ctx, _current, ctx->getText());
 }
 
-void Sign2016CustomListener::enterTypeQualifier(Sign2016Parser::TypeQualifierContext *ctx)
+void Sign2016CustomListener::enterArraySize(Sign2016Parser::ArraySizeContext *ctx)
 {
-	_current = initiateNode<Model::TypeQualifier>(ctx, _current);
+	_current = initiateNode<Model::ArraySize>(ctx, _current);
 }
 
-void Sign2016CustomListener::exitTypeQualifier(Sign2016Parser::TypeQualifierContext *ctx)
+void Sign2016CustomListener::exitArraySize(Sign2016Parser::ArraySizeContext *ctx)
 {
-	if (ctx->TYPE_QUALIFIER())
-	{
-		_current = leaveNode(ctx, _current, ctx->TYPE_QUALIFIER()->getText());
-	}
-	else
-	{
-		// type qualifier is always added, if it doesn't exist it have to be removed
-		Model::Node<> *rem = _current;
-		_current = _current->parent();
-		_current->remove(rem);
-	}
+	_current = leaveNode(ctx, _current, ctx->ARRAY_SIZE()->getText());
 }

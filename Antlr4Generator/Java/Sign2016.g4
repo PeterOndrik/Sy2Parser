@@ -18,18 +18,18 @@ options
 
 signature : (boolType | intType | uintType | floatType | structType | ptrType | function) EOF ;
 voidType : VOID_TYPE ;
-boolType : typeQualifier BOOL_TYPE arraySize ;
-intType : typeQualifier INT_TYPE size arraySize ;
-uintType : typeQualifier UINT_TYPE size arraySize ;
-floatType : typeQualifier FLOAT_TYPE size arraySize ;
-structType : typeQualifier STRUCT_TYPE size arraySize SEP ID ;
-ptrType : typeQualifier PTR_TYPE size arraySize SEP (voidType | boolType | intType | uintType | floatType | structType | ptrType | function) ;
+boolType : typeQualifier? BOOL_TYPE (arraySizes += arraySize)* ;
+intType : typeQualifier? INT_TYPE size (arraySizes += arraySize)* ;
+uintType : typeQualifier? UINT_TYPE size (arraySizes += arraySize)* ;
+floatType : typeQualifier? FLOAT_TYPE size (arraySizes += arraySize)* ;
+structType : typeQualifier? STRUCT_TYPE size (arraySizes += arraySize)* SEP ID ;
+ptrType : typeQualifier? PTR_TYPE size (arraySizes += arraySize)* SEP (voidType | boolType | intType | uintType | floatType | structType | ptrType | function) ;
 function : FB SEP returnType (SEP paramType)+ SEP FE ;
 returnType : (voidType | boolType | intType | uintType | floatType | structType | ptrType) ;
 paramType : (voidType | boolType | intType | uintType | floatType | structType | ptrType) ;
-typeQualifier : (TYPE_QUALIFIER SEP)? ;
+typeQualifier : TYPE_QUALIFIER SEP ;
 size : SIZE ;
-arraySize : (SEP ARRAY_SIZE)* ;
+arraySize : SEP ARRAY_SIZE ;
 
 /*
  * Lexer Rules

@@ -149,54 +149,6 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2ReadNext(const Sy2ParserHand
 		if (currentNode != nullptr)
 		{
 			node->type = (T_Sy2NodeType)currentNode->getType();
-			//if (dynamic_cast<const Model::File*>(currentNode))
-			//{
-			//	node->type = T_Sy2NodeType::SY2_FILE;
-			//}
-			//else if (dynamic_cast<const Model::Command*>(currentNode))
-			//{
-			//	node->type = T_Sy2NodeType::SY2_COMMAND;
-			//}
-			//else if (dynamic_cast<const Model::CmdValue*>(currentNode))
-			//{
-			//	node->type = T_Sy2NodeType::SY2_CMD_VALUE;
-			//}
-			//else if (dynamic_cast<const Model::Symbol*>(currentNode))
-			//{
-			//	node->type = T_Sy2NodeType::SY2_SYMBOL;
-			//}
-			//else if (dynamic_cast<const Model::Type*>(currentNode))
-			//{
-			//	node->type = T_Sy2NodeType::SY2_TYPE;
-			//}
-			//else if (dynamic_cast<const Model::Name*>(currentNode))
-			//{
-			//	node->type = T_Sy2NodeType::SY2_NAME;
-			//}
-			//else if (dynamic_cast<const Model::Bitmask*>(currentNode))
-			//{
-			//	node->type = T_Sy2NodeType::SY2_BITMASK;
-			//}
-			//else if (dynamic_cast<const Model::Offset*>(currentNode))
-			//{
-			//	node->type = T_Sy2NodeType::SY2_OFFSET;
-			//}
-			//else if (dynamic_cast<const Model::Address*>(currentNode))
-			//{
-			//	node->type = T_Sy2NodeType::SY2_ADDRESS;
-			//}
-			//else if (dynamic_cast<const Model::Signature*>(currentNode))
-			//{
-			//	node->type = T_Sy2NodeType::SY2_SIGNATURE;
-			//}
-			//else if (dynamic_cast<const Model::EnumValue*>(currentNode))
-			//{
-			//	node->type = Sy2NodeType::SY2_ENUM_VALUE;
-			//}
-			//else
-			//{
-			//	status = SY2_UNKNOWN_TOKEN;
-			//}
 			string value = currentNode->getValue();
 			if (value.length() == 0)
 			{

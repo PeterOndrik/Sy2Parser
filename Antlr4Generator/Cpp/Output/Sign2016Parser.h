@@ -93,11 +93,14 @@ public:
 
   class  BoolTypeContext : public antlr4::ParserRuleContext {
   public:
+    Sign2016Parser::ArraySizeContext *arraySizeContext = nullptr;;
+    std::vector<ArraySizeContext *> arraySizes;;
     BoolTypeContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    TypeQualifierContext *typeQualifier();
     antlr4::tree::TerminalNode *BOOL_TYPE();
-    ArraySizeContext *arraySize();
+    TypeQualifierContext *typeQualifier();
+    std::vector<ArraySizeContext *> arraySize();
+    ArraySizeContext* arraySize(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -110,12 +113,15 @@ public:
 
   class  IntTypeContext : public antlr4::ParserRuleContext {
   public:
+    Sign2016Parser::ArraySizeContext *arraySizeContext = nullptr;;
+    std::vector<ArraySizeContext *> arraySizes;;
     IntTypeContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    TypeQualifierContext *typeQualifier();
     antlr4::tree::TerminalNode *INT_TYPE();
     SizeContext *size();
-    ArraySizeContext *arraySize();
+    TypeQualifierContext *typeQualifier();
+    std::vector<ArraySizeContext *> arraySize();
+    ArraySizeContext* arraySize(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -128,12 +134,15 @@ public:
 
   class  UintTypeContext : public antlr4::ParserRuleContext {
   public:
+    Sign2016Parser::ArraySizeContext *arraySizeContext = nullptr;;
+    std::vector<ArraySizeContext *> arraySizes;;
     UintTypeContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    TypeQualifierContext *typeQualifier();
     antlr4::tree::TerminalNode *UINT_TYPE();
     SizeContext *size();
-    ArraySizeContext *arraySize();
+    TypeQualifierContext *typeQualifier();
+    std::vector<ArraySizeContext *> arraySize();
+    ArraySizeContext* arraySize(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -146,12 +155,15 @@ public:
 
   class  FloatTypeContext : public antlr4::ParserRuleContext {
   public:
+    Sign2016Parser::ArraySizeContext *arraySizeContext = nullptr;;
+    std::vector<ArraySizeContext *> arraySizes;;
     FloatTypeContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    TypeQualifierContext *typeQualifier();
     antlr4::tree::TerminalNode *FLOAT_TYPE();
     SizeContext *size();
-    ArraySizeContext *arraySize();
+    TypeQualifierContext *typeQualifier();
+    std::vector<ArraySizeContext *> arraySize();
+    ArraySizeContext* arraySize(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -164,14 +176,17 @@ public:
 
   class  StructTypeContext : public antlr4::ParserRuleContext {
   public:
+    Sign2016Parser::ArraySizeContext *arraySizeContext = nullptr;;
+    std::vector<ArraySizeContext *> arraySizes;;
     StructTypeContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    TypeQualifierContext *typeQualifier();
     antlr4::tree::TerminalNode *STRUCT_TYPE();
     SizeContext *size();
-    ArraySizeContext *arraySize();
     antlr4::tree::TerminalNode *SEP();
     antlr4::tree::TerminalNode *ID();
+    TypeQualifierContext *typeQualifier();
+    std::vector<ArraySizeContext *> arraySize();
+    ArraySizeContext* arraySize(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -184,12 +199,12 @@ public:
 
   class  PtrTypeContext : public antlr4::ParserRuleContext {
   public:
+    Sign2016Parser::ArraySizeContext *arraySizeContext = nullptr;;
+    std::vector<ArraySizeContext *> arraySizes;;
     PtrTypeContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    TypeQualifierContext *typeQualifier();
     antlr4::tree::TerminalNode *PTR_TYPE();
     SizeContext *size();
-    ArraySizeContext *arraySize();
     antlr4::tree::TerminalNode *SEP();
     VoidTypeContext *voidType();
     BoolTypeContext *boolType();
@@ -199,6 +214,9 @@ public:
     StructTypeContext *structType();
     PtrTypeContext *ptrType();
     FunctionContext *function();
+    TypeQualifierContext *typeQualifier();
+    std::vector<ArraySizeContext *> arraySize();
+    ArraySizeContext* arraySize(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -307,10 +325,8 @@ public:
   public:
     ArraySizeContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    std::vector<antlr4::tree::TerminalNode *> SEP();
-    antlr4::tree::TerminalNode* SEP(size_t i);
-    std::vector<antlr4::tree::TerminalNode *> ARRAY_SIZE();
-    antlr4::tree::TerminalNode* ARRAY_SIZE(size_t i);
+    antlr4::tree::TerminalNode *SEP();
+    antlr4::tree::TerminalNode *ARRAY_SIZE();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;

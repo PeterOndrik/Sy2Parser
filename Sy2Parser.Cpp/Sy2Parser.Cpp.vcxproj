@@ -175,6 +175,7 @@
     <ClInclude Include="..\Antlr4Generator\Cpp\Output\Sy2Parser.h" />
     <ClInclude Include="..\Antlr4Generator\Cpp\Output\Sy2Visitor.h" />
     <ClInclude Include="Address.h" />
+    <ClInclude Include="ArraySize.h" />
     <ClInclude Include="Bitmask.h" />
     <ClInclude Include="CmdValue.h" />
     <ClInclude Include="Command.h" />
@@ -182,6 +183,7 @@
     <ClInclude Include="EnumValue.h" />
     <ClInclude Include="File.h" />
     <ClInclude Include="FloatType.h" />
+    <ClInclude Include="Function.h" />
     <ClInclude Include="IntType.h" />
     <ClInclude Include="PtrType.h" />
     <ClInclude Include="StorageSize.h" />

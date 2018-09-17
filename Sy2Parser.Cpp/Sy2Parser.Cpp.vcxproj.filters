@@ -147,6 +147,12 @@
     <ClInclude Include="PtrType.h">
       <Filter>Header Files\Model</Filter>
     </ClInclude>
+    <ClInclude Include="Function.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="ArraySize.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
