@@ -185,7 +185,9 @@
     <ClInclude Include="FloatType.h" />
     <ClInclude Include="Function.h" />
     <ClInclude Include="IntType.h" />
+    <ClInclude Include="ParamType.h" />
     <ClInclude Include="PtrType.h" />
+    <ClInclude Include="ReturnType.h" />
     <ClInclude Include="StorageSize.h" />
     <ClInclude Include="StructType.h" />
     <ClInclude Include="Sy2Node.h" />

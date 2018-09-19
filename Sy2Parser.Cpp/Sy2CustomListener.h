@@ -3,8 +3,6 @@
 #include "Sy2BaseListener.h"
 #include "Sy2Node.h"
 #include "Node.h"
-#include "Command.h"
-#include "Symbol.h"
 
 //! Represents custom implementation of Sy2Listener.
 class Sy2CustomListener : public Sy2BaseListener
@@ -21,6 +19,9 @@ public:
 	typedef std::shared_ptr<ParsedNodeCallbackType> ParsedNodeCallbackPtr;
 	typedef std::shared_ptr<Model::Node<>> NodeType;
 
+	Sy2CustomListener();
+	Sy2CustomListener(const std::string &fileName);
+
 	~Sy2CustomListener()
 	{
 	}
@@ -34,13 +35,14 @@ public:
 	void addParsedNodeCallback(ParsedNodeCallbackPtr callback, Model::Sy2Node sy2Node);
 
 private:
-	typedef std::unordered_multimap<size_t, ParsedNodeCallbackPtr> ParsedNodeCallbackListType;
+	typedef std::unordered_multimap<Model::Sy2Node, ParsedNodeCallbackPtr> ParsedNodeCallbackListType;
 
 	NodeType _node;
 	ProgressType _size;
 	ProgressType _progress;
 	ProgressCallbackPtr _progressCb;
 	ParsedNodeCallbackListType _parsedNodeCbList;
+	std::string _fileName;
 
 	void callCallback(const Model::Node<> *node, Model::Sy2Node sy2Node);
 };

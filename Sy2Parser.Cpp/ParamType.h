@@ -4,46 +4,46 @@
 
 namespace Model
 {
-	class Function : public CompositeNode
+	class ParamType : public CompositeNode
 	{
 	public:
-		Function()
+		ParamType()
 		{
 		}
 
-		Function(SizeType line, SizeType column)
+		ParamType(SizeType line, SizeType column)
 			: CompositeNode(line, column)
 		{
 		}
 
-		Function(const Function& command)
+		ParamType(const ParamType& command)
 			: CompositeNode(command)
 		{
 		}
 
-		Function(Function&& command)
+		ParamType(ParamType&& command)
 			: CompositeNode(std::move(command))
 		{
 		}
 
-		Function& operator=(const Function& command)
+		ParamType& operator=(const ParamType& command)
 		{
 			return *this;
 		}
 
-		Function& operator=(Function&& command)
+		ParamType& operator=(ParamType&& command)
 		{
 			return *this;
 		}
 
 		Model::Sy2Node getType() const override
 		{
-			return Model::Sy2Node::SY2_FUNCTION;
+			return Model::Sy2Node::SY2_PARAMETER;
 		}
 
 		Node *clone() override
 		{
-			return new Function(*this);
+			return new ParamType(*this);
 		}
 	};
 }

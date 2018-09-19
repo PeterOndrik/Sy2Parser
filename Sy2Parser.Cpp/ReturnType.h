@@ -4,46 +4,46 @@
 
 namespace Model
 {
-	class Function : public CompositeNode
+	class ReturnType : public CompositeNode
 	{
 	public:
-		Function()
+		ReturnType()
 		{
 		}
 
-		Function(SizeType line, SizeType column)
+		ReturnType(SizeType line, SizeType column)
 			: CompositeNode(line, column)
 		{
 		}
 
-		Function(const Function& command)
+		ReturnType(const ReturnType& command)
 			: CompositeNode(command)
 		{
 		}
 
-		Function(Function&& command)
+		ReturnType(ReturnType&& command)
 			: CompositeNode(std::move(command))
 		{
 		}
 
-		Function& operator=(const Function& command)
+		ReturnType& operator=(const ReturnType& command)
 		{
 			return *this;
 		}
 
-		Function& operator=(Function&& command)
+		ReturnType& operator=(ReturnType&& command)
 		{
 			return *this;
 		}
 
 		Model::Sy2Node getType() const override
 		{
-			return Model::Sy2Node::SY2_FUNCTION;
+			return Model::Sy2Node::SY2_RETURN;
 		}
 
 		Node *clone() override
 		{
-			return new Function(*this);
+			return new ReturnType(*this);
 		}
 	};
 }

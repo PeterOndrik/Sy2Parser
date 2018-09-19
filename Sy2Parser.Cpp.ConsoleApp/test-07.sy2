@@ -1,0 +1,2 @@
+RegCmd    PROC   func1           00401415     FB_I32_I16_I8_F16_FE
+RegCmd    PROC   func2           00401425     FB_V_V_FE

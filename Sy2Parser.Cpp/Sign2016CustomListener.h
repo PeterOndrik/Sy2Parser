@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Sign2016BaseListener.h"
+#include "Sy2CustomListener.h"
 #include "Sy2Node.h"
 #include "Node.h"
 
@@ -55,7 +56,14 @@ public:
 	void enterArraySize(Sign2016Parser::ArraySizeContext * /*ctx*/) override;
 	void exitArraySize(Sign2016Parser::ArraySizeContext * /*ctx*/) override;
 
+	void addParsedNodeCallback(Sy2CustomListener::ParsedNodeCallbackPtr callback, Model::Sy2Node sy2Node);
+
 private:
+	typedef std::unordered_multimap<size_t, Sy2CustomListener::ParsedNodeCallbackPtr> ParsedNodeCallbackListType;
+
 	Model::Node<> &_node;
 	Model::Node<> *_current;
+	ParsedNodeCallbackListType _parsedNodeCbList;
+
+	void callCallback(const Model::Node<> *node, Model::Sy2Node sy2Node);
 };

@@ -94,7 +94,7 @@ typedef enum Sy2ParserStatusCode
 	SY2_FILE_NOT_FOUND	= 0x2,			//!< File not found.
 	SY2_EOF				= 0x3,			//!< End of file.
 	SY2_UNKNOWN_TOKEN	= 0x4,			//!< Unknown token.
-	SY2_HANDLE_NOT_FOUND = 0x05,
+	SY2_INVALID_HANDLE = 0x05,
 } T_Sy2ParserStatusCode;
 
 typedef enum Sy2NodeType
@@ -138,8 +138,8 @@ typedef struct Sy2Node
 @}
 */
 
-typedef void SY2PARSER_API_CALL ParsingProgressCallback(unsigned int progress);
-typedef void SY2PARSER_API_CALL ParsedNodeCallback(const T_Sy2Node *node);
+typedef void SY2PARSER_API_CALL ParsingProgressCallback(Sy2ParserHandle handle, unsigned int progress, void *callbackContext);
+typedef void SY2PARSER_API_CALL ParsedNodeCallback(Sy2ParserHandle handle, const T_Sy2Node *node, void *callbackContext);
 
 /*!
 \brief Open a Sy2 Parser by using a file name.
@@ -179,7 +179,9 @@ If a valid handle is specified, the function returns always #SY2_SUCCESS.
 */
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Close(Sy2ParserHandle handle);
 
-SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2AddParsedNodeCallback(Sy2ParserHandle handle, ParsedNodeCallback *callback, unsigned int nodeType);
+SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2SetParsingProgressCallback(Sy2ParserHandle handle, ParsingProgressCallback *callback, void *callbackContext);
+SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2AddParsedNodeCallback(Sy2ParserHandle handle, T_Sy2NodeType nodeType, ParsedNodeCallback *callback, void *callbackContext);
+SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2RemoveParsedNodeCallback(Sy2ParserHandle handle, T_Sy2NodeType nodeType, ParsedNodeCallback *callback);
 
 /*!
 Performs a single-call parse of an Sy2 file associated with a handle.
@@ -191,7 +193,7 @@ Returns when one of the following occurs:
 
 While sy2Parse is running, each time the parser detects an node, the corresponding callback is invoked.
 */
-SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Parse(Sy2ParserHandle handle, ParsingProgressCallback *callback);
+SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Parse(Sy2ParserHandle handle);
 
 /*!
 Read next.

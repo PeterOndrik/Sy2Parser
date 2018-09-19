@@ -40,7 +40,7 @@ namespace Model
 
 		Model::Sy2Node getType() const override
 		{
-			return Model::Sy2Node::SY2_UINT;
+			return Model::Sy2Node::SY2_VOID;
 		}
 
 		Node *clone() override

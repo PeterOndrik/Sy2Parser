@@ -21,9 +21,20 @@
 using namespace std;
 using namespace antlr4;
 
+Sy2CustomListener::Sy2CustomListener()
+	: _fileName("")
+{
+}
+
+Sy2CustomListener::Sy2CustomListener(const string &fileName)
+	: _fileName(fileName)
+{
+}
+
 void Sy2CustomListener::enterFile(Sy2Parser::FileContext *ctx)
 {
 	_node = make_shared<Model::File>();
+	_node->setValue(_fileName);
 	_size = ctx->start->getInputStream()->size();
 	_progress = 0;
 }
@@ -130,6 +141,10 @@ void Sy2CustomListener::exitCommand(Sy2Parser::CommandContext *ctx)
 		Sign2016Parser sign2016Parser(&sign2016Tokens);
 
 		Sign2016CustomListener sign2016Listener(*signature);
+		for (auto cb : _parsedNodeCbList)
+		{
+			sign2016Listener.addParsedNodeCallback(cb.second, cb.first);
+		}
 		sign2016Parser.addParseListener(&sign2016Listener);
 		Sign2016Parser::SignatureContext *sign2016Tree = sign2016Parser.signature();
 		sign2016Parser.removeParseListener(&sign2016Listener);
@@ -157,9 +172,9 @@ void Sy2CustomListener::setProgressCallback(ProgressCallbackPtr callback)
 	_progressCb = callback;
 }
 
-void Sy2CustomListener::addParsedNodeCallback(ParsedNodeCallbackPtr callback, Model::Sy2Node node)
+void Sy2CustomListener::addParsedNodeCallback(ParsedNodeCallbackPtr callback, Model::Sy2Node sy2Node)
 {
-	_parsedNodeCbList.insert({ node, callback });
+	_parsedNodeCbList.insert({ sy2Node, callback });
 }
 
 void Sy2CustomListener::callCallback(const Model::Node<> *node, Model::Sy2Node sy2Node)
