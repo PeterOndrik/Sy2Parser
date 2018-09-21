@@ -159,6 +159,9 @@
     <ClInclude Include="ParamType.h">
       <Filter>Header Files\Model</Filter>
     </ClInclude>
+    <ClInclude Include="Unspecified.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -207,6 +207,7 @@
     <ClInclude Include="Type.h" />
     <ClInclude Include="TypeQualifier.h" />
     <ClInclude Include="UIntType.h" />
+    <ClInclude Include="Unspecified.h" />
     <ClInclude Include="VoidType.h" />
   </ItemGroup>
   <ItemGroup>

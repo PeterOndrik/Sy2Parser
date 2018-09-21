@@ -4,6 +4,7 @@
 #include "Sy2Lexer.h"
 #include "Sy2Parser.h"
 #include "Sy2CustomListener.h"
+#include "Unspecified.h"
 
 using namespace std;
 using namespace antlr4;
@@ -113,17 +114,17 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2SetParsingProgressCallback(S
 			parser->progressCb = make_shared<Sy2CustomListener::ProgressCallbackType>(
 				[handle, callback, callbackContext](Sy2CustomListener::ProgressType progress)
 			{
-				callback(handle, progress, callbackContext);
+			callback(handle, progress, callbackContext);
 			});
 		}
 		else
 		{
-			parser->progressCb.reset();
+		parser->progressCb.reset();
 		}
 	}
 	else
 	{
-		status = SY2_INVALID_HANDLE;
+	status = SY2_INVALID_HANDLE;
 	}
 
 	return status;
@@ -172,9 +173,9 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2RemoveParsedNodeCallback(Sy2
 	if (parser)
 	{
 		parser->parsedNodeCbList.erase(remove_if(parser->parsedNodeCbList.begin(), parser->parsedNodeCbList.end(), [nodeType, callback](ParsedNodeCallbackStorage cbStorage)
-			{
-				return cbStorage.nodeType == nodeType && cbStorage.apiParsedNodeCallback == callback;
-			}), parser->parsedNodeCbList.end());
+		{
+			return cbStorage.nodeType == nodeType && cbStorage.apiParsedNodeCallback == callback;
+		}), parser->parsedNodeCbList.end());
 	}
 
 	return status;
@@ -197,8 +198,36 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Parse(Sy2ParserHandle handle
 		parser->sy2Parser->addParseListener(&listener);
 		parser->sy2Tree = parser->sy2Parser->file();
 		parser->sy2File = listener.getNode();
-		parser->currentNode = parser->sy2File.get();
+		parser->currentNode = new Model::Unspecified;
 		parser->sy2Parser->removeParseListener(&listener);
+	}
+
+	return status;
+}
+
+static Sy2ParserStatus processNode(const Model::Node<> *node, T_Sy2Node *apiNode)
+{
+	Sy2ParserStatus status = SY2_SUCCESS;
+
+	if (node != nullptr)
+	{
+		apiNode->type = (T_Sy2NodeType)node->getType();
+		string value = node->getValue();
+		if (value.length() == 0)
+		{
+			apiNode->value[0] = '\0';
+		}
+		else
+		{
+			strncpy_s(apiNode->value, value.c_str(), value.length());
+		}
+		apiNode->depth = node->getDepth();
+		apiNode->line = node->getLine();
+		apiNode->column = node->getColumn();
+	}
+	else
+	{
+		status = SY2_EOF;
 	}
 
 	return status;
@@ -211,28 +240,18 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2ReadNext(const Sy2ParserHand
 
 	if (parser)
 	{
-		const Model::Node<> *currentNode = parser->currentNode->next();
-		if (currentNode != nullptr)
+		if (parser->currentNode->getType() == T_Sy2NodeType::SY2_UNSPECIFIED)
 		{
-			node->type = (T_Sy2NodeType)currentNode->getType();
-			string value = currentNode->getValue();
-			if (value.length() == 0)
-			{
-				node->value[0] = '\0';
-			}
-			else
-			{
-				strncpy_s(node->value, value.c_str(), value.length());
-			}
-			node->depth = currentNode->getDepth();
-			node->line = currentNode->getLine();
-			node->column = currentNode->getColumn();
+			const Model::Node<> *currentNode = parser->sy2File.get();
+			status = processNode(currentNode, node);
+			parser->currentNode = currentNode;
 		}
 		else
 		{
-			status = SY2_EOF;
+			const Model::Node<> *currentNode = parser->currentNode->next();
+			status = processNode(currentNode, node);
+			parser->currentNode = currentNode;
 		}
-		parser->currentNode = currentNode;
 	}
 	else
 	{
