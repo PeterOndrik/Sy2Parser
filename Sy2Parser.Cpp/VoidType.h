@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma once
-
 #include "LeafNode.h"
 
 namespace Model

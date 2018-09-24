@@ -1,5 +1,6 @@
 #include "Sign2016CustomListener.h"
 #include "VoidType.h"
+#include "BoolType.h"
 #include "IntType.h"
 #include "UIntType.h"
 #include "FloatType.h"
@@ -37,6 +38,18 @@ void Sign2016CustomListener::enterSignature(Sign2016Parser::SignatureContext * c
 
 void Sign2016CustomListener::exitSignature(Sign2016Parser::SignatureContext * ctx)
 {
+}
+
+void Sign2016CustomListener::enterBoolType(Sign2016Parser::BoolTypeContext *ctx)
+{
+	_current = initiateNode<Model::BoolType>(ctx, _current);
+}
+
+void Sign2016CustomListener::exitBoolType(Sign2016Parser::BoolTypeContext *ctx)
+{
+	Model::Node<> *temp = _current;
+	_current = leaveNode(ctx, temp, ctx->BOOL_TYPE()->getText());
+	this->callCallback(temp, Model::Sy2Node::SY2_BOOL);
 }
 
 void Sign2016CustomListener::enterVoidType(Sign2016Parser::VoidTypeContext *ctx)

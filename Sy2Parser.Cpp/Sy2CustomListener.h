@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Sy2BaseListener.h"
+#include "Sy2ErrorListener.h"
 #include "Sy2Node.h"
 #include "Node.h"
 
@@ -28,11 +29,14 @@ public:
 
 	void enterFile(Sy2Parser::FileContext *ctx) override;
 	void exitFile(Sy2Parser::FileContext *ctx) override;
+
 	void exitCommand(Sy2Parser::CommandContext *ctx) override;
 
 	NodeType getNode() const;
+	void setErrorCallback(Sy2ErrorListener::ErrorCallbackPtr callback);
 	void setProgressCallback(ProgressCallbackPtr callback);
 	void addParsedNodeCallback(ParsedNodeCallbackPtr callback, Model::Sy2Node sy2Node);
+	size_t getNumberOfSyntaxErrors();
 
 private:
 	typedef std::unordered_multimap<Model::Sy2Node, ParsedNodeCallbackPtr> ParsedNodeCallbackListType;
@@ -40,9 +44,11 @@ private:
 	NodeType _node;
 	ProgressType _size;
 	ProgressType _progress;
+	Sy2ErrorListener::ErrorCallbackPtr _errorCb;
 	ProgressCallbackPtr _progressCb;
 	ParsedNodeCallbackListType _parsedNodeCbList;
 	std::string _fileName;
+	size_t _syntaxErrors;
 
 	void callCallback(const Model::Node<> *node, Model::Sy2Node sy2Node);
 };

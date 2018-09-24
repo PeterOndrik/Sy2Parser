@@ -23,6 +23,9 @@ public:
 	void enterVoidType(Sign2016Parser::VoidTypeContext * /*ctx*/) override;
 	void exitVoidType(Sign2016Parser::VoidTypeContext * /*ctx*/) override;
 
+	void enterBoolType(Sign2016Parser::BoolTypeContext * /*ctx*/) override;
+	void exitBoolType(Sign2016Parser::BoolTypeContext * /*ctx*/) override;
+
 	void enterIntType(Sign2016Parser::IntTypeContext * /*ctx*/) override;
 	void exitIntType(Sign2016Parser::IntTypeContext * /*ctx*/) override;
 

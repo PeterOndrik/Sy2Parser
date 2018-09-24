@@ -177,6 +177,7 @@
     <ClInclude Include="Address.h" />
     <ClInclude Include="ArraySize.h" />
     <ClInclude Include="Bitmask.h" />
+    <ClInclude Include="BoolType.h" />
     <ClInclude Include="CmdValue.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="CompositeNode.h" />
@@ -190,6 +191,7 @@
     <ClInclude Include="ReturnType.h" />
     <ClInclude Include="StorageSize.h" />
     <ClInclude Include="StructType.h" />
+    <ClInclude Include="Sy2ErrorListener.h" />
     <ClInclude Include="Sy2Node.h" />
     <ClInclude Include="Offset.h" />
     <ClInclude Include="LeafNode.h" />
@@ -234,6 +236,7 @@
     </ClCompile>
     <ClCompile Include="Sy2CustomListener.cpp" />
     <ClCompile Include="Sy2CustomVisitor.cpp" />
+    <ClCompile Include="Sy2ErrorListener.cpp" />
     <ClCompile Include="Sy2Parser.Cpp.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

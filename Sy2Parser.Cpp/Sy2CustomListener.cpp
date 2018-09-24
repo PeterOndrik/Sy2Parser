@@ -22,12 +22,12 @@ using namespace std;
 using namespace antlr4;
 
 Sy2CustomListener::Sy2CustomListener()
-	: _fileName("")
+	: _fileName(""), _syntaxErrors(0)
 {
 }
 
 Sy2CustomListener::Sy2CustomListener(const string &fileName)
-	: _fileName(fileName)
+	: _fileName(fileName), _syntaxErrors(0)
 {
 }
 
@@ -101,53 +101,73 @@ void Sy2CustomListener::exitCommand(Sy2Parser::CommandContext *ctx)
 		symbol->add(name);
 		symbol->setValue(name->getValue());
 
+		ParserRuleContext *sy2PositionCtx = nullptr;
 		if (sy2SymbolCtx->bitmask())
 		{
-			auto sy2BitmaskCtx = sy2SymbolCtx->bitmask();
-			bitmask = new Model::Bitmask(sy2BitmaskCtx->start->getLine(), sy2BitmaskCtx->start->getCharPositionInLine());
-			bitmask->setValue(sy2BitmaskCtx->getText());
+			sy2PositionCtx = sy2SymbolCtx->bitmask();
+			bitmask = new Model::Bitmask(sy2PositionCtx->start->getLine(), sy2PositionCtx->start->getCharPositionInLine());
+			bitmask->setValue(sy2PositionCtx->getText());
 			symbol->add(bitmask);
 		}
 		else if (sy2SymbolCtx->offset())
 		{
-			auto sy2OffsetCtx = sy2SymbolCtx->offset();
-			offset = new Model::Offset(sy2OffsetCtx->start->getLine(), sy2OffsetCtx->start->getCharPositionInLine());
-			offset->setValue(sy2OffsetCtx->getText());
+			sy2PositionCtx = sy2SymbolCtx->offset();
+			offset = new Model::Offset(sy2PositionCtx->start->getLine(), sy2PositionCtx->start->getCharPositionInLine());
+			offset->setValue(sy2PositionCtx->getText());
 			symbol->add(offset);
 		}
 		else if (sy2SymbolCtx->address())
 		{
-			auto sy2AddressCtx = sy2SymbolCtx->address();
-			address = new Model::Address(sy2AddressCtx->start->getLine(), sy2AddressCtx->start->getCharPositionInLine());
-			address->setValue(sy2AddressCtx->getText());
+			sy2PositionCtx = sy2SymbolCtx->address();
+			address = new Model::Address(sy2PositionCtx->start->getLine(), sy2PositionCtx->start->getCharPositionInLine());
+			address->setValue(sy2PositionCtx->getText());
 			symbol->add(address);
 		}
-		else
+		else if (sy2SymbolCtx->enumValue())
 		{
-			auto sy2EnumValueCtx = sy2SymbolCtx->enumValue();
-			enumValue = new Model::EnumValue(sy2EnumValueCtx->start->getLine(), sy2EnumValueCtx->start->getCharPositionInLine());
-			enumValue->setValue(sy2EnumValueCtx->getText());
+			sy2PositionCtx = sy2SymbolCtx->enumValue();
+			enumValue = new Model::EnumValue(sy2PositionCtx->start->getLine(), sy2PositionCtx->start->getCharPositionInLine());
+			enumValue->setValue(sy2PositionCtx->getText());
 			symbol->add(enumValue);
 		}
 
-		auto sy2SignatureCtx = sy2SymbolCtx->signature();
-		signature = new Model::Signature(sy2SignatureCtx->start->getLine(), sy2SignatureCtx->start->getCharPositionInLine());
-		signature->setValue(sy2SignatureCtx->getText());
-		symbol->add(signature);
-
-		ANTLRInputStream sign2016Input(signature->getValue());
-		Sign2016Lexer sign2016Lexer(&sign2016Input);
-		CommonTokenStream sign2016Tokens(&sign2016Lexer);
-		Sign2016Parser sign2016Parser(&sign2016Tokens);
-
-		Sign2016CustomListener sign2016Listener(*signature);
-		for (auto cb : _parsedNodeCbList)
+		if (sy2PositionCtx != nullptr)
 		{
-			sign2016Listener.addParsedNodeCallback(cb.second, cb.first);
+			auto sy2SignatureCtx = sy2SymbolCtx->signature();
+			signature = new Model::Signature(sy2SignatureCtx->start->getLine(), sy2SignatureCtx->start->getCharPositionInLine());
+			signature->setValue(sy2SignatureCtx->getText());
+			symbol->add(signature);
+
+			ANTLRInputStream sign2016Input(signature->getValue());
+
+			Sy2ErrorListener sign2016ErrorListener(signature->getLine(), signature->getColumn());
+			sign2016ErrorListener.setErrorCallback(_errorCb);
+
+			Sign2016Lexer sign2016Lexer(&sign2016Input);
+			sign2016Lexer.removeErrorListeners();
+			sign2016Lexer.addErrorListener(&sign2016ErrorListener);
+
+			CommonTokenStream sign2016Tokens(&sign2016Lexer);
+
+			Sign2016Parser sign2016Parser(&sign2016Tokens);
+			sign2016Parser.removeErrorListeners();
+			sign2016Parser.addErrorListener(&sign2016ErrorListener);
+			Sign2016CustomListener sign2016Listener(*signature);
+			for (auto cb : _parsedNodeCbList)
+			{
+				sign2016Listener.addParsedNodeCallback(cb.second, cb.first);
+			}
+			sign2016Parser.addParseListener(&sign2016Listener);
+
+			Sign2016Parser::SignatureContext *sign2016Tree = sign2016Parser.signature();
+
+			sign2016Parser.removeParseListeners();
+			sign2016Parser.removeErrorListeners();
+			sign2016Lexer.removeErrorListeners();
+
+			_syntaxErrors = sign2016Lexer.getNumberOfSyntaxErrors();
+			_syntaxErrors += sign2016Parser.getNumberOfSyntaxErrors();
 		}
-		sign2016Parser.addParseListener(&sign2016Listener);
-		Sign2016Parser::SignatureContext *sign2016Tree = sign2016Parser.signature();
-		sign2016Parser.removeParseListener(&sign2016Listener);
 	}
 
 	this->callCallback(command, Model::Sy2Node::SY2_COMMAND);
@@ -167,6 +187,11 @@ Sy2CustomListener::NodeType Sy2CustomListener::getNode() const
 	return _node;
 }
 
+void Sy2CustomListener::setErrorCallback(Sy2ErrorListener::ErrorCallbackPtr callback)
+{
+	_errorCb = callback;
+}
+
 void Sy2CustomListener::setProgressCallback(ProgressCallbackPtr callback)
 {
 	_progressCb = callback;
@@ -175,6 +200,11 @@ void Sy2CustomListener::setProgressCallback(ProgressCallbackPtr callback)
 void Sy2CustomListener::addParsedNodeCallback(ParsedNodeCallbackPtr callback, Model::Sy2Node sy2Node)
 {
 	_parsedNodeCbList.insert({ sy2Node, callback });
+}
+
+size_t Sy2CustomListener::getNumberOfSyntaxErrors()
+{
+	return _syntaxErrors;
 }
 
 void Sy2CustomListener::callCallback(const Model::Node<> *node, Model::Sy2Node sy2Node)

@@ -162,6 +162,12 @@
     <ClInclude Include="Unspecified.h">
       <Filter>Header Files\Model</Filter>
     </ClInclude>
+    <ClInclude Include="BoolType.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Sy2ErrorListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -219,6 +225,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sy2CustomListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sy2ErrorListener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
