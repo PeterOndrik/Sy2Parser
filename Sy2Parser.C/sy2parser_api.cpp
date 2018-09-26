@@ -1,6 +1,7 @@
 #include "sy2parser_api.h"
 #include <fstream>
 #include "antlr4-runtime.h"
+#include "Sy2ErrorListener.h"
 #include "Sy2Lexer.h"
 #include "Sy2Parser.h"
 #include "Sy2CustomListener.h"
@@ -34,6 +35,7 @@ struct OpenParser
 	}
 
 	ANTLRInputStream *sy2Input;
+	Sy2ErrorListener *sy2ErrListener;
 	Sy2Lexer *sy2Lexer;
 	CommonTokenStream *sy2Tokens;
 	Sy2Parser *sy2Parser;
@@ -41,6 +43,7 @@ struct OpenParser
 	Sy2CustomListener::NodeType sy2File;
 	string fileName;
 	const Model::Node<> *currentNode;
+	Sy2ErrorListener::ErrorCallbackPtr errorCb;
 	Sy2CustomListener::ProgressCallbackPtr progressCb;
 	vector<ParsedNodeCallbackStorage> parsedNodeCbList;
 };
@@ -63,9 +66,14 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Open(const char *fileName, S
 	{
 		shared_ptr<OpenParser> parser = make_shared<OpenParser>();
 		parser->sy2Input = new ANTLRInputStream(stream);
+		parser->sy2ErrListener = new Sy2ErrorListener();
 		parser->sy2Lexer = new Sy2Lexer(parser->sy2Input);
+		parser->sy2Lexer->removeErrorListeners();
+		parser->sy2Lexer->addErrorListener(parser->sy2ErrListener);
 		parser->sy2Tokens = new CommonTokenStream(parser->sy2Lexer);
 		parser->sy2Parser = new Sy2Parser(parser->sy2Tokens);
+		parser->sy2Parser->removeErrorListeners();
+		parser->sy2Parser->addErrorListener(parser->sy2ErrListener);
 		parser->fileName = fileName;
 
 		handleList[lastHandle] = parser;
@@ -102,6 +110,34 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Close(Sy2ParserHandle handle
 	return status;
 }
 
+SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2SetParsingErrorCallback(Sy2ParserHandle handle, ParsingErrorCallback *callback, void *callbackContext)
+{
+	Sy2ParserStatus status = SY2_SUCCESS;
+	shared_ptr<OpenParser> parser = handleList[handle];
+
+	if (parser)
+	{
+		if (callback != nullptr)
+		{
+			parser->errorCb = make_shared<Sy2ErrorListener::ErrorCallbackType>(
+				[handle, callback, callbackContext](size_t line, size_t column, const string &message)
+			{
+				callback(handle, line, column, message.c_str(), callbackContext);
+			});
+		}
+		else
+		{
+			parser->errorCb.reset();
+		}
+	}
+	else
+	{
+		status = SY2_INVALID_HANDLE;
+	}
+
+	return status;
+}
+
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2SetParsingProgressCallback(Sy2ParserHandle handle, ParsingProgressCallback *callback, void *callbackContext)
 {
 	Sy2ParserStatus status = SY2_SUCCESS;
@@ -114,12 +150,12 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2SetParsingProgressCallback(S
 			parser->progressCb = make_shared<Sy2CustomListener::ProgressCallbackType>(
 				[handle, callback, callbackContext](Sy2CustomListener::ProgressType progress)
 			{
-			callback(handle, progress, callbackContext);
+				callback(handle, progress, callbackContext);
 			});
 		}
 		else
 		{
-		parser->progressCb.reset();
+			parser->progressCb.reset();
 		}
 	}
 	else
@@ -147,8 +183,8 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2AddParsedNodeCallback(Sy2Par
 				//parser->currentNode = node->next();
 				parser->currentNode = node;
 				T_Sy2Node apiNode = { (T_Sy2NodeType)node->getType(),  "\0", node->getDepth(), node->getLine(), node->getColumn() };
-				//std::copy(std::begin(command->getValue()), std::end(command->getValue()), node.value);
-				strncpy_s(apiNode.value, node->getValue().c_str(), sizeof(apiNode.value));
+				strncpy_s(apiNode.value, node->getValue().c_str(), sizeof(apiNode.value));	// copy at most N, zero-padding if shorter
+				apiNode.value[sizeof(apiNode.value) - 1] = '\0';							// ensure NUL terminated
 				callback(handle, &apiNode, callbackContext);
 				if (node->parent())
 				{
@@ -188,7 +224,9 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Parse(Sy2ParserHandle handle
 
 	if (parser)
 	{
+		parser->sy2ErrListener->setErrorCallback(parser->errorCb);
 		Sy2CustomListener listener(parser->fileName);
+		listener.setErrorCallback(parser->errorCb);
 		listener.setProgressCallback(parser->progressCb);
 		for (auto iCallback : parser->parsedNodeCbList)
 		{
@@ -219,7 +257,8 @@ static Sy2ParserStatus processNode(const Model::Node<> *node, T_Sy2Node *apiNode
 		}
 		else
 		{
-			strncpy_s(apiNode->value, value.c_str(), value.length());
+			strncpy_s(apiNode->value, value.c_str(), sizeof(apiNode->value));
+			apiNode->value[sizeof(apiNode->value) - 1] = '\0';
 		}
 		apiNode->depth = node->getDepth();
 		apiNode->line = node->getLine();

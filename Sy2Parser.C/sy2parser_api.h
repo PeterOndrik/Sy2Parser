@@ -13,53 +13,78 @@
 \section sec_introduction Introduction
 
 A parser is a software component that takes input data and builds an abstract syntax tree (ABS). The Sy2 Parser reads a file (symbol file) in the Sy2 format and builds a corresponding ABS.
-This API provides functions to parse a file and read such created ABS.
+This API provides functions to parse a file and read such created ABS. The nodes in the tree have a hierarchical relationship to each other. The terms parent, child, and sibling are used to describe the relationships.
+
 
 The Sy2 format is primarily designed for a test engine but contains lots of information for any tool which needs to work with symbols of a source program. A symbol represents 
 a data type, variable or function. Each row starts with command keyword follows by value or the symbol attributes.
 
 For example:
-- command to specify a verion of a symbol file:
+- command to specify a type of signature version of a symbol file:
 \code
   TEngSetSignVersion 2016
 \endcode
 
-- command to specify a variable of 32-bit integer data type
+- commands to specify a variable of 32-bit integer data type and const pointer to unsigned char data type
 C-style syntax: 
 \code
   uint32_t var1;
 \endcode
 \code
-  # Command Type   Name            Address     Signature
-  # ----------------------------------------------------
-  RegCmd    DATA   var1            0040DE3C    I32
+# Command Type   Name            Address     Signature
+# ----------------------------------------------------
+RegCmd    DATA   var1            0040DD0C    I32
+RegCmd    DATA   var2            0040DE20    C_PTR32_UI8
 \endcode
 
-Row started by the '#' sign is a comment. Columns Type, Name, Address and Signature are symbol attributes, where Signature describes data type. The Sy2 format uses to describe data type 
+Row started by the '#' sign is a comment. Columns "Type", "Name", "Address" and "Signature" are symbol attributes, where "Signature" describes data type. The Sy2 format is used to describe data type 
 signature version 2016.
 
 The Sy2 Parser generates following ABS for examples above:
 \image html Sy2-1.PNG "Figure 1: Sy2 ABS Example"
 
 The signature is internally parsed separated Sign2016 Parser but the API provides the same functions.
-For example the signature above is parsed following way:
-\image html Sign2016-1.PNG "Figure 2: Sign2016 I32 ABS Example"
-
-\image html Sy2-2.PNG "Figure 3: Sy2 ABS for C_UI8"
-
-\image html Sign2016-2.PNG "Figure 4: Sign2016 ABS for C_UI8"
-
-\image html Sign2016-3.PNG "Figure 4: Sign2016 ABS for C_UI8"
-
-\section sec_open_parse_view_example Get ABS after parsing
+For example ABS for the signatures above is following:
+<table align="center">
+<tr>
+<td>
+\image html Sign2016-1.PNG Figure 2: Sign2016 "I32" ABS Example
+</td>
+<td>
+\image html Sign2016-2.PNG Figure 3: Sign2016 "C_PTR32_UI8" ABS Example
+</td>
+</tr>
+</table>
+\section sec_open_parse_view_example Read ABS after parsing
 
 To parse and display ABS the following code can be used:
 \code
+#include "sy2parser_api.h"
+#include <stdio.h>
+
 #define INDENT_SIZE 100U
+
+void setIndent(char *indent, int count)
+{
+  for (int i = 0; i < count; i++)
+  {
+    indent[i] = ' ';
+  }
+}
+
+void resetIndent(char *indent)
+{
+  memset(indent, 0, INDENT_SIZE);
+}
+
+void SY2PARSER_API_CALL errorCallback(Sy2ParserHandle handle, unsigned int line, unsigned int column, const char *message, void *callbackContext)
+{
+  printf("Error: line %u, column %u, message %s\n", line, column, message);
+}
 
 void SY2PARSER_API_CALL progressCallback(Sy2ParserHandle handle, unsigned int progress, void *callbackContext)
 {
-  printf("Progress: %d%%\n", progress);
+  printf("Progress: %u%%\n", progress);
 }
 
 int main()
@@ -70,6 +95,7 @@ int main()
 
   // initialization
   Sy2ParserStatus status = sy2Open("test.sy2", &handle);
+  status = sy2SetParsingErrorCallback(handle, errorCallback, NULL);
   status = sy2SetParsingProgressCallback(handle, progressCallback, NULL);
 
   // parsing
@@ -93,18 +119,20 @@ int main()
 }
 \endcode
 
-Input:
+Input the test.sy2 file:
 \code
 TEngSetSignVersion 2016
 
 # Command Type   Name            Address     Signature
 # ----------------------------------------------------
-RegCmd    DATA   var1            0040DE3C    I32
+RegCmd    DATA   var1            0040DD0C    I32
+RegCmd    DATA   var2            0040DE20    C_PTR32_UI8
 \endcode
 
 Output:
 \code
-Progress: 13%
+Progress: 9%
+Progress: 75%
 Progress: 99%
 Progress: 100%
 
@@ -115,25 +143,205 @@ FILE: test.sy2
   SYMBOL: var1
    TYPE: DATA
    NAME: var1
-   ADDRESS: 0040DE3C
+   ADDRESS: 0040DD0C
    SIGNATURE: I32
     INT: I
      SIZE: 32
+ COMMAND: RegCmd
+  SYMBOL: var2
+   TYPE: DATA
+   NAME: var2
+   ADDRESS: 0040DE20
+   SIGNATURE: C_PTR32_UI8
+    POINTER: PTR
+     TYPE_QUALIFIER: C
+     SIZE: 32
+     UINT: UI
+      SIZE: 8
+\endcode
+
+\section sec_open_parse_callback_example Read ABS during parsing
+\code
+#include "sy2parser_api.h"
+#include <stdio.h>
+
+#define INDENT_SIZE 100U
+
+void setIndent(char *indent, int count)
+{
+  for (int i = 0; i < count; i++)
+  {
+    indent[i] = ' ';
+  }
+}
+
+void resetIndent(char *indent)
+{
+  memset(indent, 0, INDENT_SIZE);
+}
+
+void SY2PARSER_API_CALL errorCallback(Sy2ParserHandle handle, unsigned int line, unsigned int column, const char *message, void *callbackContext)
+{
+  printf("Error: line %u, column %u, message %s\n", line, column, message);
+}
+
+void SY2PARSER_API_CALL progressCallback(Sy2ParserHandle handle, unsigned int progress, void *callbackContext)
+{
+  printf("Progress: %d%%\n", progress);
+}
+
+void SY2PARSER_API_CALL parsedNodeCallback(Sy2ParserHandle handle, const T_Sy2Node *node, void *callbackContext)
+{
+  char indent[INDENT_SIZE] = { 0 };
+
+  setIndent(indent, node->depth);
+  printf("%s%s: %s\n", indent, sy2NodeName[node->type], node->value);
+
+  T_Sy2Node newNode = { 0 , 0 };
+  Sy2ParserStatus status = sy2ReadNext(handle, &newNode);
+  while (status == SY2_SUCCESS && newNode.depth > node->depth)
+  {
+    setIndent(indent, newNode.depth);
+    printf("%s%s: %s\n", indent, sy2NodeName[newNode.type], newNode.value);
+    resetIndent(indent);
+
+    status = sy2ReadNext(handle, &newNode);
+  }
+  printf("\n");
+}
+
+int main()
+{
+  Sy2ParserHandle handle = SY2PARSER_INVALID_HANDLE;
+  T_Sy2Node node = { 0, 0 };
+  char indent[INDENT_SIZE] = { 0 };
+
+  Sy2ParserStatus status = sy2Open("test.sy2", &handle);
+  status = sy2SetParsingErrorCallback(handle, errorCallback, NULL);
+  status = sy2SetParsingProgressCallback(handle, progressCallback, NULL);
+  status = sy2AddParsedNodeCallback(handle, SY2_COMMAND, parsedNodeCallback, NULL);
+  status = sy2Parse(handle);
+  status = sy2Close(handle);
+
+  return 0;
+}
+\endcode
+
+Input the test.sy2 file:
+\code
+TEngSetSignVersion 2016
+
+# Structure TAG PointTag, sizeof(PointTag) is 16 Byte(s):
+# Command Type   Name              Offset      Signature
+# -------------------------------------------------------------------------------------------------------
+RegVar    STRUCT PointTag          0           S128_PointTag                                             
+RegVar    STRUCT PointTag_x        0           F32                                                       
+RegVar    STRUCT PointTag_y        4           F96 
+
+# Command Type   Name            Address     Signature
+# ----------------------------------------------------
+RegCmd    DATA   var2            0040DD0C    C_UI8
+RegCmd    DATA   var3            0040DE20    C_PTR32_C_I32
+RegCmd    DATA   point1          0040DF20    S128_PointTag                                             
+RegCmd    DATA   point1_x        0040DF20    F32                                                       
+RegCmd    DATA   point1_y        0040DF24    F96
+\endcode
+
+Output:
+\code
+Progress: 2%
+ COMMAND: TEngSetSignVersion
+  CMD_VALUE: 2016
+
+Progress: 35%
+ COMMAND: RegVar
+  SYMBOL: PointTag
+   TYPE: STRUCT
+   NAME: PointTag
+   OFFSET: 0
+   SIGNATURE: S128_PointTag
+    STRUCT: PointTag
+     SIZE: 128
+
+Progress: 46%
+ COMMAND: RegVar
+  SYMBOL: PointTag_x
+   TYPE: STRUCT
+   NAME: PointTag_x
+   OFFSET: 0
+   SIGNATURE: F32
+    FLOAT: F
+     SIZE: 32
+
+Progress: 51%
+ COMMAND: RegVar
+  SYMBOL: PointTag_y
+   TYPE: STRUCT
+   NAME: PointTag_y
+   OFFSET: 4
+   SIGNATURE: F96
+    FLOAT: F
+     SIZE: 96
+
+Progress: 67%
+ COMMAND: RegCmd
+  SYMBOL: var2
+   TYPE: DATA
+   NAME: var2
+   ADDRESS: 0040DD0C
+   SIGNATURE: C_UI8
+    UINT: UI
+     TYPE_QUALIFIER: C
+      SIZE: 8
+
+Progress: 73%
+ COMMAND: RegCmd
+  SYMBOL: var3
+   TYPE: DATA
+   NAME: var3
+   ADDRESS: 0040DE20
+   SIGNATURE: C_PTR32_C_I32
+    POINTER: PTR
+     TYPE_QUALIFIER: C
+     SIZE: 32
+     INT: I
+      TYPE_QUALIFIER: C
+      SIZE: 32
+
+Progress: 84%
+ COMMAND: RegCmd
+  SYMBOL: point1
+   TYPE: DATA
+   NAME: point1
+   ADDRESS: 0040DF20
+   SIGNATURE: S128_PointTag
+    STRUCT: PointTag
+     SIZE: 128
+
+Progress: 94%
+ COMMAND: RegCmd
+  SYMBOL: point1_x
+   TYPE: DATA
+   NAME: point1_x
+   ADDRESS: 0040DF20
+   SIGNATURE: F32
+    FLOAT: F
+     SIZE: 32
+
+Progress: 99%
+ COMMAND: RegCmd
+  SYMBOL: point1_y
+   TYPE: DATA
+   NAME: point1_y
+   ADDRESS: 0040DF24
+   SIGNATURE: F96
+    FLOAT: F
+     SIZE: 96
+
+Progress: 100%
 \endcode
 
 The Sy2 Parser is provided as dynamic link library. The programming interface consists of C-style functions. 
-
-Node Relationships
-
-The nodes in the node tree have a hierarchical relationship to each other.
-The terms parent, child, and sibling are used to describe the relationships.
-
-In a node tree, the top node is called the root (or root node)
-Every node has exactly one parent, except the root (which has no parent)
-A node can have a number of children
-Siblings (brothers or sisters) are nodes with the same parent
-
-
 */
 
 // The following ifdef block is the standard way of creating macros which make exporting 
@@ -171,12 +379,12 @@ of the interface then the major version number will be incremented.
 It can use udaGetApiVersion() to retrieve the API version implemented by the DLL.
 */
 //! Major version number of the programming interface.
-#define SY2PARSER_API_MAJOR_VERSION   0
+#define SY2PARSER_API_MAJOR_VERSION   0U
 //! Minor version number of the programming interface.
-#define SY2PARSER_API_MINOR_VERSION   1
+#define SY2PARSER_API_MINOR_VERSION   1U
 
 //! Version number of the programming interface as DWORD.
-#define SY2PARSER_API_VERSION ( (((unsigned int)SY2PARSER_API_MAJOR_VERSION) << 16) | ((unsigned int)SY2PARSER_API_MINOR_VERSION) ) 
+#define SY2PARSER_API_VERSION ( (SY2PARSER_API_MAJOR_VERSION << 16) | SY2PARSER_API_MINOR_VERSION ) 
 /*!
 @}
 */
@@ -189,7 +397,7 @@ It can use udaGetApiVersion() to retrieve the API version implemented by the DLL
 */
 
 //! The value zero is an invalid handle.
-#define SY2PARSER_INVALID_HANDLE	0
+#define SY2PARSER_INVALID_HANDLE	0U
 
 //! Status code returned by API functions.
 typedef unsigned int Sy2ParserStatus;
@@ -206,10 +414,9 @@ typedef enum Sy2ParserStatusCode
 	SY2_EOF				= 0x3,			//!< End of file.
 	SY2_UNKNOWN_TOKEN	= 0x4,			//!< Unknown token.
 	SY2_INVALID_HANDLE = 0x05,
-
-//! Sy2 Node types.
 } T_Sy2ParserStatusCode;
 
+//! Sy2 Node types.
 typedef enum Sy2NodeType
 {
 	SY2_UNSPECIFIED,
@@ -269,14 +476,14 @@ const char *sy2NodeName[SY2_NODE_COUNT] = {
 	"ARRAY_SIZE"
 };
 
-//! The basic information to unique Sy2 node identification.
+//! The basic information to unique Sy2 node identification. The Sy2 node represents a terminal and a non-terminal lexical token.
 typedef struct Sy2Node
 {
-	T_Sy2NodeType type;
-	char value[256];
-	unsigned int depth;
-	unsigned int line;
-	unsigned int column;
+	T_Sy2NodeType type;		//!< The type of a node see #Sy2NodeType.
+	char value[256];		//!< The value of a node.
+	unsigned int depth;		//!< The length of the path from root to the end.
+	unsigned int line;		//!< The number of line.
+	unsigned int column;	//!< The column of character.
 } T_Sy2Node;
 
 /*!
@@ -290,7 +497,54 @@ typedef struct Sy2Node
 \brief Functions exported from the DLL and called by the application.
 */
 
+/*!
+  \brief Callback function which will be called when an error occurs.
+
+  \param[in] handle
+	A descriptor identifying an open Sy2 parser.
+
+  \param[in] line
+	The number of line.
+
+  \param[in] column
+	The number of column.
+
+  \param[in] message
+	The error message.
+
+  \param[in] callbackContext
+	The pointer value that was passed when the callback was registered.
+*/
+typedef void SY2PARSER_API_CALL ParsingErrorCallback(Sy2ParserHandle handle, unsigned int line, unsigned int column, const char *message, void *callbackContext);
+
+/*!
+  \brief Callback function which is be called when parsing progress is changed.
+
+  \param[in] handle
+	A descriptor identifying an open Sy2 parser.
+
+  \param[in] progress
+	The value of progress in percentages.
+	
+  \param[in] callbackContext
+	The pointer value that was passed when the callback was registered.
+*/
 typedef void SY2PARSER_API_CALL ParsingProgressCallback(Sy2ParserHandle handle, unsigned int progress, void *callbackContext);
+
+/*!
+  \brief Callback function which is be called after a node is completely parsed.
+
+  Otherwise the ParsingErrorCallback is called.
+
+  \param[in] handle
+	A descriptor identifying an open Sy2 parser.
+
+  \param[in] node
+	Information about parsed node.
+
+  \param[in] callbackContext
+	The pointer value that was passed when the callback was registered.
+*/
 typedef void SY2PARSER_API_CALL ParsedNodeCallback(Sy2ParserHandle handle, const T_Sy2Node *node, void *callbackContext);
 
 /*!
@@ -298,7 +552,6 @@ typedef void SY2PARSER_API_CALL ParsedNodeCallback(Sy2ParserHandle handle, const
 
 \param[in] fileName
 Specifies the name of a file to be parse.
-Parsing and then close the specified file.
 
 \param[out] handle
 Address of a caller-provided variable which will be set to a handle value if the function succeeds.
@@ -331,24 +584,108 @@ If a valid handle is specified, the function returns always #SY2_SUCCESS.
 */
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Close(Sy2ParserHandle handle);
 
+/*!
+  \brief Set a callback to receive a parsing error.
+
+  The callback is invoked during running the #sy2Parse() function.
+
+  \param[in] handle
+	A descriptor identifying an open Sy2 parser.
+
+  \param[in] callback
+	Address of a caller-provided callback function.
+
+  \param[in] callbackContext
+	Caller-provided pointer which will be passed to the callback function unmodified. Can be set to NULL if unused.
+
+  \return
+	The function returns #SY2_SUCCESS if successful, an error code otherwise.
+*/
+SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2SetParsingErrorCallback(Sy2ParserHandle handle, ParsingErrorCallback *callback, void *callbackContext);
+
+/*!
+  \brief Set a callback to receive a parsing progress.
+
+  The callback is invoked during running the #sy2Parse() function.
+
+  \param[in] handle
+	A descriptor identifying an open Sy2 parser.
+
+  \param[in] callback
+	Address of a caller-provided callback function.
+
+  \param[in] callbackContext
+	Caller-provided pointer which will be passed to the callback function unmodified. Can be set to NULL if unused.
+
+  \return
+	The function returns #SY2_SUCCESS if successful, an error code otherwise.
+*/
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2SetParsingProgressCallback(Sy2ParserHandle handle, ParsingProgressCallback *callback, void *callbackContext);
+
+/*!
+  \brief Add a callback to receive a parsed node.
+
+  The callback is invoked during running the #sy2Parse() function.
+
+  \param[in] handle
+	A descriptor identifying an open Sy2 parser.
+
+  \param[in] nodeType
+    A node type for which the specified callback will be called only. See #Sy2NodeType.
+
+  \param[in] callback
+	Address of a caller-provided callback function.
+
+  \param[in] callbackContext
+	Caller-provided pointer which will be passed to the callback function unmodified. Can be set to NULL if unused.
+
+  \return
+	The function returns #SY2_SUCCESS if successful, an error code otherwise.
+*/
+
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2AddParsedNodeCallback(Sy2ParserHandle handle, T_Sy2NodeType nodeType, ParsedNodeCallback *callback, void *callbackContext);
+
+/*!
+  \brief Remove already added callback to receive a parsed node.
+
+  \param[in] handle
+	A descriptor identifying an open Sy2 parser.
+
+  \param[in] nodeType
+	A node type for which the specified callback will be called only. See #Sy2NodeType.
+
+  \param[in] callback
+	Address of a caller-provided callback function.
+
+  \return
+	The function returns #SY2_SUCCESS if successful, an error code otherwise.
+*/
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2RemoveParsedNodeCallback(Sy2ParserHandle handle, T_Sy2NodeType nodeType, ParsedNodeCallback *callback);
 
 /*!
-Performs a single-call parse of an Sy2 file associated with a handle.
-Returns when one of the following occurs:
-- The parser reaches the end of the file.
-- A callback invokes RETURN ERROR.
-- An error occurred because the parser could not start or could not continue parsing.
+  \brief Perform a single-call parse of an Sy2 file associated with a handle. This function internally creates ABS which can be read by using #sy2ReadNext() funcition after or during parsing.
 
+  While sy2Parse() is running the previously registered callbacks are invoked. Functions sy2SetParsingErrorCallback(), sy2SetParsingProgressCallback() and sy2AddParsedNodeCallback().
 
-While sy2Parse is running, each time the parser detects an node, the corresponding callback is invoked.
+  \param[in] handle
+	A descriptor identifying an open Sy2 parser.
+
+  \return
+	The function returns #SY2_SUCCESS if successful, an error code otherwise.
 */
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Parse(Sy2ParserHandle handle);
 
 /*!
-Read next.
+  \brief Read next node in generated ABS.
+
+  \param[in] handle
+    A descriptor identifying an open Sy2 parser.
+
+  \param[out] node
+    A node information.
+
+  \return
+	The function returns #SY2_SUCCESS if successful, an error code otherwise.
 */
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2ReadNext(const Sy2ParserHandle handle, T_Sy2Node *node);
 
