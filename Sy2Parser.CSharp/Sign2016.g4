@@ -15,24 +15,26 @@ options
 /*
  * Parser Rules
  */
-signature : (dataType | ptrType | function) EOF ;
-dataType : typeQualifier (voidType | boolType | intType | uintType | floatType | structType) ;
-ptrType : (typeQualifier PTR_TYPE SIZE arraySize SEP)+ (dataType | function) ;
-function : FB SEP returnType (SEP paramType)+ SEP FE ;
-typeQualifier : (TYPE_QUALIFIER SEP)? ;
+
+signature : (boolType | intType | uintType | floatType | structType | ptrType | function) EOF ;
 voidType : VOID_TYPE ;
-boolType : BOOL_TYPE arraySize ;
-intType : INT_TYPE SIZE arraySize ;
-uintType : UINT_TYPE SIZE arraySize ;
-floatType : FLOAT_TYPE SIZE arraySize ;
-structType : STRUCT_TYPE SIZE arraySize SEP ID ;
-returnType : (dataType | ptrType) ;
-paramType : (dataType | ptrType) ;
-arraySize : (SEP ARRAY_SIZE)* ;
+boolType : typeQualifier? BOOL_TYPE (arraySizes += arraySize)* ;
+intType : typeQualifier? INT_TYPE size (arraySizes += arraySize)* ;
+uintType : typeQualifier? UINT_TYPE size (arraySizes += arraySize)* ;
+floatType : typeQualifier? FLOAT_TYPE size (arraySizes += arraySize)* ;
+structType : typeQualifier? STRUCT_TYPE size (arraySizes += arraySize)* SEP ID ;
+ptrType : typeQualifier? PTR_TYPE size (arraySizes += arraySize)* SEP (voidType | boolType | intType | uintType | floatType | structType | ptrType | function) ;
+function : FB SEP returnType (SEP paramType)+ SEP FE ;
+returnType : (voidType | boolType | intType | uintType | floatType | structType | ptrType) ;
+paramType : (voidType | boolType | intType | uintType | floatType | structType | ptrType) ;
+typeQualifier : TYPE_QUALIFIER SEP ;
+size : SIZE ;
+arraySize : SEP ARRAY_SIZE ;
 
 /*
  * Lexer Rules
  */
+
 TYPE_QUALIFIER : 'C' ;
 VOID_TYPE : 'V' ;
 BOOL_TYPE : 'B' ;

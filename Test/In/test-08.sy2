@@ -1,0 +1,5 @@
+TEngSetSignVersion 2016
+
+# Command Type   Name            Address     Signature
+# ----------------------------------------------------
+RegCmd    DATA   var1            0040DE3C    I32

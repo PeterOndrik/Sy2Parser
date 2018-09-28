@@ -66,9 +66,17 @@ options
  */
 
 file : (NL | commands += command)+ EOF ;
-command : (KEYWORD CMD_VALUE | KEYWORD symbol) NL ;
-symbol : TYPE ID position SIGNATURE ;
-position : BITMASK | OFFSET | ADDRESS | VALUE ;
+command : (keyword cmdValue | keyword symbol) NL ;
+keyword : KEYWORD ;
+cmdValue : CMD_VALUE ;
+symbol : type name (bitmask | offset | address | enumValue) signature ;
+type : TYPE ;
+name : ID ;
+bitmask : BITMASK ;
+offset : OFFSET ;
+address : ADDRESS ;
+enumValue : ENUM_VALUE ;
+signature : SIGNATURE ;
 
 /*
  * Lexer Rules
@@ -86,8 +94,8 @@ ID : CHAR+ { tokenPos == 2 }? { tokenPos++; } ;
 BITMASK : [0-9]+ { tokenPos == 3 && symPosType == 0 }? { tokenPos++; } ;
 OFFSET : [0-9]+ { tokenPos == 3 && symPosType == 1 }? { tokenPos++; } ;
 ADDRESS : NUMBER NUMBER NUMBER NUMBER NUMBER NUMBER NUMBER NUMBER { tokenPos == 3 && symPosType == 2 }? { tokenPos++; } ;
-VALUE : [0-9]+ { tokenPos == 3 && symPosType == 3 }? { tokenPos++; } ;
-SIGNATURE : CHAR+ { tokenPos == 4 }? { tokenPos = 0; };
+ENUM_VALUE : [0-9]+ { tokenPos == 3 && symPosType == 3 }? { tokenPos++; } ;
+SIGNATURE : CHAR+ { tokenPos == 4 }? { tokenPos = 0; } ;
 BIT : 'BIT' ;
 STRUCT : 'STRUCT' ;
 UNION : 'UNION' ;

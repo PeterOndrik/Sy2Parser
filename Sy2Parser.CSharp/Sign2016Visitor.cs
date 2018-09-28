@@ -9,12 +9,6 @@ namespace Sy2Parser.CSharp
 {
     public class Sign2016Visitor : Sign2016BaseVisitor<Object>
     {
-        public override object VisitDataType([NotNull] Sign2016Parser.DataTypeContext context)
-        {
-            Sign2016Parser.TypeQualifierContext tqContext = context.typeQualifier();
-
-            return base.VisitDataType(context);
-        }
         public override object VisitIntType([NotNull] Sign2016Parser.IntTypeContext context)
         {
             String text = context.GetText();

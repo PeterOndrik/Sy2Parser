@@ -12,15 +12,15 @@
 
 \section sec_introduction Introduction
 
-A parser is a software component that takes input data and builds an abstract syntax tree (ABS). The Sy2 Parser reads a file (symbol file) in the Sy2 format and builds a corresponding ABS.
+A parser is a software component that takes input data and builds an abstract syntax tree (ABS). The Sy2 Parser reads a symbol file in the Sy2 format and builds a corresponding ABS.
 This API provides functions to parse a file and read such created ABS. The nodes in the tree have a hierarchical relationship to each other. The terms parent, child, and sibling are used to describe the relationships.
 
 
 The Sy2 format is primarily designed for a test engine but contains lots of information for any tool which needs to work with symbols of a source program. A symbol represents 
-a data type, variable or function. Each row starts with command keyword follows by value or the symbol attributes.
+a data type, variable or function. Each line starts with a command keyword followed by a value or the symbol attributes.
 
 For example:
-- command to specify a type of signature version of a symbol file:
+- command to specify a type of signature version of a symbol file (the signature describes a data type of a symbol):
 \code
   TEngSetSignVersion 2016
 \endcode
@@ -29,6 +29,7 @@ For example:
 C-style syntax: 
 \code
   uint32_t var1;
+  uint8_t * const var2;
 \endcode
 \code
 # Command Type   Name            Address     Signature
@@ -37,10 +38,10 @@ RegCmd    DATA   var1            0040DD0C    I32
 RegCmd    DATA   var2            0040DE20    C_PTR32_UI8
 \endcode
 
-Row started by the '#' sign is a comment. Columns "Type", "Name", "Address" and "Signature" are symbol attributes, where "Signature" describes data type. The Sy2 format is used to describe data type 
+A line started by the '#' sign is a comment. Columns "Type", "Name", "Address" and "Signature" are symbol attributes, where "Signature" describes data type. The Sy2 format is used to describe data type 
 signature version 2016.
 
-The Sy2 Parser generates following ABS for examples above:
+The Sy2 Parser generates following ABS for example above:
 \image html Sy2-1.PNG "Figure 1: Sy2 ABS Example"
 
 The signature is internally parsed separated Sign2016 Parser but the API provides the same functions.
@@ -60,7 +61,8 @@ For example ABS for the signatures above is following:
 To parse and display ABS the following code can be used:
 \code
 #include "sy2parser_api.h"
-#include <stdio.h>
+#include <stdio.h>  // printf()
+#include <string.h>  // memset()
 
 #define INDENT_SIZE 100U
 
@@ -216,11 +218,16 @@ int main()
   T_Sy2Node node = { 0, 0 };
   char indent[INDENT_SIZE] = { 0 };
 
+  // initialization
   Sy2ParserStatus status = sy2Open("test.sy2", &handle);
   status = sy2SetParsingErrorCallback(handle, errorCallback, NULL);
   status = sy2SetParsingProgressCallback(handle, progressCallback, NULL);
   status = sy2AddParsedNodeCallback(handle, SY2_COMMAND, parsedNodeCallback, NULL);
+
+  // parsing
   status = sy2Parse(handle);
+
+  // closing
   status = sy2Close(handle);
 
   return 0;
@@ -498,7 +505,7 @@ typedef struct Sy2Node
 */
 
 /*!
-  \brief Callback function which will be called when an error occurs.
+  \brief Callback function which is called when an error occurs.
 
   \param[in] handle
 	A descriptor identifying an open Sy2 parser.
@@ -518,7 +525,7 @@ typedef struct Sy2Node
 typedef void SY2PARSER_API_CALL ParsingErrorCallback(Sy2ParserHandle handle, unsigned int line, unsigned int column, const char *message, void *callbackContext);
 
 /*!
-  \brief Callback function which is be called when parsing progress is changed.
+  \brief Callback function which is called when parsing progress is changed.
 
   \param[in] handle
 	A descriptor identifying an open Sy2 parser.
@@ -532,7 +539,7 @@ typedef void SY2PARSER_API_CALL ParsingErrorCallback(Sy2ParserHandle handle, uns
 typedef void SY2PARSER_API_CALL ParsingProgressCallback(Sy2ParserHandle handle, unsigned int progress, void *callbackContext);
 
 /*!
-  \brief Callback function which is be called after a node is completely parsed.
+  \brief Callback function which is called after a node is completely parsed.
 
   Otherwise the ParsingErrorCallback is called.
 
@@ -682,7 +689,7 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Parse(Sy2ParserHandle handle
     A descriptor identifying an open Sy2 parser.
 
   \param[out] node
-    A node information.
+    Node information.
 
   \return
 	The function returns #SY2_SUCCESS if successful, an error code otherwise.

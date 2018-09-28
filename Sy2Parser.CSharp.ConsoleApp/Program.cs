@@ -13,7 +13,7 @@ namespace Sy2Parser.CSharp.ConsoleApp
     {
         static void Main(string[] args)
         {
-            using (Stream stream = File.Open("test_03.sy2", FileMode.Open))
+            using (Stream stream = File.Open(@"..\..\..\Test\In\test-01.sy2", FileMode.Open))
             {
                 AntlrInputStream inputStream = new AntlrInputStream(stream);
                 Sy2Lexer lexer = new Sy2Lexer(inputStream);
