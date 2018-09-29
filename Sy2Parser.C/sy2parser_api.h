@@ -498,7 +498,7 @@ typedef struct Sy2Node
 */
 
 /*!
-\defgroup sy2parser_api_functions Sy2 Parser API functions
+\defgroup sy2parser_api_functions Sy2 Parser API Functions
 @{
 
 \brief Functions exported from the DLL and called by the application.
@@ -695,6 +695,26 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Parse(Sy2ParserHandle handle
 	The function returns #SY2_SUCCESS if successful, an error code otherwise.
 */
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2ReadNext(const Sy2ParserHandle handle, T_Sy2Node *node);
+
+/*!
+@}
+*/
+
+/*!
+\defgroup sy2parser_api_runtime Run-Time DL API
+@{
+
+\brief API function signatures for run-time dynamic linking.
+*/
+
+typedef Sy2ParserStatus(SY2PARSER_API_CALL *T_sy2Open)(const char *fileName, Sy2ParserHandle *handle);
+typedef Sy2ParserStatus(SY2PARSER_API_CALL *T_sy2Close)(Sy2ParserHandle handle);
+typedef Sy2ParserStatus(SY2PARSER_API_CALL *T_sy2SetParsingErrorCallback)(Sy2ParserHandle handle, ParsingErrorCallback *callback, void *callbackContext);
+typedef Sy2ParserStatus(SY2PARSER_API_CALL *T_sy2SetParsingProgressCallback)(Sy2ParserHandle handle, ParsingProgressCallback *callback, void *callbackContext);
+typedef Sy2ParserStatus(SY2PARSER_API_CALL *T_sy2AddParsedNodeCallback)(Sy2ParserHandle handle, T_Sy2NodeType nodeType, ParsedNodeCallback *callback, void *callbackContext);
+typedef Sy2ParserStatus(SY2PARSER_API_CALL *T_sy2RemoveParsedNodeCallback)(Sy2ParserHandle handle, T_Sy2NodeType nodeType, ParsedNodeCallback *callback);
+typedef Sy2ParserStatus(SY2PARSER_API_CALL *T_sy2Parse)(Sy2ParserHandle handle);
+typedef Sy2ParserStatus(SY2PARSER_API_CALL *T_sy2ReadNext)(const Sy2ParserHandle handle, T_Sy2Node *node);
 
 /*!
 @}
