@@ -56,8 +56,8 @@ Figure 3: Sign2016 "C_PTR32_UI8" ABS Example
 </td>
 </tr>
 </table>
-The Sy2 Parser is provided as dynamic link library sy2parser.dll. 
-The programming interface consists of C-style functions which signatures are availale in sy2parser_api.h.
+The Sy2 Parser is provided as dynamic link library in bin\Release\Win32\sy2parser.dll. 
+The programming interface consists of C-style functions which signatures are availale in Sy2Parser.C\sy2parser_api.h.
 
 ## Read ABS after parsing
 
