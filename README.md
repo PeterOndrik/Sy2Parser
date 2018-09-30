@@ -59,7 +59,7 @@ Figure 3: Sign2016 "C_PTR32_UI8" ABS Example
 The Sy2 Parser is provided as dynamic link library in bin\Release\Win32\sy2parser.dll. 
 The programming interface consists of C-style functions which signatures are availale in Sy2Parser.C\sy2parser_api.h.
 
-## Read ABS after parsing
+## ABS reading after parsing
 
 To parse and display ABS the following code can be used: 
 ```
@@ -162,7 +162,7 @@ FILE: test.sy2
      UINT: UI
       SIZE: 8
 ```
-## Read ABS during parsing
+## ABS reading during parsing
 ```
 #include "sy2parser_api.h"
 #include <stdio.h>  // printf()
