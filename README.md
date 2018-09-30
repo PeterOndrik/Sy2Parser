@@ -32,7 +32,7 @@ The Sy2 Parser generates following ABS for example above:
 
 ![alt text][Sy2-1]
 
-[Sy2-1]: https://github.com/PeterOndrik/Sy2Parser/blob/master/doc/img/Sy2-1.PNG "Figure 1: Sy2 ABS Example"
+[Sy2-1]: https://doc/img/Sy2-1.PNG "Figure 1: Sy2 ABS Example"
 Figure 1: Sy2 ABS Example
 </td>
 </tr>
