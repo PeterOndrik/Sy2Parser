@@ -56,8 +56,9 @@ For example ABS for the signatures above is following:
 </td>
 </tr>
 </table>
+The Sy2 Parser is provided as dynamic link library \c sy2parser.dll. 
+The programming interface consists of C-style functions which signatures are availale in \c sy2parser_api.h.
 \section sec_open_parse_view_example Read ABS after parsing
-
 To parse and display ABS the following code can be used:
 \code
 #include "sy2parser_api.h"
@@ -92,7 +93,7 @@ void SY2PARSER_API_CALL progressCallback(Sy2ParserHandle handle, unsigned int pr
 int main()
 {
   Sy2ParserHandle handle = SY2PARSER_INVALID_HANDLE;
-  T_Sy2Node node = { 0, 0 };
+  T_Sy2Node node = { 0 };
   char indent[INDENT_SIZE] = { 0 };
 
   // initialization
@@ -165,7 +166,8 @@ FILE: test.sy2
 \section sec_open_parse_callback_example Read ABS during parsing
 \code
 #include "sy2parser_api.h"
-#include <stdio.h>
+#include <stdio.h>  // printf()
+#include <string.h>  // memset()
 
 #define INDENT_SIZE 100U
 
@@ -199,7 +201,7 @@ void SY2PARSER_API_CALL parsedNodeCallback(Sy2ParserHandle handle, const T_Sy2No
   setIndent(indent, node->depth);
   printf("%s%s: %s\n", indent, sy2NodeName[node->type], node->value);
 
-  T_Sy2Node newNode = { 0 , 0 };
+  T_Sy2Node newNode = { 0 };
   Sy2ParserStatus status = sy2ReadNext(handle, &newNode);
   while (status == SY2_SUCCESS && newNode.depth > node->depth)
   {
@@ -215,8 +217,6 @@ void SY2PARSER_API_CALL parsedNodeCallback(Sy2ParserHandle handle, const T_Sy2No
 int main()
 {
   Sy2ParserHandle handle = SY2PARSER_INVALID_HANDLE;
-  T_Sy2Node node = { 0, 0 };
-  char indent[INDENT_SIZE] = { 0 };
 
   // initialization
   Sy2ParserStatus status = sy2Open("test.sy2", &handle);
@@ -347,8 +347,6 @@ Progress: 99%
 
 Progress: 100%
 \endcode
-
-The Sy2 Parser is provided as dynamic link library. The programming interface consists of C-style functions. 
 */
 
 // The following ifdef block is the standard way of creating macros which make exporting 
