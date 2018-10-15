@@ -39,25 +39,13 @@ public class Sy2BaseListener implements Sy2Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterKeyword(Sy2Parser.KeywordContext ctx) { }
+	@Override public void enterTypedef(Sy2Parser.TypedefContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitKeyword(Sy2Parser.KeywordContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCmdValue(Sy2Parser.CmdValueContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCmdValue(Sy2Parser.CmdValueContext ctx) { }
+	@Override public void exitTypedef(Sy2Parser.TypedefContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -27,25 +27,15 @@ public interface Sy2Listener extends ParseTreeListener {
 	 */
 	void exitCommand(Sy2Parser.CommandContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link Sy2Parser#keyword}.
+	 * Enter a parse tree produced by {@link Sy2Parser#typedef}.
 	 * @param ctx the parse tree
 	 */
-	void enterKeyword(Sy2Parser.KeywordContext ctx);
+	void enterTypedef(Sy2Parser.TypedefContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link Sy2Parser#keyword}.
+	 * Exit a parse tree produced by {@link Sy2Parser#typedef}.
 	 * @param ctx the parse tree
 	 */
-	void exitKeyword(Sy2Parser.KeywordContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link Sy2Parser#cmdValue}.
-	 * @param ctx the parse tree
-	 */
-	void enterCmdValue(Sy2Parser.CmdValueContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link Sy2Parser#cmdValue}.
-	 * @param ctx the parse tree
-	 */
-	void exitCmdValue(Sy2Parser.CmdValueContext ctx);
+	void exitTypedef(Sy2Parser.TypedefContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link Sy2Parser#symbol}.
 	 * @param ctx the parse tree
