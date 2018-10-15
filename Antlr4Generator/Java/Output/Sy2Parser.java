@@ -16,26 +16,29 @@ public class Sy2Parser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		KEYWORD=1, CMD_VALUE=2, TYPE=3, ID=4, BITMASK=5, OFFSET=6, ADDRESS=7, 
-		ENUM_VALUE=8, SIGNATURE=9, BIT=10, STRUCT=11, UNION=12, ENUM=13, PROC=14, 
-		DATA=15, LINE_COMMENT=16, WS=17, NL=18;
+		ENCODING=1, LITTLE_ENDIAN=2, BIG_ENDIAN=3, SIGN_VERSION=4, CMD_VALUE=5, 
+		REG_VAR=6, REG_CMD=7, TYPE=8, ID=9, BITMASK=10, OFFSET=11, ADDRESS=12, 
+		ENUM_VALUE=13, SIGNATURE=14, BIT=15, STRUCT=16, UNION=17, ENUM=18, PROC=19, 
+		DATA=20, LINE_COMMENT=21, WS=22, NL=23;
 	public static final int
-		RULE_file = 0, RULE_command = 1, RULE_keyword = 2, RULE_cmdValue = 3, 
-		RULE_symbol = 4, RULE_type = 5, RULE_name = 6, RULE_bitmask = 7, RULE_offset = 8, 
-		RULE_address = 9, RULE_enumValue = 10, RULE_signature = 11;
+		RULE_file = 0, RULE_command = 1, RULE_typedef = 2, RULE_symbol = 3, RULE_type = 4, 
+		RULE_name = 5, RULE_bitmask = 6, RULE_offset = 7, RULE_address = 8, RULE_enumValue = 9, 
+		RULE_signature = 10;
 	public static final String[] ruleNames = {
-		"file", "command", "keyword", "cmdValue", "symbol", "type", "name", "bitmask", 
-		"offset", "address", "enumValue", "signature"
+		"file", "command", "typedef", "symbol", "type", "name", "bitmask", "offset", 
+		"address", "enumValue", "signature"
 	};
 
 	private static final String[] _LITERAL_NAMES = {
-		null, null, null, null, null, null, null, null, null, null, "'BIT'", "'STRUCT'", 
-		"'UNION'", "'ENUM'", "'PROC'", "'DATA'"
+		null, null, null, null, null, null, null, null, null, null, null, null, 
+		null, null, null, "'BIT'", "'STRUCT'", "'UNION'", "'ENUM'", "'PROC'", 
+		"'DATA'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
-		null, "KEYWORD", "CMD_VALUE", "TYPE", "ID", "BITMASK", "OFFSET", "ADDRESS", 
-		"ENUM_VALUE", "SIGNATURE", "BIT", "STRUCT", "UNION", "ENUM", "PROC", "DATA", 
-		"LINE_COMMENT", "WS", "NL"
+		null, "ENCODING", "LITTLE_ENDIAN", "BIG_ENDIAN", "SIGN_VERSION", "CMD_VALUE", 
+		"REG_VAR", "REG_CMD", "TYPE", "ID", "BITMASK", "OFFSET", "ADDRESS", "ENUM_VALUE", 
+		"SIGNATURE", "BIT", "STRUCT", "UNION", "ENUM", "PROC", "DATA", "LINE_COMMENT", 
+		"WS", "NL"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -125,23 +128,26 @@ public class Sy2Parser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(26); 
+			setState(24); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
-				setState(26);
+				setState(24);
 				_errHandler.sync(this);
 				switch (_input.LA(1)) {
 				case NL:
 					{
-					setState(24);
+					setState(22);
 					match(NL);
 					}
 					break;
-				case KEYWORD:
+				case ENCODING:
+				case SIGN_VERSION:
+				case REG_VAR:
+				case REG_CMD:
 					{
-					setState(25);
+					setState(23);
 					((FileContext)_localctx).command = command();
 					((FileContext)_localctx).commands.add(((FileContext)_localctx).command);
 					}
@@ -150,11 +156,11 @@ public class Sy2Parser extends Parser {
 					throw new NoViableAltException(this);
 				}
 				}
-				setState(28); 
+				setState(26); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( _la==KEYWORD || _la==NL );
-			setState(30);
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << ENCODING) | (1L << SIGN_VERSION) | (1L << REG_VAR) | (1L << REG_CMD) | (1L << NL))) != 0) );
+			setState(28);
 			match(EOF);
 			}
 		}
@@ -170,13 +176,17 @@ public class Sy2Parser extends Parser {
 	}
 
 	public static class CommandContext extends ParserRuleContext {
+		public TerminalNode ENCODING() { return getToken(Sy2Parser.ENCODING, 0); }
 		public TerminalNode NL() { return getToken(Sy2Parser.NL, 0); }
-		public KeywordContext keyword() {
-			return getRuleContext(KeywordContext.class,0);
+		public TerminalNode LITTLE_ENDIAN() { return getToken(Sy2Parser.LITTLE_ENDIAN, 0); }
+		public TerminalNode BIG_ENDIAN() { return getToken(Sy2Parser.BIG_ENDIAN, 0); }
+		public TerminalNode SIGN_VERSION() { return getToken(Sy2Parser.SIGN_VERSION, 0); }
+		public TerminalNode CMD_VALUE() { return getToken(Sy2Parser.CMD_VALUE, 0); }
+		public TerminalNode REG_VAR() { return getToken(Sy2Parser.REG_VAR, 0); }
+		public TypedefContext typedef() {
+			return getRuleContext(TypedefContext.class,0);
 		}
-		public CmdValueContext cmdValue() {
-			return getRuleContext(CmdValueContext.class,0);
-		}
+		public TerminalNode REG_CMD() { return getToken(Sy2Parser.REG_CMD, 0); }
 		public SymbolContext symbol() {
 			return getRuleContext(SymbolContext.class,0);
 		}
@@ -197,105 +207,147 @@ public class Sy2Parser extends Parser {
 	public final CommandContext command() throws RecognitionException {
 		CommandContext _localctx = new CommandContext(_ctx, getState());
 		enterRule(_localctx, 2, RULE_command);
+		int _la;
 		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(38);
-			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
-			case 1:
-				{
-				setState(32);
-				keyword();
-				setState(33);
-				cmdValue();
-				}
-				break;
-			case 2:
-				{
-				setState(35);
-				keyword();
-				setState(36);
-				symbol();
-				}
-				break;
-			}
-			setState(40);
-			match(NL);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class KeywordContext extends ParserRuleContext {
-		public TerminalNode KEYWORD() { return getToken(Sy2Parser.KEYWORD, 0); }
-		public KeywordContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_keyword; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Sy2Listener ) ((Sy2Listener)listener).enterKeyword(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Sy2Listener ) ((Sy2Listener)listener).exitKeyword(this);
-		}
-	}
-
-	public final KeywordContext keyword() throws RecognitionException {
-		KeywordContext _localctx = new KeywordContext(_ctx, getState());
-		enterRule(_localctx, 4, RULE_keyword);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(42);
-			match(KEYWORD);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class CmdValueContext extends ParserRuleContext {
-		public TerminalNode CMD_VALUE() { return getToken(Sy2Parser.CMD_VALUE, 0); }
-		public CmdValueContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_cmdValue; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof Sy2Listener ) ((Sy2Listener)listener).enterCmdValue(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof Sy2Listener ) ((Sy2Listener)listener).exitCmdValue(this);
-		}
-	}
-
-	public final CmdValueContext cmdValue() throws RecognitionException {
-		CmdValueContext _localctx = new CmdValueContext(_ctx, getState());
-		enterRule(_localctx, 6, RULE_cmdValue);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
 			setState(44);
-			match(CMD_VALUE);
+			_errHandler.sync(this);
+			switch (_input.LA(1)) {
+			case ENCODING:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(30);
+				match(ENCODING);
+				setState(31);
+				_la = _input.LA(1);
+				if ( !(_la==LITTLE_ENDIAN || _la==BIG_ENDIAN) ) {
+				_errHandler.recoverInline(this);
+				}
+				else {
+					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+					_errHandler.reportMatch(this);
+					consume();
+				}
+				setState(32);
+				match(NL);
+				}
+				break;
+			case SIGN_VERSION:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(33);
+				match(SIGN_VERSION);
+				setState(34);
+				match(CMD_VALUE);
+				setState(35);
+				match(NL);
+				}
+				break;
+			case REG_VAR:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(36);
+				match(REG_VAR);
+				setState(37);
+				typedef();
+				setState(38);
+				match(NL);
+				}
+				break;
+			case REG_CMD:
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(40);
+				match(REG_CMD);
+				setState(41);
+				symbol();
+				setState(42);
+				match(NL);
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class TypedefContext extends ParserRuleContext {
+		public TypeContext type() {
+			return getRuleContext(TypeContext.class,0);
+		}
+		public NameContext name() {
+			return getRuleContext(NameContext.class,0);
+		}
+		public SignatureContext signature() {
+			return getRuleContext(SignatureContext.class,0);
+		}
+		public BitmaskContext bitmask() {
+			return getRuleContext(BitmaskContext.class,0);
+		}
+		public OffsetContext offset() {
+			return getRuleContext(OffsetContext.class,0);
+		}
+		public EnumValueContext enumValue() {
+			return getRuleContext(EnumValueContext.class,0);
+		}
+		public TypedefContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_typedef; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof Sy2Listener ) ((Sy2Listener)listener).enterTypedef(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof Sy2Listener ) ((Sy2Listener)listener).exitTypedef(this);
+		}
+	}
+
+	public final TypedefContext typedef() throws RecognitionException {
+		TypedefContext _localctx = new TypedefContext(_ctx, getState());
+		enterRule(_localctx, 4, RULE_typedef);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(46);
+			type();
+			setState(47);
+			name();
+			setState(51);
+			_errHandler.sync(this);
+			switch (_input.LA(1)) {
+			case BITMASK:
+				{
+				setState(48);
+				bitmask();
+				}
+				break;
+			case OFFSET:
+				{
+				setState(49);
+				offset();
+				}
+				break;
+			case ENUM_VALUE:
+				{
+				setState(50);
+				enumValue();
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+			setState(53);
+			signature();
 			}
 		}
 		catch (RecognitionException re) {
@@ -316,20 +368,11 @@ public class Sy2Parser extends Parser {
 		public NameContext name() {
 			return getRuleContext(NameContext.class,0);
 		}
-		public SignatureContext signature() {
-			return getRuleContext(SignatureContext.class,0);
-		}
-		public BitmaskContext bitmask() {
-			return getRuleContext(BitmaskContext.class,0);
-		}
-		public OffsetContext offset() {
-			return getRuleContext(OffsetContext.class,0);
-		}
 		public AddressContext address() {
 			return getRuleContext(AddressContext.class,0);
 		}
-		public EnumValueContext enumValue() {
-			return getRuleContext(EnumValueContext.class,0);
+		public SignatureContext signature() {
+			return getRuleContext(SignatureContext.class,0);
 		}
 		public SymbolContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -347,45 +390,17 @@ public class Sy2Parser extends Parser {
 
 	public final SymbolContext symbol() throws RecognitionException {
 		SymbolContext _localctx = new SymbolContext(_ctx, getState());
-		enterRule(_localctx, 8, RULE_symbol);
+		enterRule(_localctx, 6, RULE_symbol);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(46);
+			setState(55);
 			type();
-			setState(47);
+			setState(56);
 			name();
-			setState(52);
-			_errHandler.sync(this);
-			switch (_input.LA(1)) {
-			case BITMASK:
-				{
-				setState(48);
-				bitmask();
-				}
-				break;
-			case OFFSET:
-				{
-				setState(49);
-				offset();
-				}
-				break;
-			case ADDRESS:
-				{
-				setState(50);
-				address();
-				}
-				break;
-			case ENUM_VALUE:
-				{
-				setState(51);
-				enumValue();
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
-			}
-			setState(54);
+			setState(57);
+			address();
+			setState(58);
 			signature();
 			}
 		}
@@ -418,11 +433,11 @@ public class Sy2Parser extends Parser {
 
 	public final TypeContext type() throws RecognitionException {
 		TypeContext _localctx = new TypeContext(_ctx, getState());
-		enterRule(_localctx, 10, RULE_type);
+		enterRule(_localctx, 8, RULE_type);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(56);
+			setState(60);
 			match(TYPE);
 			}
 		}
@@ -455,11 +470,11 @@ public class Sy2Parser extends Parser {
 
 	public final NameContext name() throws RecognitionException {
 		NameContext _localctx = new NameContext(_ctx, getState());
-		enterRule(_localctx, 12, RULE_name);
+		enterRule(_localctx, 10, RULE_name);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(58);
+			setState(62);
 			match(ID);
 			}
 		}
@@ -492,11 +507,11 @@ public class Sy2Parser extends Parser {
 
 	public final BitmaskContext bitmask() throws RecognitionException {
 		BitmaskContext _localctx = new BitmaskContext(_ctx, getState());
-		enterRule(_localctx, 14, RULE_bitmask);
+		enterRule(_localctx, 12, RULE_bitmask);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(60);
+			setState(64);
 			match(BITMASK);
 			}
 		}
@@ -529,11 +544,11 @@ public class Sy2Parser extends Parser {
 
 	public final OffsetContext offset() throws RecognitionException {
 		OffsetContext _localctx = new OffsetContext(_ctx, getState());
-		enterRule(_localctx, 16, RULE_offset);
+		enterRule(_localctx, 14, RULE_offset);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(62);
+			setState(66);
 			match(OFFSET);
 			}
 		}
@@ -566,11 +581,11 @@ public class Sy2Parser extends Parser {
 
 	public final AddressContext address() throws RecognitionException {
 		AddressContext _localctx = new AddressContext(_ctx, getState());
-		enterRule(_localctx, 18, RULE_address);
+		enterRule(_localctx, 16, RULE_address);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(64);
+			setState(68);
 			match(ADDRESS);
 			}
 		}
@@ -603,11 +618,11 @@ public class Sy2Parser extends Parser {
 
 	public final EnumValueContext enumValue() throws RecognitionException {
 		EnumValueContext _localctx = new EnumValueContext(_ctx, getState());
-		enterRule(_localctx, 20, RULE_enumValue);
+		enterRule(_localctx, 18, RULE_enumValue);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(66);
+			setState(70);
 			match(ENUM_VALUE);
 			}
 		}
@@ -640,11 +655,11 @@ public class Sy2Parser extends Parser {
 
 	public final SignatureContext signature() throws RecognitionException {
 		SignatureContext _localctx = new SignatureContext(_ctx, getState());
-		enterRule(_localctx, 22, RULE_signature);
+		enterRule(_localctx, 20, RULE_signature);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(68);
+			setState(72);
 			match(SIGNATURE);
 			}
 		}
@@ -660,23 +675,25 @@ public class Sy2Parser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\24I\4\2\t\2\4\3\t"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\31M\4\2\t\2\4\3\t"+
 		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4"+
-		"\f\t\f\4\r\t\r\3\2\3\2\6\2\35\n\2\r\2\16\2\36\3\2\3\2\3\3\3\3\3\3\3\3"+
-		"\3\3\3\3\5\3)\n\3\3\3\3\3\3\4\3\4\3\5\3\5\3\6\3\6\3\6\3\6\3\6\3\6\5\6"+
-		"\67\n\6\3\6\3\6\3\7\3\7\3\b\3\b\3\t\3\t\3\n\3\n\3\13\3\13\3\f\3\f\3\r"+
-		"\3\r\3\r\2\2\16\2\4\6\b\n\f\16\20\22\24\26\30\2\2\2B\2\34\3\2\2\2\4(\3"+
-		"\2\2\2\6,\3\2\2\2\b.\3\2\2\2\n\60\3\2\2\2\f:\3\2\2\2\16<\3\2\2\2\20>\3"+
-		"\2\2\2\22@\3\2\2\2\24B\3\2\2\2\26D\3\2\2\2\30F\3\2\2\2\32\35\7\24\2\2"+
-		"\33\35\5\4\3\2\34\32\3\2\2\2\34\33\3\2\2\2\35\36\3\2\2\2\36\34\3\2\2\2"+
-		"\36\37\3\2\2\2\37 \3\2\2\2 !\7\2\2\3!\3\3\2\2\2\"#\5\6\4\2#$\5\b\5\2$"+
-		")\3\2\2\2%&\5\6\4\2&\'\5\n\6\2\')\3\2\2\2(\"\3\2\2\2(%\3\2\2\2)*\3\2\2"+
-		"\2*+\7\24\2\2+\5\3\2\2\2,-\7\3\2\2-\7\3\2\2\2./\7\4\2\2/\t\3\2\2\2\60"+
-		"\61\5\f\7\2\61\66\5\16\b\2\62\67\5\20\t\2\63\67\5\22\n\2\64\67\5\24\13"+
-		"\2\65\67\5\26\f\2\66\62\3\2\2\2\66\63\3\2\2\2\66\64\3\2\2\2\66\65\3\2"+
-		"\2\2\678\3\2\2\289\5\30\r\29\13\3\2\2\2:;\7\5\2\2;\r\3\2\2\2<=\7\6\2\2"+
-		"=\17\3\2\2\2>?\7\7\2\2?\21\3\2\2\2@A\7\b\2\2A\23\3\2\2\2BC\7\t\2\2C\25"+
-		"\3\2\2\2DE\7\n\2\2E\27\3\2\2\2FG\7\13\2\2G\31\3\2\2\2\6\34\36(\66";
+		"\f\t\f\3\2\3\2\6\2\33\n\2\r\2\16\2\34\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3"+
+		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\5\3/\n\3\3\4\3\4\3\4\3\4\3\4\5\4\66\n"+
+		"\4\3\4\3\4\3\5\3\5\3\5\3\5\3\5\3\6\3\6\3\7\3\7\3\b\3\b\3\t\3\t\3\n\3\n"+
+		"\3\13\3\13\3\f\3\f\3\f\2\2\r\2\4\6\b\n\f\16\20\22\24\26\2\3\3\2\4\5\2"+
+		"H\2\32\3\2\2\2\4.\3\2\2\2\6\60\3\2\2\2\b9\3\2\2\2\n>\3\2\2\2\f@\3\2\2"+
+		"\2\16B\3\2\2\2\20D\3\2\2\2\22F\3\2\2\2\24H\3\2\2\2\26J\3\2\2\2\30\33\7"+
+		"\31\2\2\31\33\5\4\3\2\32\30\3\2\2\2\32\31\3\2\2\2\33\34\3\2\2\2\34\32"+
+		"\3\2\2\2\34\35\3\2\2\2\35\36\3\2\2\2\36\37\7\2\2\3\37\3\3\2\2\2 !\7\3"+
+		"\2\2!\"\t\2\2\2\"/\7\31\2\2#$\7\6\2\2$%\7\7\2\2%/\7\31\2\2&\'\7\b\2\2"+
+		"\'(\5\6\4\2()\7\31\2\2)/\3\2\2\2*+\7\t\2\2+,\5\b\5\2,-\7\31\2\2-/\3\2"+
+		"\2\2. \3\2\2\2.#\3\2\2\2.&\3\2\2\2.*\3\2\2\2/\5\3\2\2\2\60\61\5\n\6\2"+
+		"\61\65\5\f\7\2\62\66\5\16\b\2\63\66\5\20\t\2\64\66\5\24\13\2\65\62\3\2"+
+		"\2\2\65\63\3\2\2\2\65\64\3\2\2\2\66\67\3\2\2\2\678\5\26\f\28\7\3\2\2\2"+
+		"9:\5\n\6\2:;\5\f\7\2;<\5\22\n\2<=\5\26\f\2=\t\3\2\2\2>?\7\n\2\2?\13\3"+
+		"\2\2\2@A\7\13\2\2A\r\3\2\2\2BC\7\f\2\2C\17\3\2\2\2DE\7\r\2\2E\21\3\2\2"+
+		"\2FG\7\16\2\2G\23\3\2\2\2HI\7\17\2\2I\25\3\2\2\2JK\7\20\2\2K\27\3\2\2"+
+		"\2\6\32\34.\65";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
