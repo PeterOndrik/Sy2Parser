@@ -118,10 +118,10 @@ Functions</h2></td></tr>
 <tr class="memdesc:ga9599ebdbd568c2c94c47941085b36b06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove already added callback to receive a parsed node.  <a href="#ga9599ebdbd568c2c94c47941085b36b06">More...</a><br /></td></tr>
 <tr class="separator:ga9599ebdbd568c2c94c47941085b36b06"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga2b15567a938a0b33f1c9aba5fc9cf2fe"><td class="memItemLeft" align="right" valign="top">SY2PARSER_API <a class="el" href="group__uda__device__constants__types.html#ga2a6b7a98923516eba7750a06b43fc577">Sy2ParserStatus</a> SY2PARSER_API_CALL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sy2parser__api__functions.html#ga2b15567a938a0b33f1c9aba5fc9cf2fe">sy2Parse</a> (<a class="el" href="group__uda__device__constants__types.html#gab56874616dcf613944f4d01ca95478c5">Sy2ParserHandle</a> handle)</td></tr>
-<tr class="memdesc:ga2b15567a938a0b33f1c9aba5fc9cf2fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform a single-call parse of an Sy2 file associated with a handle. This function internally creates ABS which can be read by using <a class="el" href="group__sy2parser__api__functions.html#ga122163cbc3d1f5c12f484e10355e54a7" title="Read next node in generated ABS. ">sy2ReadNext()</a> funcition after or during parsing.  <a href="#ga2b15567a938a0b33f1c9aba5fc9cf2fe">More...</a><br /></td></tr>
+<tr class="memdesc:ga2b15567a938a0b33f1c9aba5fc9cf2fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform a single-call parse of an Sy2 file associated with a handle. This function internally creates AST which can be read by using <a class="el" href="group__sy2parser__api__functions.html#ga122163cbc3d1f5c12f484e10355e54a7" title="Read next node in generated AST. ">sy2ReadNext()</a> funcition after or during parsing.  <a href="#ga2b15567a938a0b33f1c9aba5fc9cf2fe">More...</a><br /></td></tr>
 <tr class="separator:ga2b15567a938a0b33f1c9aba5fc9cf2fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga122163cbc3d1f5c12f484e10355e54a7"><td class="memItemLeft" align="right" valign="top">SY2PARSER_API <a class="el" href="group__uda__device__constants__types.html#ga2a6b7a98923516eba7750a06b43fc577">Sy2ParserStatus</a> SY2PARSER_API_CALL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sy2parser__api__functions.html#ga122163cbc3d1f5c12f484e10355e54a7">sy2ReadNext</a> (const <a class="el" href="group__uda__device__constants__types.html#gab56874616dcf613944f4d01ca95478c5">Sy2ParserHandle</a> handle, <a class="el" href="group__uda__device__constants__types.html#ga6ee74cf779d4211a85ec66ff9e9d7a05">T_Sy2Node</a> *node)</td></tr>
-<tr class="memdesc:ga122163cbc3d1f5c12f484e10355e54a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read next node in generated ABS.  <a href="#ga122163cbc3d1f5c12f484e10355e54a7">More...</a><br /></td></tr>
+<tr class="memdesc:ga122163cbc3d1f5c12f484e10355e54a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read next node in generated AST.  <a href="#ga122163cbc3d1f5c12f484e10355e54a7">More...</a><br /></td></tr>
 <tr class="separator:ga122163cbc3d1f5c12f484e10355e54a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -185,7 +185,23 @@ Functions</h2></td></tr>
 
 <p>Callback function which is called after a node is completely parsed. </p>
 <p>Otherwise the ParsingErrorCallback is called.</p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>The entire subtree must be read by the <a class="el" href="group__sy2parser__api__functions.html#ga122163cbc3d1f5c12f484e10355e54a7" title="Read next node in generated AST. ">sy2ReadNext()</a> function. For example: </p><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;void SY2PARSER_API_CALL parsedNodeCallback(Sy2ParserHandle handle, const T_Sy2Node *node, void *callbackContext)</div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;{</div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;  // the first node</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;  printf(&quot;%u: %s\n&quot;, node-&gt;type, node-&gt;value);</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;  T_Sy2Node newNode = { 0 };</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;  // read first child node</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;  Sy2ParserStatus status = sy2ReadNext(handle, &amp;newNode);</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;  while (status == SY2_SUCCESS &amp;&amp; newNode.depth &gt; node-&gt;depth)</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;  {</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;  // display child node</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;  printf(&quot;%u: %s\n&quot;, newNode.type, newNode.value);</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;  // read next child node</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;  status = sy2ReadNext(handle, &amp;newNode);</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;  }</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;}</div>
+</div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">handle</td><td>A descriptor identifying an open Sy2 parser.</td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">node</td><td>Information about parsed node.</td></tr>
@@ -461,7 +477,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Perform a single-call parse of an Sy2 file associated with a handle. This function internally creates ABS which can be read by using <a class="el" href="group__sy2parser__api__functions.html#ga122163cbc3d1f5c12f484e10355e54a7" title="Read next node in generated ABS. ">sy2ReadNext()</a> funcition after or during parsing. </p>
+<p>Perform a single-call parse of an Sy2 file associated with a handle. This function internally creates AST which can be read by using <a class="el" href="group__sy2parser__api__functions.html#ga122163cbc3d1f5c12f484e10355e54a7" title="Read next node in generated AST. ">sy2ReadNext()</a> funcition after or during parsing. </p>
 <p>While <a class="el" href="group__sy2parser__api__functions.html#ga2b15567a938a0b33f1c9aba5fc9cf2fe" title="Perform a single-call parse of an Sy2 file associated with a handle. This function internally creates...">sy2Parse()</a> is running the previously registered callbacks are invoked. Functions <a class="el" href="group__sy2parser__api__functions.html#ga142672bd5409aa5acc6f9c535a2807c5" title="Set a callback to receive a parsing error. ">sy2SetParsingErrorCallback()</a>, <a class="el" href="group__sy2parser__api__functions.html#ga6d028cc4c6c6fdef064b9b0964334ced" title="Set a callback to receive a parsing progress. ">sy2SetParsingProgressCallback()</a> and <a class="el" href="group__sy2parser__api__functions.html#ga4bb1f41d1a63b5c0f4272a73c6fe45e4" title="Add a callback to receive a parsed node. ">sy2AddParsedNodeCallback()</a>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -497,7 +513,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Read next node in generated ABS. </p>
+<p>Read next node in generated AST. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">handle</td><td>A descriptor identifying an open Sy2 parser.</td></tr>
@@ -512,7 +528,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Oct 1 2018 09:45:54 for Sy2 Parser API by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Oct 5 2018 08:22:59 for Sy2 Parser API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

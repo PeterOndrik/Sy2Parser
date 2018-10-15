@@ -121,9 +121,9 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2SetParsingErrorCallback(Sy2P
 		{
 			parser->errorCb = make_shared<Sy2ErrorListener::ErrorCallbackType>(
 				[handle, callback, callbackContext](size_t line, size_t column, const string &message)
-			{
-				callback(handle, line, column, message.c_str(), callbackContext);
-			});
+				{
+					callback(handle, line, column, message.c_str(), callbackContext);
+				});
 		}
 		else
 		{
@@ -224,20 +224,27 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Parse(Sy2ParserHandle handle
 
 	if (parser)
 	{
-		parser->sy2ErrListener->setErrorCallback(parser->errorCb);
-		Sy2CustomListener listener(parser->fileName);
-		listener.setErrorCallback(parser->errorCb);
-		listener.setProgressCallback(parser->progressCb);
-		for (auto iCallback : parser->parsedNodeCbList)
+		try
 		{
-			listener.addParsedNodeCallback(iCallback.parsedNodeCallback, iCallback.nodeType);
+			parser->sy2ErrListener->setErrorCallback(parser->errorCb);
+			Sy2CustomListener listener(parser->fileName);
+			listener.setErrorCallback(parser->errorCb);
+			listener.setProgressCallback(parser->progressCb);
+			for (auto iCallback : parser->parsedNodeCbList)
+			{
+				listener.addParsedNodeCallback(iCallback.parsedNodeCallback, iCallback.nodeType);
+			}
+			parser->sy2Parser->addParseListener(&listener);
+			parser->sy2Tree = parser->sy2Parser->file();
+			parser->sy2File = listener.getNode();
+			parser->currentNode = new Model::Unspecified;
+			parser->sy2Parser->removeParseListener(&listener);
 		}
-
-		parser->sy2Parser->addParseListener(&listener);
-		parser->sy2Tree = parser->sy2Parser->file();
-		parser->sy2File = listener.getNode();
-		parser->currentNode = new Model::Unspecified;
-		parser->sy2Parser->removeParseListener(&listener);
+		catch (...)
+		{
+			//string sex(ex.what());
+			cout << "nnnn" << endl;
+		}
 	}
 
 	return status;
