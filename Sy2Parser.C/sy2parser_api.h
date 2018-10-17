@@ -391,7 +391,7 @@ It can use udaGetApiVersion() to retrieve the API version implemented by the DLL
 //! Major version number of the programming interface.
 #define SY2PARSER_API_MAJOR_VERSION   1U
 //! Minor version number of the programming interface.
-#define SY2PARSER_API_MINOR_VERSION   0U
+#define SY2PARSER_API_MINOR_VERSION   1U
 
 //! Version number of the programming interface as DWORD.
 #define SY2PARSER_API_VERSION ( (SY2PARSER_API_MAJOR_VERSION << 16) | SY2PARSER_API_MINOR_VERSION ) 
@@ -497,6 +497,28 @@ typedef struct Sy2Node
 	unsigned int line;		//!< The number of line.
 	unsigned int column;	//!< The column of character.
 } T_Sy2Node;
+
+//! The date and time of a parsed file.
+typedef struct FileDateTime
+{
+	unsigned short year;
+	unsigned short month;
+	unsigned short dayOfWeek;
+	unsigned short day;
+	unsigned short hour;
+	unsigned short minute;
+	unsigned short second;
+	unsigned short milliseconds;
+} T_FileDateTime;
+
+//! The parsed file information.
+typedef struct Sy2FileInfo
+{
+	unsigned int size;
+	T_FileDateTime creation;
+	T_FileDateTime lastAccess;
+	T_FileDateTime lastWrite;
+} T_Sy2FileInfo;
 
 /*!
 @}
@@ -617,6 +639,20 @@ If a valid handle is specified, the function returns always #SY2_SUCCESS.
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Close(Sy2ParserHandle handle);
 
 /*!
+\brief Get information abut a parsed file.
+
+\param[in] handle
+A descriptor identifying a Sy2 Parser.
+
+\param[out] fileInfo
+Address of a caller-provided variable which will be set to a parsed file information if the function succeeds.
+
+\return
+The function returns #SY2_SUCCESS if successful, an error code otherwise.
+*/
+SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2GetFileInfo(Sy2ParserHandle handle, T_Sy2FileInfo *fileInfo);
+
+/*!
   \brief Set a callback to receive a parsing error.
 
   The callback is invoked during running the #sy2Parse() function.
@@ -720,6 +756,17 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Parse(Sy2ParserHandle handle
 	The function returns #SY2_SUCCESS if successful, an error code otherwise.
 */
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2ReadNext(const Sy2ParserHandle handle, T_Sy2Node *node);
+
+/*!
+\brief Terminate the parsing process that is currently being performed. 
+
+\param[in] handle
+A descriptor identifying a Sy2 Parser.
+
+\return
+The function returns #SY2_SUCCESS if successful, an error code otherwise.
+*/
+SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2AbortParsing(const Sy2ParserHandle handle);
 
 /*!
 @}

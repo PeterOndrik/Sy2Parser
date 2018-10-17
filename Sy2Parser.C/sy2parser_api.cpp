@@ -7,6 +7,8 @@
 #include "Sy2CustomListener.h"
 #include "Unspecified.h"
 
+#include <Windows.h>
+
 using namespace std;
 using namespace antlr4;
 using namespace antlrcpp;
@@ -79,6 +81,66 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Open(const char *fileName, S
 		handleList[lastHandle] = parser;
 		*handle = lastHandle;
 		lastHandle++;
+	}
+
+	return status;
+}
+
+void ConvertDateTime(const FILETIME * const ft, T_FileDateTime *const fileDateTime)
+{
+	SYSTEMTIME stUTC, stLocal;
+
+	FileTimeToSystemTime(ft, &stUTC);
+	SystemTimeToTzSpecificLocalTime(NULL, &stUTC, &stLocal);
+
+	fileDateTime->year = stLocal.wYear;
+	fileDateTime->month = stLocal.wMonth;
+	fileDateTime->dayOfWeek = stLocal.wDayOfWeek;
+	fileDateTime->day = stLocal.wDay;
+	fileDateTime->hour = stLocal.wHour;
+	fileDateTime->minute = stLocal.wMinute;
+	fileDateTime->second = stLocal.wSecond;
+	fileDateTime->milliseconds = stLocal.wMilliseconds;
+}
+
+SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2GetFileInfo(Sy2ParserHandle handle, T_Sy2FileInfo *fileInfo)
+{
+	Sy2ParserStatus status = SY2_SUCCESS;
+	shared_ptr<OpenParser> parser = handleList[handle];
+
+	fileInfo->size = 0;
+
+	if (parser)
+	{
+		HANDLE hFile;
+		FILETIME ftCreate, ftAccess, ftWrite;
+
+		// Opening the existing file
+		string fileName = parser->fileName;
+		hFile = ::CreateFile(wstring(fileName.begin(), fileName.end()).c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+		if (hFile == INVALID_HANDLE_VALUE)
+		{
+			status = SY2_FILE_NOT_FOUND;
+		}
+		else
+		{
+			fileInfo->size = ::GetFileSize(hFile, NULL);
+			if (!GetFileTime(hFile, &ftCreate, &ftAccess, &ftWrite))
+			{
+				status = SY2_FAILD;
+			}
+			ConvertDateTime(&ftCreate, &fileInfo->creation);
+			ConvertDateTime(&ftAccess, &fileInfo->lastAccess);
+			ConvertDateTime(&ftWrite, &fileInfo->lastWrite);
+		}
+		if (CloseHandle(hFile) == 0)
+		{
+			status = SY2_FAILD;
+		}
+	}
+	else
+	{
+		status = SY2_INVALID_HANDLE;
 	}
 
 	return status;
@@ -224,27 +286,19 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Parse(Sy2ParserHandle handle
 
 	if (parser)
 	{
-		try
+		parser->sy2ErrListener->setErrorCallback(parser->errorCb);
+		Sy2CustomListener listener(parser->fileName);
+		listener.setErrorCallback(parser->errorCb);
+		listener.setProgressCallback(parser->progressCb);
+		for (auto iCallback : parser->parsedNodeCbList)
 		{
-			parser->sy2ErrListener->setErrorCallback(parser->errorCb);
-			Sy2CustomListener listener(parser->fileName);
-			listener.setErrorCallback(parser->errorCb);
-			listener.setProgressCallback(parser->progressCb);
-			for (auto iCallback : parser->parsedNodeCbList)
-			{
-				listener.addParsedNodeCallback(iCallback.parsedNodeCallback, iCallback.nodeType);
-			}
-			parser->sy2Parser->addParseListener(&listener);
-			parser->sy2Tree = parser->sy2Parser->file();
-			parser->sy2File = listener.getNode();
-			parser->currentNode = new Model::Unspecified;
-			parser->sy2Parser->removeParseListener(&listener);
+			listener.addParsedNodeCallback(iCallback.parsedNodeCallback, iCallback.nodeType);
 		}
-		catch (...)
-		{
-			//string sex(ex.what());
-			cout << "nnnn" << endl;
-		}
+		parser->sy2Parser->addParseListener(&listener);
+		parser->sy2Tree = parser->sy2Parser->file();
+		parser->sy2File = listener.getNode();
+		parser->currentNode = new Model::Unspecified;
+		parser->sy2Parser->removeParseListener(&listener);
 	}
 
 	return status;
@@ -298,6 +352,24 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2ReadNext(const Sy2ParserHand
 			status = processNode(currentNode, node);
 			parser->currentNode = currentNode;
 		}
+	}
+	else
+	{
+		status = SY2_INVALID_HANDLE;
+	}
+
+	return status;
+}
+
+SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2AbortParsing(const Sy2ParserHandle handle)
+{
+	Sy2ParserStatus status = SY2_SUCCESS;
+	shared_ptr<OpenParser> parser = handleList[handle];
+
+	if (parser)
+	{
+		size_t size = parser->sy2Input->size();
+		parser->sy2Parser->getInputStream()->seek(size);
 	}
 	else
 	{
