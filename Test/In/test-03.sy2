@@ -5,7 +5,8 @@
 # Loaded DWARF Library: C:\Users\Ondrik\AppData\Local\LocalData\Projects\EDS-TOOLS_TEST_ENGINE\ComplexSolution\MS_STUDIO_DOT_NET\Debug\dwarf_gnu_mid0003.dll
 # Origin:               C:\Users\Ondrik\AppData\Local\LocalData\Projects\EDS-TOOLS_TEST_ENGINE\_test\MyTest\i386.elf
 # Created at:           Mon Sep 10 12:56:04 2018
-# Encoding little_endian
+
+Encoding little_endian
 
 TEngSetSignVersion 2016
 

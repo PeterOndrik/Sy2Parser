@@ -12,15 +12,18 @@
 class  Sy2Parser : public antlr4::Parser {
 public:
   enum {
-    KEYWORD = 1, CMD_VALUE = 2, TYPE = 3, ID = 4, BITMASK = 5, OFFSET = 6, 
-    ADDRESS = 7, ENUM_VALUE = 8, SIGNATURE = 9, BIT = 10, STRUCT = 11, UNION = 12, 
-    ENUM = 13, PROC = 14, DATA = 15, LINE_COMMENT = 16, WS = 17, NL = 18
+    ENCODING = 1, LITTLE_ENDIAN = 2, BIG_ENDIAN = 3, SIGN_VERSION = 4, V2016 = 5, 
+    REG_VAR = 6, REG_CMD = 7, TYPE = 8, ID = 9, BITMASK = 10, OFFSET = 11, 
+    ADDRESS = 12, ENUM_VALUE = 13, SIGNATURE = 14, BIT = 15, STRUCT = 16, 
+    UNION = 17, ENUM = 18, PROC = 19, DATA = 20, LINE_COMMENT = 21, WS = 22, 
+    NL = 23
   };
 
   enum {
-    RuleFile = 0, RuleCommand = 1, RuleKeyword = 2, RuleCmdValue = 3, RuleSymbol = 4, 
-    RuleType = 5, RuleName = 6, RuleBitmask = 7, RuleOffset = 8, RuleAddress = 9, 
-    RuleEnumValue = 10, RuleSignature = 11
+    RuleFile = 0, RuleCommand = 1, RuleEncodingValue = 2, RuleSignValue = 3, 
+    RuleTypeDefinition = 4, RuleSymbol = 5, RuleType = 6, RuleName = 7, 
+    RuleBitmask = 8, RuleOffset = 9, RuleAddress = 10, RuleEnumValue = 11, 
+    RuleSignature = 12
   };
 
   Sy2Parser(antlr4::TokenStream *input);
@@ -39,8 +42,9 @@ public:
 
   class FileContext;
   class CommandContext;
-  class KeywordContext;
-  class CmdValueContext;
+  class EncodingValueContext;
+  class SignValueContext;
+  class TypeDefinitionContext;
   class SymbolContext;
   class TypeContext;
   class NameContext;
@@ -75,9 +79,14 @@ public:
   public:
     CommandContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *ENCODING();
+    EncodingValueContext *encodingValue();
     antlr4::tree::TerminalNode *NL();
-    KeywordContext *keyword();
-    CmdValueContext *cmdValue();
+    antlr4::tree::TerminalNode *SIGN_VERSION();
+    SignValueContext *signValue();
+    antlr4::tree::TerminalNode *REG_VAR();
+    TypeDefinitionContext *typeDefinition();
+    antlr4::tree::TerminalNode *REG_CMD();
     SymbolContext *symbol();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -89,11 +98,12 @@ public:
 
   CommandContext* command();
 
-  class  KeywordContext : public antlr4::ParserRuleContext {
+  class  EncodingValueContext : public antlr4::ParserRuleContext {
   public:
-    KeywordContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    EncodingValueContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *KEYWORD();
+    antlr4::tree::TerminalNode *LITTLE_ENDIAN();
+    antlr4::tree::TerminalNode *BIG_ENDIAN();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -102,13 +112,13 @@ public:
    
   };
 
-  KeywordContext* keyword();
+  EncodingValueContext* encodingValue();
 
-  class  CmdValueContext : public antlr4::ParserRuleContext {
+  class  SignValueContext : public antlr4::ParserRuleContext {
   public:
-    CmdValueContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    SignValueContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *CMD_VALUE();
+    antlr4::tree::TerminalNode *V2016();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -117,7 +127,27 @@ public:
    
   };
 
-  CmdValueContext* cmdValue();
+  SignValueContext* signValue();
+
+  class  TypeDefinitionContext : public antlr4::ParserRuleContext {
+  public:
+    TypeDefinitionContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    TypeContext *type();
+    NameContext *name();
+    SignatureContext *signature();
+    BitmaskContext *bitmask();
+    OffsetContext *offset();
+    EnumValueContext *enumValue();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  TypeDefinitionContext* typeDefinition();
 
   class  SymbolContext : public antlr4::ParserRuleContext {
   public:
@@ -125,11 +155,8 @@ public:
     virtual size_t getRuleIndex() const override;
     TypeContext *type();
     NameContext *name();
-    SignatureContext *signature();
-    BitmaskContext *bitmask();
-    OffsetContext *offset();
     AddressContext *address();
-    EnumValueContext *enumValue();
+    SignatureContext *signature();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;

@@ -27,15 +27,35 @@ public interface Sy2Listener extends ParseTreeListener {
 	 */
 	void exitCommand(Sy2Parser.CommandContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link Sy2Parser#typedef}.
+	 * Enter a parse tree produced by {@link Sy2Parser#encodingValue}.
 	 * @param ctx the parse tree
 	 */
-	void enterTypedef(Sy2Parser.TypedefContext ctx);
+	void enterEncodingValue(Sy2Parser.EncodingValueContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link Sy2Parser#typedef}.
+	 * Exit a parse tree produced by {@link Sy2Parser#encodingValue}.
 	 * @param ctx the parse tree
 	 */
-	void exitTypedef(Sy2Parser.TypedefContext ctx);
+	void exitEncodingValue(Sy2Parser.EncodingValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Sy2Parser#signValue}.
+	 * @param ctx the parse tree
+	 */
+	void enterSignValue(Sy2Parser.SignValueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Sy2Parser#signValue}.
+	 * @param ctx the parse tree
+	 */
+	void exitSignValue(Sy2Parser.SignValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Sy2Parser#typeDefinition}.
+	 * @param ctx the parse tree
+	 */
+	void enterTypeDefinition(Sy2Parser.TypeDefinitionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Sy2Parser#typeDefinition}.
+	 * @param ctx the parse tree
+	 */
+	void exitTypeDefinition(Sy2Parser.TypeDefinitionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link Sy2Parser#symbol}.
 	 * @param ctx the parse tree

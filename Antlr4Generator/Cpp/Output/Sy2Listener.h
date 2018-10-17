@@ -20,11 +20,14 @@ public:
   virtual void enterCommand(Sy2Parser::CommandContext *ctx) = 0;
   virtual void exitCommand(Sy2Parser::CommandContext *ctx) = 0;
 
-  virtual void enterKeyword(Sy2Parser::KeywordContext *ctx) = 0;
-  virtual void exitKeyword(Sy2Parser::KeywordContext *ctx) = 0;
+  virtual void enterEncodingValue(Sy2Parser::EncodingValueContext *ctx) = 0;
+  virtual void exitEncodingValue(Sy2Parser::EncodingValueContext *ctx) = 0;
 
-  virtual void enterCmdValue(Sy2Parser::CmdValueContext *ctx) = 0;
-  virtual void exitCmdValue(Sy2Parser::CmdValueContext *ctx) = 0;
+  virtual void enterSignValue(Sy2Parser::SignValueContext *ctx) = 0;
+  virtual void exitSignValue(Sy2Parser::SignValueContext *ctx) = 0;
+
+  virtual void enterTypeDefinition(Sy2Parser::TypeDefinitionContext *ctx) = 0;
+  virtual void exitTypeDefinition(Sy2Parser::TypeDefinitionContext *ctx) = 0;
 
   virtual void enterSymbol(Sy2Parser::SymbolContext *ctx) = 0;
   virtual void exitSymbol(Sy2Parser::SymbolContext *ctx) = 0;

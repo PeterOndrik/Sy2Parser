@@ -168,6 +168,9 @@
     <ClInclude Include="Sy2ErrorListener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TypeDefinition.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -12,9 +12,11 @@
 class  Sy2Lexer : public antlr4::Lexer {
 public:
   enum {
-    KEYWORD = 1, CMD_VALUE = 2, TYPE = 3, ID = 4, BITMASK = 5, OFFSET = 6, 
-    ADDRESS = 7, ENUM_VALUE = 8, SIGNATURE = 9, BIT = 10, STRUCT = 11, UNION = 12, 
-    ENUM = 13, PROC = 14, DATA = 15, LINE_COMMENT = 16, WS = 17, NL = 18
+    ENCODING = 1, LITTLE_ENDIAN = 2, BIG_ENDIAN = 3, SIGN_VERSION = 4, V2016 = 5, 
+    REG_VAR = 6, REG_CMD = 7, TYPE = 8, ID = 9, BITMASK = 10, OFFSET = 11, 
+    ADDRESS = 12, ENUM_VALUE = 13, SIGNATURE = 14, BIT = 15, STRUCT = 16, 
+    UNION = 17, ENUM = 18, PROC = 19, DATA = 20, LINE_COMMENT = 21, WS = 22, 
+    NL = 23
   };
 
   Sy2Lexer(antlr4::CharStream *input);
@@ -54,8 +56,13 @@ private:
 
 
   // Individual action functions triggered by action() above.
-  void KEYWORDAction(antlr4::RuleContext *context, size_t actionIndex);
-  void CMD_VALUEAction(antlr4::RuleContext *context, size_t actionIndex);
+  void ENCODINGAction(antlr4::RuleContext *context, size_t actionIndex);
+  void LITTLE_ENDIANAction(antlr4::RuleContext *context, size_t actionIndex);
+  void BIG_ENDIANAction(antlr4::RuleContext *context, size_t actionIndex);
+  void SIGN_VERSIONAction(antlr4::RuleContext *context, size_t actionIndex);
+  void V2016Action(antlr4::RuleContext *context, size_t actionIndex);
+  void REG_VARAction(antlr4::RuleContext *context, size_t actionIndex);
+  void REG_CMDAction(antlr4::RuleContext *context, size_t actionIndex);
   void TYPEAction(antlr4::RuleContext *context, size_t actionIndex);
   void IDAction(antlr4::RuleContext *context, size_t actionIndex);
   void BITMASKAction(antlr4::RuleContext *context, size_t actionIndex);
@@ -65,8 +72,13 @@ private:
   void SIGNATUREAction(antlr4::RuleContext *context, size_t actionIndex);
 
   // Individual semantic predicate functions triggered by sempred() above.
-  bool KEYWORDSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
-  bool CMD_VALUESempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
+  bool ENCODINGSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
+  bool LITTLE_ENDIANSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
+  bool BIG_ENDIANSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
+  bool SIGN_VERSIONSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
+  bool V2016Sempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
+  bool REG_VARSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
+  bool REG_CMDSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
   bool TYPESempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
   bool IDSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
   bool BITMASKSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);

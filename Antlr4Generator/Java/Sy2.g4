@@ -70,16 +70,15 @@ options
  */
 
 file : (NL | commands += command)+ EOF ;
-/* command : (keyword keyword cmdValue | keyword typedef | keyword symbol) NL ; */
-/* keyword : KEYWORD ; */
-/* cmdValue : CMD_VALUE ; */
 command 
-	: ENCODING (LITTLE_ENDIAN | BIG_ENDIAN) NL
-	| SIGN_VERSION CMD_VALUE NL
-	| REG_VAR typedef NL
+	: ENCODING encodingValue NL
+	| SIGN_VERSION signValue NL
+	| REG_VAR typeDefinition NL
 	| REG_CMD symbol NL
 	;
-typedef : type name (bitmask | offset | enumValue) signature ;
+encodingValue : LITTLE_ENDIAN | BIG_ENDIAN ;
+signValue : V2016 ;
+typeDefinition : type name (bitmask | offset | enumValue) signature ;
 symbol : type name address signature ;
 type : TYPE ;
 name : ID ;
@@ -93,13 +92,12 @@ signature : SIGNATURE ;
  * Lexer Rules
  */
 
-/* KEYWORD : ( 'Encoding' | 'TEngSetSignVersion' | 'RegCmd' | 'RegVar' ) { tokenPos == 0 }? { tokenPos++; } ; */
 ENCODING : 'Encoding' { tokenPos == 0 }? { tokenPos++; } ;
 LITTLE_ENDIAN : 'little_endian' { tokenPos == 1 }? { tokenPos = 0; } ;
 BIG_ENDIAN : 'big_endian' { tokenPos == 1 }? { tokenPos = 0; } ;
 
 SIGN_VERSION : 'TEngSetSignVersion' { tokenPos == 0 }? { tokenPos++; } ;
-CMD_VALUE : [0-9]+ { tokenPos == 1 }? { tokenPos = 0; } ;
+V2016 : '2016' { tokenPos == 1 }? { tokenPos = 0; } ;
 
 REG_VAR : 'RegVar' { tokenPos == 0 }? { tokenPos++; } ;
 REG_CMD : 'RegCmd' { tokenPos == 0 }? { tokenPos++; } ;
