@@ -239,6 +239,10 @@ int main()
 ```
 Input the test.sy2 file: 
 ```
+# Header
+
+Encoding little_endian
+
 TEngSetSignVersion 2016
 
 # Structure TAG PointTag, sizeof(PointTag) is 16 Byte(s):
@@ -265,7 +269,7 @@ Progress: 2%
 
 Progress: 35%
  COMMAND: RegVar
-  SYMBOL: PointTag
+  TYPEDEF: PointTag
    TYPE: STRUCT
    NAME: PointTag
    OFFSET: 0
@@ -275,7 +279,7 @@ Progress: 35%
 
 Progress: 46%
  COMMAND: RegVar
-  SYMBOL: PointTag_x
+  TYPEDEF: PointTag_x
    TYPE: STRUCT
    NAME: PointTag_x
    OFFSET: 0
@@ -285,7 +289,7 @@ Progress: 46%
 
 Progress: 51%
  COMMAND: RegVar
-  SYMBOL: PointTag_y
+  TYPEDEF: PointTag_y
    TYPE: STRUCT
    NAME: PointTag_y
    OFFSET: 4
