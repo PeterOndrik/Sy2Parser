@@ -183,7 +183,11 @@ Read AST after parsing</h1>
 <div class="line"></div>
 <div class="line">  <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
-</div><!-- fragment --><p>Input the test.sy2 file: </p><div class="fragment"><div class="line">TEngSetSignVersion 2016</div>
+</div><!-- fragment --><p>Input the test.sy2 file: </p><div class="fragment"><div class="line"><span class="preprocessor"># Header</span></div>
+<div class="line"></div>
+<div class="line">Encoding little_endian</div>
+<div class="line"></div>
+<div class="line">TEngSetSignVersion 2016</div>
 <div class="line"></div>
 <div class="line"><span class="preprocessor"># Command Type   Name            Address     Signature</span></div>
 <div class="line"><span class="preprocessor"># ----------------------------------------------------</span></div>
@@ -195,6 +199,8 @@ Read AST after parsing</h1>
 <div class="line">Progress: 100%</div>
 <div class="line"></div>
 <div class="line">FILE: test.sy2</div>
+<div class="line"> COMMAND: Encoding</div>
+<div class="line">  CMD_VALUE: little_endian</div>
 <div class="line"> COMMAND: TEngSetSignVersion</div>
 <div class="line">  CMD_VALUE: 2016</div>
 <div class="line"> COMMAND: RegCmd</div>
@@ -285,7 +291,11 @@ Read AST during parsing</h1>
 <div class="line"></div>
 <div class="line">  <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
-</div><!-- fragment --><p>Input the test.sy2 file: </p><div class="fragment"><div class="line">TEngSetSignVersion 2016</div>
+</div><!-- fragment --><p>Input the test.sy2 file: </p><div class="fragment"><div class="line"><span class="preprocessor"># Header</span></div>
+<div class="line"></div>
+<div class="line">Encoding little_endian</div>
+<div class="line"></div>
+<div class="line">TEngSetSignVersion 2016</div>
 <div class="line"></div>
 <div class="line"><span class="preprocessor"># Structure TAG PointTag, sizeof(PointTag) is 16 Byte(s):</span></div>
 <div class="line"><span class="preprocessor"># Command Type   Name              Offset      Signature</span></div>
@@ -302,12 +312,16 @@ Read AST during parsing</h1>
 <div class="line">RegCmd    DATA   point1_x        0040DF20    F32                                                       </div>
 <div class="line">RegCmd    DATA   point1_y        0040DF24    F96</div>
 </div><!-- fragment --><p>Output: </p><div class="fragment"><div class="line">Progress: 2%</div>
+<div class="line"> COMMAND: Encoding</div>
+<div class="line">  CMD_VALUE: little_endian  </div>
+<div class="line"></div>
+<div class="line">Progress: 5%</div>
 <div class="line"> COMMAND: TEngSetSignVersion</div>
 <div class="line">  CMD_VALUE: 2016</div>
 <div class="line"></div>
 <div class="line">Progress: 35%</div>
 <div class="line"> COMMAND: RegVar</div>
-<div class="line">  SYMBOL: PointTag</div>
+<div class="line">  TYPEDEF: PointTag</div>
 <div class="line">   TYPE: STRUCT</div>
 <div class="line">   NAME: PointTag</div>
 <div class="line">   OFFSET: 0</div>
@@ -317,7 +331,7 @@ Read AST during parsing</h1>
 <div class="line"></div>
 <div class="line">Progress: 46%</div>
 <div class="line"> COMMAND: RegVar</div>
-<div class="line">  SYMBOL: PointTag_x</div>
+<div class="line">  TYPEDEF: PointTag_x</div>
 <div class="line">   TYPE: STRUCT</div>
 <div class="line">   NAME: PointTag_x</div>
 <div class="line">   OFFSET: 0</div>
@@ -327,7 +341,7 @@ Read AST during parsing</h1>
 <div class="line"></div>
 <div class="line">Progress: 51%</div>
 <div class="line"> COMMAND: RegVar</div>
-<div class="line">  SYMBOL: PointTag_y</div>
+<div class="line">  TYPEDEF: PointTag_y</div>
 <div class="line">   TYPE: STRUCT</div>
 <div class="line">   NAME: PointTag_y</div>
 <div class="line">   OFFSET: 4</div>
@@ -394,7 +408,7 @@ Read AST during parsing</h1>
 </div><!-- fragment --> </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Oct 5 2018 08:22:59 for Sy2 Parser API by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 17 2018 18:34:55 for Sy2 Parser API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

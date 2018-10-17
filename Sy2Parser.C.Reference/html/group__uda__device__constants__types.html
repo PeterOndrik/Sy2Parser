@@ -93,6 +93,12 @@ Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_sy2_node.html">Sy2Node</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The basic information to unique Sy2 node identification. The Sy2 node represents a terminal and a non-terminal lexical token.  <a href="struct_sy2_node.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_file_date_time.html">FileDateTime</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The date and time of a parsed file.  <a href="struct_file_date_time.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_sy2_file_info.html">Sy2FileInfo</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The parsed file information.  <a href="struct_sy2_file_info.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
@@ -123,6 +129,14 @@ typedef enum <a class="el" href="group__uda__device__constants__types.html#ga810
 typedef struct <a class="el" href="struct_sy2_node.html">Sy2Node</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uda__device__constants__types.html#ga6ee74cf779d4211a85ec66ff9e9d7a05">T_Sy2Node</a></td></tr>
 <tr class="memdesc:ga6ee74cf779d4211a85ec66ff9e9d7a05"><td class="mdescLeft">&#160;</td><td class="mdescRight">The basic information to unique Sy2 node identification. The Sy2 node represents a terminal and a non-terminal lexical token. <br /></td></tr>
 <tr class="separator:ga6ee74cf779d4211a85ec66ff9e9d7a05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad90817871d56e5f13f40f559697c7f35"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="gad90817871d56e5f13f40f559697c7f35"></a>
+typedef struct <a class="el" href="struct_file_date_time.html">FileDateTime</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uda__device__constants__types.html#gad90817871d56e5f13f40f559697c7f35">T_FileDateTime</a></td></tr>
+<tr class="memdesc:gad90817871d56e5f13f40f559697c7f35"><td class="mdescLeft">&#160;</td><td class="mdescRight">The date and time of a parsed file. <br /></td></tr>
+<tr class="separator:gad90817871d56e5f13f40f559697c7f35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac1c9ed8c6f14a642dd0934a536f6f285"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="gac1c9ed8c6f14a642dd0934a536f6f285"></a>
+typedef struct <a class="el" href="struct_sy2_file_info.html">Sy2FileInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uda__device__constants__types.html#gac1c9ed8c6f14a642dd0934a536f6f285">T_Sy2FileInfo</a></td></tr>
+<tr class="memdesc:gac1c9ed8c6f14a642dd0934a536f6f285"><td class="mdescLeft">&#160;</td><td class="mdescRight">The parsed file information. <br /></td></tr>
+<tr class="separator:gac1c9ed8c6f14a642dd0934a536f6f285"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -144,32 +158,33 @@ Enumerations</h2></td></tr>
 <b>SY2_COMMAND</b>, 
 <b>SY2_CMD_VALUE</b>, 
 <br />
-&#160;&#160;<b>SY2_SYMBOL</b>, 
+&#160;&#160;<b>SY2_TYPEDEF</b>, 
+<b>SY2_SYMBOL</b>, 
 <b>SY2_TYPE</b>, 
 <b>SY2_NAME</b>, 
-<b>SY2_BITMASK</b>, 
 <br />
-&#160;&#160;<b>SY2_OFFSET</b>, 
+&#160;&#160;<b>SY2_BITMASK</b>, 
+<b>SY2_OFFSET</b>, 
 <b>SY2_ADDRESS</b>, 
 <b>SY2_ENUM_VALUE</b>, 
-<b>SY2_SIGNATURE</b>, 
 <br />
-&#160;&#160;<b>SY2_VOID</b>, 
+&#160;&#160;<b>SY2_SIGNATURE</b>, 
+<b>SY2_VOID</b>, 
 <b>SY2_BOOL</b>, 
 <b>SY2_INT</b>, 
-<b>SY2_UINT</b>, 
 <br />
-&#160;&#160;<b>SY2_FLOAT</b>, 
+&#160;&#160;<b>SY2_UINT</b>, 
+<b>SY2_FLOAT</b>, 
 <b>SY2_STRUCT</b>, 
 <b>SY2_POINTER</b>, 
-<b>SY2_FUNCTION</b>, 
 <br />
-&#160;&#160;<b>SY2_RETURN</b>, 
+&#160;&#160;<b>SY2_FUNCTION</b>, 
+<b>SY2_RETURN</b>, 
 <b>SY2_PARAMETER</b>, 
 <b>SY2_TYPE_QUALIFIER</b>, 
-<b>SY2_SIZE</b>, 
 <br />
-&#160;&#160;<b>SY2_ARRAY_SIZE</b>, 
+&#160;&#160;<b>SY2_SIZE</b>, 
+<b>SY2_ARRAY_SIZE</b>, 
 <b>SY2_NODE_COUNT</b>
 <br />
  }<tr class="memdesc:ga81012a381cc41da83292c7b7c9cb47f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sy2 Node types. <br /></td></tr>
@@ -231,6 +246,7 @@ Variables</h2></td></tr>
 <div class="line">        <span class="stringliteral">&quot;FILE&quot;</span>,</div>
 <div class="line">        <span class="stringliteral">&quot;COMMAND&quot;</span>,</div>
 <div class="line">        <span class="stringliteral">&quot;CMD_VALUE&quot;</span>,</div>
+<div class="line">        <span class="stringliteral">&quot;TYPEDEF&quot;</span>,</div>
 <div class="line">        <span class="stringliteral">&quot;SYMBOL&quot;</span>,</div>
 <div class="line">        <span class="stringliteral">&quot;TYPE&quot;</span>,</div>
 <div class="line">        <span class="stringliteral">&quot;NAME&quot;</span>,</div>
@@ -261,7 +277,7 @@ Variables</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Oct 5 2018 08:22:59 for Sy2 Parser API by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 17 2018 18:34:55 for Sy2 Parser API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

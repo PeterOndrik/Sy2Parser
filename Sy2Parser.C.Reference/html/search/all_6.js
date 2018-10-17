@@ -1,28 +1,4 @@
 var searchData=
 [
-  ['sy2_20parser_20api',['Sy2 Parser API',['../index.html',1,'']]],
-  ['sy2_5feof',['SY2_EOF',['../group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba184dce72acff92f77299f48deedffd95',1,'sy2parser_api.h']]],
-  ['sy2_5ffaild',['SY2_FAILD',['../group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba0f5974ab25abc0342fcc804fb9402550',1,'sy2parser_api.h']]],
-  ['sy2_5ffile_5fnot_5ffound',['SY2_FILE_NOT_FOUND',['../group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba069b9678b5580df4ef3ff0e2e7e8ae41',1,'sy2parser_api.h']]],
-  ['sy2_5fsuccess',['SY2_SUCCESS',['../group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba0c523e2a0e55d51471f7f0179bd74a32',1,'sy2parser_api.h']]],
-  ['sy2_5funknown_5ftoken',['SY2_UNKNOWN_TOKEN',['../group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5baceffa75c1e074e27372a0a10ecbff3fc',1,'sy2parser_api.h']]],
-  ['sy2addparsednodecallback',['sy2AddParsedNodeCallback',['../group__sy2parser__api__functions.html#ga4bb1f41d1a63b5c0f4272a73c6fe45e4',1,'sy2parser_api.h']]],
-  ['sy2close',['sy2Close',['../group__sy2parser__api__functions.html#ga25319be6008b7670a07f289a775de185',1,'sy2parser_api.h']]],
-  ['sy2node',['Sy2Node',['../struct_sy2_node.html',1,'']]],
-  ['sy2nodename',['sy2NodeName',['../group__uda__device__constants__types.html#ga3852ce8af18e9e47389c12172f7baf90',1,'sy2parser_api.h']]],
-  ['sy2nodetype',['Sy2NodeType',['../group__uda__device__constants__types.html#ga81012a381cc41da83292c7b7c9cb47f8',1,'sy2parser_api.h']]],
-  ['sy2open',['sy2Open',['../group__sy2parser__api__functions.html#ga7c423115821a7c105f803d021b4fc07d',1,'sy2parser_api.h']]],
-  ['sy2parse',['sy2Parse',['../group__sy2parser__api__functions.html#ga2b15567a938a0b33f1c9aba5fc9cf2fe',1,'sy2parser_api.h']]],
-  ['sy2_20parser_20api_20functions',['Sy2 Parser API Functions',['../group__sy2parser__api__functions.html',1,'']]],
-  ['sy2parser_5fapi_5fmajor_5fversion',['SY2PARSER_API_MAJOR_VERSION',['../group__sy2parser__api__version__constants.html#gafde73c352ca7bd546290a0a0238b1f0b',1,'sy2parser_api.h']]],
-  ['sy2parser_5fapi_5fminor_5fversion',['SY2PARSER_API_MINOR_VERSION',['../group__sy2parser__api__version__constants.html#ga5541fc500e1aaffb65bc5c286bf48b08',1,'sy2parser_api.h']]],
-  ['sy2parser_5fapi_5fversion',['SY2PARSER_API_VERSION',['../group__sy2parser__api__version__constants.html#gaca690d4ca81963835e34e2c6fe148e68',1,'sy2parser_api.h']]],
-  ['sy2parser_5finvalid_5fhandle',['SY2PARSER_INVALID_HANDLE',['../group__uda__device__constants__types.html#ga78c3c87878b5493344d349a39b4b77cf',1,'sy2parser_api.h']]],
-  ['sy2parserhandle',['Sy2ParserHandle',['../group__uda__device__constants__types.html#gab56874616dcf613944f4d01ca95478c5',1,'sy2parser_api.h']]],
-  ['sy2parserstatus',['Sy2ParserStatus',['../group__uda__device__constants__types.html#ga2a6b7a98923516eba7750a06b43fc577',1,'sy2parser_api.h']]],
-  ['sy2parserstatuscode',['Sy2ParserStatusCode',['../group__uda__device__constants__types.html#ga815bd44e1542872aa2e8edf7e9427f5b',1,'sy2parser_api.h']]],
-  ['sy2readnext',['sy2ReadNext',['../group__sy2parser__api__functions.html#ga122163cbc3d1f5c12f484e10355e54a7',1,'sy2parser_api.h']]],
-  ['sy2removeparsednodecallback',['sy2RemoveParsedNodeCallback',['../group__sy2parser__api__functions.html#ga9599ebdbd568c2c94c47941085b36b06',1,'sy2parser_api.h']]],
-  ['sy2setparsingerrorcallback',['sy2SetParsingErrorCallback',['../group__sy2parser__api__functions.html#ga142672bd5409aa5acc6f9c535a2807c5',1,'sy2parser_api.h']]],
-  ['sy2setparsingprogresscallback',['sy2SetParsingProgressCallback',['../group__sy2parser__api__functions.html#ga6d028cc4c6c6fdef064b9b0964334ced',1,'sy2parser_api.h']]]
+  ['run_2dtime_20dl_20api',['Run-Time DL API',['../group__sy2parser__api__runtime.html',1,'']]]
 ];

@@ -129,6 +129,10 @@ int main()
 
 Input the test.sy2 file:
 \code
+# Header
+
+Encoding little_endian
+
 TEngSetSignVersion 2016
 
 # Command Type   Name            Address     Signature
@@ -145,6 +149,8 @@ Progress: 99%
 Progress: 100%
 
 FILE: test.sy2
+ COMMAND: Encoding
+  CMD_VALUE: little_endian
  COMMAND: TEngSetSignVersion
   CMD_VALUE: 2016
  COMMAND: RegCmd
@@ -241,6 +247,10 @@ int main()
 
 Input the test.sy2 file:
 \code
+# Header
+
+Encoding little_endian
+
 TEngSetSignVersion 2016
 
 # Structure TAG PointTag, sizeof(PointTag) is 16 Byte(s):
@@ -262,12 +272,16 @@ RegCmd    DATA   point1_y        0040DF24    F96
 Output:
 \code
 Progress: 2%
+ COMMAND: Encoding
+  CMD_VALUE: little_endian  
+
+Progress: 5%
  COMMAND: TEngSetSignVersion
   CMD_VALUE: 2016
 
 Progress: 35%
  COMMAND: RegVar
-  SYMBOL: PointTag
+  TYPEDEF: PointTag
    TYPE: STRUCT
    NAME: PointTag
    OFFSET: 0
@@ -277,7 +291,7 @@ Progress: 35%
 
 Progress: 46%
  COMMAND: RegVar
-  SYMBOL: PointTag_x
+  TYPEDEF: PointTag_x
    TYPE: STRUCT
    NAME: PointTag_x
    OFFSET: 0
@@ -287,7 +301,7 @@ Progress: 46%
 
 Progress: 51%
  COMMAND: RegVar
-  SYMBOL: PointTag_y
+  TYPEDEF: PointTag_y
    TYPE: STRUCT
    NAME: PointTag_y
    OFFSET: 4
