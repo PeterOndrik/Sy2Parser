@@ -389,9 +389,9 @@ of the interface then the major version number will be incremented.
 It can use udaGetApiVersion() to retrieve the API version implemented by the DLL.
 */
 //! Major version number of the programming interface.
-#define SY2PARSER_API_MAJOR_VERSION   0U
+#define SY2PARSER_API_MAJOR_VERSION   1U
 //! Minor version number of the programming interface.
-#define SY2PARSER_API_MINOR_VERSION   1U
+#define SY2PARSER_API_MINOR_VERSION   0U
 
 //! Version number of the programming interface as DWORD.
 #define SY2PARSER_API_VERSION ( (SY2PARSER_API_MAJOR_VERSION << 16) | SY2PARSER_API_MINOR_VERSION ) 
@@ -433,6 +433,7 @@ typedef enum Sy2NodeType
 	SY2_FILE,
 	SY2_COMMAND,
 	SY2_CMD_VALUE,
+	SY2_TYPEDEF,
 	SY2_SYMBOL,
 	SY2_TYPE,
 	SY2_NAME,
@@ -463,6 +464,7 @@ const char *sy2NodeName[SY2_NODE_COUNT] = {
 	"FILE",
 	"COMMAND",
 	"CMD_VALUE",
+	"TYPEDEF",
 	"SYMBOL",
 	"TYPE",
 	"NAME",
