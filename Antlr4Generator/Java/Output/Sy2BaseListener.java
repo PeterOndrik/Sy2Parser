@@ -39,13 +39,37 @@ public class Sy2BaseListener implements Sy2Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTypedef(Sy2Parser.TypedefContext ctx) { }
+	@Override public void enterEncodingValue(Sy2Parser.EncodingValueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTypedef(Sy2Parser.TypedefContext ctx) { }
+	@Override public void exitEncodingValue(Sy2Parser.EncodingValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSignValue(Sy2Parser.SignValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSignValue(Sy2Parser.SignValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTypeDefinition(Sy2Parser.TypeDefinitionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTypeDefinition(Sy2Parser.TypeDefinitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

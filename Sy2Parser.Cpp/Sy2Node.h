@@ -8,6 +8,7 @@ namespace Model
 		SY2_FILE,
 		SY2_COMMAND,
 		SY2_CMD_VALUE,
+		SY2_TYPEDEF,
 		SY2_SYMBOL,
 		SY2_TYPE,
 		SY2_NAME,

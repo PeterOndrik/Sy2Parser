@@ -129,6 +129,10 @@ int main()
 
 Input the test.sy2 file:
 \code
+# Header
+
+Encoding little_endian
+
 TEngSetSignVersion 2016
 
 # Command Type   Name            Address     Signature
@@ -145,6 +149,8 @@ Progress: 99%
 Progress: 100%
 
 FILE: test.sy2
+ COMMAND: Encoding
+  CMD_VALUE: little_endian
  COMMAND: TEngSetSignVersion
   CMD_VALUE: 2016
  COMMAND: RegCmd
@@ -241,6 +247,10 @@ int main()
 
 Input the test.sy2 file:
 \code
+# Header
+
+Encoding little_endian
+
 TEngSetSignVersion 2016
 
 # Structure TAG PointTag, sizeof(PointTag) is 16 Byte(s):
@@ -262,12 +272,16 @@ RegCmd    DATA   point1_y        0040DF24    F96
 Output:
 \code
 Progress: 2%
+ COMMAND: Encoding
+  CMD_VALUE: little_endian  
+
+Progress: 5%
  COMMAND: TEngSetSignVersion
   CMD_VALUE: 2016
 
 Progress: 35%
  COMMAND: RegVar
-  SYMBOL: PointTag
+  TYPEDEF: PointTag
    TYPE: STRUCT
    NAME: PointTag
    OFFSET: 0
@@ -277,7 +291,7 @@ Progress: 35%
 
 Progress: 46%
  COMMAND: RegVar
-  SYMBOL: PointTag_x
+  TYPEDEF: PointTag_x
    TYPE: STRUCT
    NAME: PointTag_x
    OFFSET: 0
@@ -287,7 +301,7 @@ Progress: 46%
 
 Progress: 51%
  COMMAND: RegVar
-  SYMBOL: PointTag_y
+  TYPEDEF: PointTag_y
    TYPE: STRUCT
    NAME: PointTag_y
    OFFSET: 4
@@ -389,7 +403,7 @@ of the interface then the major version number will be incremented.
 It can use udaGetApiVersion() to retrieve the API version implemented by the DLL.
 */
 //! Major version number of the programming interface.
-#define SY2PARSER_API_MAJOR_VERSION   0U
+#define SY2PARSER_API_MAJOR_VERSION   1U
 //! Minor version number of the programming interface.
 #define SY2PARSER_API_MINOR_VERSION   1U
 
@@ -433,6 +447,7 @@ typedef enum Sy2NodeType
 	SY2_FILE,
 	SY2_COMMAND,
 	SY2_CMD_VALUE,
+	SY2_TYPEDEF,
 	SY2_SYMBOL,
 	SY2_TYPE,
 	SY2_NAME,
@@ -463,6 +478,7 @@ const char *sy2NodeName[SY2_NODE_COUNT] = {
 	"FILE",
 	"COMMAND",
 	"CMD_VALUE",
+	"TYPEDEF",
 	"SYMBOL",
 	"TYPE",
 	"NAME",
@@ -495,6 +511,28 @@ typedef struct Sy2Node
 	unsigned int line;		//!< The number of line.
 	unsigned int column;	//!< The column of character.
 } T_Sy2Node;
+
+//! The date and time of a parsed file.
+typedef struct FileDateTime
+{
+	unsigned short year;
+	unsigned short month;
+	unsigned short dayOfWeek;
+	unsigned short day;
+	unsigned short hour;
+	unsigned short minute;
+	unsigned short second;
+	unsigned short milliseconds;
+} T_FileDateTime;
+
+//! The parsed file information.
+typedef struct Sy2FileInfo
+{
+	unsigned int size;
+	T_FileDateTime creation;
+	T_FileDateTime lastAccess;
+	T_FileDateTime lastWrite;
+} T_Sy2FileInfo;
 
 /*!
 @}
@@ -615,6 +653,20 @@ If a valid handle is specified, the function returns always #SY2_SUCCESS.
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Close(Sy2ParserHandle handle);
 
 /*!
+\brief Get information abut a parsed file.
+
+\param[in] handle
+A descriptor identifying a Sy2 Parser.
+
+\param[out] fileInfo
+Address of a caller-provided variable which will be set to a parsed file information if the function succeeds.
+
+\return
+The function returns #SY2_SUCCESS if successful, an error code otherwise.
+*/
+SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2GetFileInfo(Sy2ParserHandle handle, T_Sy2FileInfo *fileInfo);
+
+/*!
   \brief Set a callback to receive a parsing error.
 
   The callback is invoked during running the #sy2Parse() function.
@@ -718,6 +770,17 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Parse(Sy2ParserHandle handle
 	The function returns #SY2_SUCCESS if successful, an error code otherwise.
 */
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2ReadNext(const Sy2ParserHandle handle, T_Sy2Node *node);
+
+/*!
+\brief Terminate the parsing process that is currently being performed. 
+
+\param[in] handle
+A descriptor identifying a Sy2 Parser.
+
+\return
+The function returns #SY2_SUCCESS if successful, an error code otherwise.
+*/
+SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2AbortParsing(const Sy2ParserHandle handle);
 
 /*!
 @}

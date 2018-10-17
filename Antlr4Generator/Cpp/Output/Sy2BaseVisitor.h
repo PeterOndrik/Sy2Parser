@@ -23,11 +23,15 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitKeyword(Sy2Parser::KeywordContext *ctx) override {
+  virtual antlrcpp::Any visitEncodingValue(Sy2Parser::EncodingValueContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitCmdValue(Sy2Parser::CmdValueContext *ctx) override {
+  virtual antlrcpp::Any visitSignValue(Sy2Parser::SignValueContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitTypeDefinition(Sy2Parser::TypeDefinitionContext *ctx) override {
     return visitChildren(ctx);
   }
 

@@ -38,7 +38,7 @@ namespace Model
 
 		Model::Sy2Node getType() const override
 		{
-			return Model::Sy2Node::SY2_INT;
+			return Model::Sy2Node::SY2_ARRAY_SIZE;
 		}
 
 		Node *clone() override

@@ -3,6 +3,10 @@ grammar Sy2;
 /*
 Example:
 
+# Header
+
+Encoding little_endian
+
 TEngSetSignVersion 2016
 
 # Bit field TAG BitFieldTag, sizeof(BitFieldTag) is 8 Byte(s):
@@ -66,10 +70,16 @@ options
  */
 
 file : (NL | commands += command)+ EOF ;
-command : (keyword cmdValue | keyword symbol) NL ;
-keyword : KEYWORD ;
-cmdValue : CMD_VALUE ;
-symbol : type name (bitmask | offset | address | enumValue) signature ;
+command 
+	: ENCODING encodingValue NL
+	| SIGN_VERSION signValue NL
+	| REG_VAR typeDefinition NL
+	| REG_CMD symbol NL
+	;
+encodingValue : LITTLE_ENDIAN | BIG_ENDIAN ;
+signValue : V2016 ;
+typeDefinition : type name (bitmask | offset | enumValue) signature ;
+symbol : type name address signature ;
 type : TYPE ;
 name : ID ;
 bitmask : BITMASK ;
@@ -82,8 +92,15 @@ signature : SIGNATURE ;
  * Lexer Rules
  */
 
-KEYWORD : ( 'TEngSetSignVersion' | 'RegCmd' | 'RegVar' ) { tokenPos == 0 }? { tokenPos++; } ;
-CMD_VALUE : [0-9]+ { tokenPos == 1 }? { tokenPos = 0; } ;
+ENCODING : 'Encoding' { tokenPos == 0 }? { tokenPos++; } ;
+LITTLE_ENDIAN : 'little_endian' { tokenPos == 1 }? { tokenPos = 0; } ;
+BIG_ENDIAN : 'big_endian' { tokenPos == 1 }? { tokenPos = 0; } ;
+
+SIGN_VERSION : 'TEngSetSignVersion' { tokenPos == 0 }? { tokenPos++; } ;
+V2016 : '2016' { tokenPos == 1 }? { tokenPos = 0; } ;
+
+REG_VAR : 'RegVar' { tokenPos == 0 }? { tokenPos++; } ;
+REG_CMD : 'RegCmd' { tokenPos == 0 }? { tokenPos++; } ;
 TYPE : ( BIT | STRUCT | UNION | ENUM | PROC | DATA ) { tokenPos == 1 }? { tokenPos++;
 															if (getText().compare("BIT") == 0) symPosType = 0; 
 															if (getText().compare("STRUCT") == 0 || getText().compare("UNION") == 0) symPosType = 1; 

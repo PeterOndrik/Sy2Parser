@@ -93,21 +93,24 @@ Sy2Parser::FileContext* Sy2Parser::file() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(26); 
+    setState(28); 
     _errHandler->sync(this);
     _la = _input->LA(1);
     do {
-      setState(26);
+      setState(28);
       _errHandler->sync(this);
       switch (_input->LA(1)) {
         case Sy2Parser::NL: {
-          setState(24);
+          setState(26);
           match(Sy2Parser::NL);
           break;
         }
 
-        case Sy2Parser::KEYWORD: {
-          setState(25);
+        case Sy2Parser::ENCODING:
+        case Sy2Parser::SIGN_VERSION:
+        case Sy2Parser::REG_VAR:
+        case Sy2Parser::REG_CMD: {
+          setState(27);
           dynamic_cast<FileContext *>(_localctx)->commandContext = command();
           dynamic_cast<FileContext *>(_localctx)->commands.push_back(dynamic_cast<FileContext *>(_localctx)->commandContext);
           break;
@@ -116,13 +119,16 @@ Sy2Parser::FileContext* Sy2Parser::file() {
       default:
         throw NoViableAltException(this);
       }
-      setState(28); 
+      setState(30); 
       _errHandler->sync(this);
       _la = _input->LA(1);
-    } while (_la == Sy2Parser::KEYWORD
-
-    || _la == Sy2Parser::NL);
-    setState(30);
+    } while ((((_la & ~ 0x3fULL) == 0) &&
+      ((1ULL << _la) & ((1ULL << Sy2Parser::ENCODING)
+      | (1ULL << Sy2Parser::SIGN_VERSION)
+      | (1ULL << Sy2Parser::REG_VAR)
+      | (1ULL << Sy2Parser::REG_CMD)
+      | (1ULL << Sy2Parser::NL))) != 0));
+    setState(32);
     match(Sy2Parser::EOF);
    
   }
@@ -141,16 +147,36 @@ Sy2Parser::CommandContext::CommandContext(ParserRuleContext *parent, size_t invo
   : ParserRuleContext(parent, invokingState) {
 }
 
+tree::TerminalNode* Sy2Parser::CommandContext::ENCODING() {
+  return getToken(Sy2Parser::ENCODING, 0);
+}
+
+Sy2Parser::EncodingValueContext* Sy2Parser::CommandContext::encodingValue() {
+  return getRuleContext<Sy2Parser::EncodingValueContext>(0);
+}
+
 tree::TerminalNode* Sy2Parser::CommandContext::NL() {
   return getToken(Sy2Parser::NL, 0);
 }
 
-Sy2Parser::KeywordContext* Sy2Parser::CommandContext::keyword() {
-  return getRuleContext<Sy2Parser::KeywordContext>(0);
+tree::TerminalNode* Sy2Parser::CommandContext::SIGN_VERSION() {
+  return getToken(Sy2Parser::SIGN_VERSION, 0);
 }
 
-Sy2Parser::CmdValueContext* Sy2Parser::CommandContext::cmdValue() {
-  return getRuleContext<Sy2Parser::CmdValueContext>(0);
+Sy2Parser::SignValueContext* Sy2Parser::CommandContext::signValue() {
+  return getRuleContext<Sy2Parser::SignValueContext>(0);
+}
+
+tree::TerminalNode* Sy2Parser::CommandContext::REG_VAR() {
+  return getToken(Sy2Parser::REG_VAR, 0);
+}
+
+Sy2Parser::TypeDefinitionContext* Sy2Parser::CommandContext::typeDefinition() {
+  return getRuleContext<Sy2Parser::TypeDefinitionContext>(0);
+}
+
+tree::TerminalNode* Sy2Parser::CommandContext::REG_CMD() {
+  return getToken(Sy2Parser::REG_CMD, 0);
 }
 
 Sy2Parser::SymbolContext* Sy2Parser::CommandContext::symbol() {
@@ -190,29 +216,56 @@ Sy2Parser::CommandContext* Sy2Parser::command() {
     exitRule();
   });
   try {
-    enterOuterAlt(_localctx, 1);
-    setState(38);
+    setState(50);
     _errHandler->sync(this);
-    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 2, _ctx)) {
-    case 1: {
-      setState(32);
-      keyword();
-      setState(33);
-      cmdValue();
-      break;
-    }
+    switch (_input->LA(1)) {
+      case Sy2Parser::ENCODING: {
+        enterOuterAlt(_localctx, 1);
+        setState(34);
+        match(Sy2Parser::ENCODING);
+        setState(35);
+        encodingValue();
+        setState(36);
+        match(Sy2Parser::NL);
+        break;
+      }
 
-    case 2: {
-      setState(35);
-      keyword();
-      setState(36);
-      symbol();
-      break;
-    }
+      case Sy2Parser::SIGN_VERSION: {
+        enterOuterAlt(_localctx, 2);
+        setState(38);
+        match(Sy2Parser::SIGN_VERSION);
+        setState(39);
+        signValue();
+        setState(40);
+        match(Sy2Parser::NL);
+        break;
+      }
 
+      case Sy2Parser::REG_VAR: {
+        enterOuterAlt(_localctx, 3);
+        setState(42);
+        match(Sy2Parser::REG_VAR);
+        setState(43);
+        typeDefinition();
+        setState(44);
+        match(Sy2Parser::NL);
+        break;
+      }
+
+      case Sy2Parser::REG_CMD: {
+        enterOuterAlt(_localctx, 4);
+        setState(46);
+        match(Sy2Parser::REG_CMD);
+        setState(47);
+        symbol();
+        setState(48);
+        match(Sy2Parser::NL);
+        break;
+      }
+
+    default:
+      throw NoViableAltException(this);
     }
-    setState(40);
-    match(Sy2Parser::NL);
    
   }
   catch (RecognitionException &e) {
@@ -224,52 +277,66 @@ Sy2Parser::CommandContext* Sy2Parser::command() {
   return _localctx;
 }
 
-//----------------- KeywordContext ------------------------------------------------------------------
+//----------------- EncodingValueContext ------------------------------------------------------------------
 
-Sy2Parser::KeywordContext::KeywordContext(ParserRuleContext *parent, size_t invokingState)
+Sy2Parser::EncodingValueContext::EncodingValueContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* Sy2Parser::KeywordContext::KEYWORD() {
-  return getToken(Sy2Parser::KEYWORD, 0);
+tree::TerminalNode* Sy2Parser::EncodingValueContext::LITTLE_ENDIAN() {
+  return getToken(Sy2Parser::LITTLE_ENDIAN, 0);
+}
+
+tree::TerminalNode* Sy2Parser::EncodingValueContext::BIG_ENDIAN() {
+  return getToken(Sy2Parser::BIG_ENDIAN, 0);
 }
 
 
-size_t Sy2Parser::KeywordContext::getRuleIndex() const {
-  return Sy2Parser::RuleKeyword;
+size_t Sy2Parser::EncodingValueContext::getRuleIndex() const {
+  return Sy2Parser::RuleEncodingValue;
 }
 
-void Sy2Parser::KeywordContext::enterRule(tree::ParseTreeListener *listener) {
+void Sy2Parser::EncodingValueContext::enterRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<Sy2Listener *>(listener);
   if (parserListener != nullptr)
-    parserListener->enterKeyword(this);
+    parserListener->enterEncodingValue(this);
 }
 
-void Sy2Parser::KeywordContext::exitRule(tree::ParseTreeListener *listener) {
+void Sy2Parser::EncodingValueContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<Sy2Listener *>(listener);
   if (parserListener != nullptr)
-    parserListener->exitKeyword(this);
+    parserListener->exitEncodingValue(this);
 }
 
 
-antlrcpp::Any Sy2Parser::KeywordContext::accept(tree::ParseTreeVisitor *visitor) {
+antlrcpp::Any Sy2Parser::EncodingValueContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<Sy2Visitor*>(visitor))
-    return parserVisitor->visitKeyword(this);
+    return parserVisitor->visitEncodingValue(this);
   else
     return visitor->visitChildren(this);
 }
 
-Sy2Parser::KeywordContext* Sy2Parser::keyword() {
-  KeywordContext *_localctx = _tracker.createInstance<KeywordContext>(_ctx, getState());
-  enterRule(_localctx, 4, Sy2Parser::RuleKeyword);
+Sy2Parser::EncodingValueContext* Sy2Parser::encodingValue() {
+  EncodingValueContext *_localctx = _tracker.createInstance<EncodingValueContext>(_ctx, getState());
+  enterRule(_localctx, 4, Sy2Parser::RuleEncodingValue);
+  size_t _la = 0;
 
   auto onExit = finally([=] {
     exitRule();
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(42);
-    match(Sy2Parser::KEYWORD);
+    setState(52);
+    _la = _input->LA(1);
+    if (!(_la == Sy2Parser::LITTLE_ENDIAN
+
+    || _la == Sy2Parser::BIG_ENDIAN)) {
+    _errHandler->recoverInline(this);
+    }
+    else {
+      _errHandler->reportMatch(this);
+      consume();
+    }
    
   }
   catch (RecognitionException &e) {
@@ -281,52 +348,157 @@ Sy2Parser::KeywordContext* Sy2Parser::keyword() {
   return _localctx;
 }
 
-//----------------- CmdValueContext ------------------------------------------------------------------
+//----------------- SignValueContext ------------------------------------------------------------------
 
-Sy2Parser::CmdValueContext::CmdValueContext(ParserRuleContext *parent, size_t invokingState)
+Sy2Parser::SignValueContext::SignValueContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* Sy2Parser::CmdValueContext::CMD_VALUE() {
-  return getToken(Sy2Parser::CMD_VALUE, 0);
+tree::TerminalNode* Sy2Parser::SignValueContext::V2016() {
+  return getToken(Sy2Parser::V2016, 0);
 }
 
 
-size_t Sy2Parser::CmdValueContext::getRuleIndex() const {
-  return Sy2Parser::RuleCmdValue;
+size_t Sy2Parser::SignValueContext::getRuleIndex() const {
+  return Sy2Parser::RuleSignValue;
 }
 
-void Sy2Parser::CmdValueContext::enterRule(tree::ParseTreeListener *listener) {
+void Sy2Parser::SignValueContext::enterRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<Sy2Listener *>(listener);
   if (parserListener != nullptr)
-    parserListener->enterCmdValue(this);
+    parserListener->enterSignValue(this);
 }
 
-void Sy2Parser::CmdValueContext::exitRule(tree::ParseTreeListener *listener) {
+void Sy2Parser::SignValueContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<Sy2Listener *>(listener);
   if (parserListener != nullptr)
-    parserListener->exitCmdValue(this);
+    parserListener->exitSignValue(this);
 }
 
 
-antlrcpp::Any Sy2Parser::CmdValueContext::accept(tree::ParseTreeVisitor *visitor) {
+antlrcpp::Any Sy2Parser::SignValueContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<Sy2Visitor*>(visitor))
-    return parserVisitor->visitCmdValue(this);
+    return parserVisitor->visitSignValue(this);
   else
     return visitor->visitChildren(this);
 }
 
-Sy2Parser::CmdValueContext* Sy2Parser::cmdValue() {
-  CmdValueContext *_localctx = _tracker.createInstance<CmdValueContext>(_ctx, getState());
-  enterRule(_localctx, 6, Sy2Parser::RuleCmdValue);
+Sy2Parser::SignValueContext* Sy2Parser::signValue() {
+  SignValueContext *_localctx = _tracker.createInstance<SignValueContext>(_ctx, getState());
+  enterRule(_localctx, 6, Sy2Parser::RuleSignValue);
 
   auto onExit = finally([=] {
     exitRule();
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(44);
-    match(Sy2Parser::CMD_VALUE);
+    setState(54);
+    match(Sy2Parser::V2016);
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- TypeDefinitionContext ------------------------------------------------------------------
+
+Sy2Parser::TypeDefinitionContext::TypeDefinitionContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+Sy2Parser::TypeContext* Sy2Parser::TypeDefinitionContext::type() {
+  return getRuleContext<Sy2Parser::TypeContext>(0);
+}
+
+Sy2Parser::NameContext* Sy2Parser::TypeDefinitionContext::name() {
+  return getRuleContext<Sy2Parser::NameContext>(0);
+}
+
+Sy2Parser::SignatureContext* Sy2Parser::TypeDefinitionContext::signature() {
+  return getRuleContext<Sy2Parser::SignatureContext>(0);
+}
+
+Sy2Parser::BitmaskContext* Sy2Parser::TypeDefinitionContext::bitmask() {
+  return getRuleContext<Sy2Parser::BitmaskContext>(0);
+}
+
+Sy2Parser::OffsetContext* Sy2Parser::TypeDefinitionContext::offset() {
+  return getRuleContext<Sy2Parser::OffsetContext>(0);
+}
+
+Sy2Parser::EnumValueContext* Sy2Parser::TypeDefinitionContext::enumValue() {
+  return getRuleContext<Sy2Parser::EnumValueContext>(0);
+}
+
+
+size_t Sy2Parser::TypeDefinitionContext::getRuleIndex() const {
+  return Sy2Parser::RuleTypeDefinition;
+}
+
+void Sy2Parser::TypeDefinitionContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<Sy2Listener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterTypeDefinition(this);
+}
+
+void Sy2Parser::TypeDefinitionContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<Sy2Listener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitTypeDefinition(this);
+}
+
+
+antlrcpp::Any Sy2Parser::TypeDefinitionContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<Sy2Visitor*>(visitor))
+    return parserVisitor->visitTypeDefinition(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+Sy2Parser::TypeDefinitionContext* Sy2Parser::typeDefinition() {
+  TypeDefinitionContext *_localctx = _tracker.createInstance<TypeDefinitionContext>(_ctx, getState());
+  enterRule(_localctx, 8, Sy2Parser::RuleTypeDefinition);
+
+  auto onExit = finally([=] {
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(56);
+    type();
+    setState(57);
+    name();
+    setState(61);
+    _errHandler->sync(this);
+    switch (_input->LA(1)) {
+      case Sy2Parser::BITMASK: {
+        setState(58);
+        bitmask();
+        break;
+      }
+
+      case Sy2Parser::OFFSET: {
+        setState(59);
+        offset();
+        break;
+      }
+
+      case Sy2Parser::ENUM_VALUE: {
+        setState(60);
+        enumValue();
+        break;
+      }
+
+    default:
+      throw NoViableAltException(this);
+    }
+    setState(63);
+    signature();
    
   }
   catch (RecognitionException &e) {
@@ -352,24 +524,12 @@ Sy2Parser::NameContext* Sy2Parser::SymbolContext::name() {
   return getRuleContext<Sy2Parser::NameContext>(0);
 }
 
-Sy2Parser::SignatureContext* Sy2Parser::SymbolContext::signature() {
-  return getRuleContext<Sy2Parser::SignatureContext>(0);
-}
-
-Sy2Parser::BitmaskContext* Sy2Parser::SymbolContext::bitmask() {
-  return getRuleContext<Sy2Parser::BitmaskContext>(0);
-}
-
-Sy2Parser::OffsetContext* Sy2Parser::SymbolContext::offset() {
-  return getRuleContext<Sy2Parser::OffsetContext>(0);
-}
-
 Sy2Parser::AddressContext* Sy2Parser::SymbolContext::address() {
   return getRuleContext<Sy2Parser::AddressContext>(0);
 }
 
-Sy2Parser::EnumValueContext* Sy2Parser::SymbolContext::enumValue() {
-  return getRuleContext<Sy2Parser::EnumValueContext>(0);
+Sy2Parser::SignatureContext* Sy2Parser::SymbolContext::signature() {
+  return getRuleContext<Sy2Parser::SignatureContext>(0);
 }
 
 
@@ -399,48 +559,20 @@ antlrcpp::Any Sy2Parser::SymbolContext::accept(tree::ParseTreeVisitor *visitor) 
 
 Sy2Parser::SymbolContext* Sy2Parser::symbol() {
   SymbolContext *_localctx = _tracker.createInstance<SymbolContext>(_ctx, getState());
-  enterRule(_localctx, 8, Sy2Parser::RuleSymbol);
+  enterRule(_localctx, 10, Sy2Parser::RuleSymbol);
 
   auto onExit = finally([=] {
     exitRule();
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(46);
+    setState(65);
     type();
-    setState(47);
+    setState(66);
     name();
-    setState(52);
-    _errHandler->sync(this);
-    switch (_input->LA(1)) {
-      case Sy2Parser::BITMASK: {
-        setState(48);
-        bitmask();
-        break;
-      }
-
-      case Sy2Parser::OFFSET: {
-        setState(49);
-        offset();
-        break;
-      }
-
-      case Sy2Parser::ADDRESS: {
-        setState(50);
-        address();
-        break;
-      }
-
-      case Sy2Parser::ENUM_VALUE: {
-        setState(51);
-        enumValue();
-        break;
-      }
-
-    default:
-      throw NoViableAltException(this);
-    }
-    setState(54);
+    setState(67);
+    address();
+    setState(68);
     signature();
    
   }
@@ -490,14 +622,14 @@ antlrcpp::Any Sy2Parser::TypeContext::accept(tree::ParseTreeVisitor *visitor) {
 
 Sy2Parser::TypeContext* Sy2Parser::type() {
   TypeContext *_localctx = _tracker.createInstance<TypeContext>(_ctx, getState());
-  enterRule(_localctx, 10, Sy2Parser::RuleType);
+  enterRule(_localctx, 12, Sy2Parser::RuleType);
 
   auto onExit = finally([=] {
     exitRule();
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(56);
+    setState(70);
     match(Sy2Parser::TYPE);
    
   }
@@ -547,14 +679,14 @@ antlrcpp::Any Sy2Parser::NameContext::accept(tree::ParseTreeVisitor *visitor) {
 
 Sy2Parser::NameContext* Sy2Parser::name() {
   NameContext *_localctx = _tracker.createInstance<NameContext>(_ctx, getState());
-  enterRule(_localctx, 12, Sy2Parser::RuleName);
+  enterRule(_localctx, 14, Sy2Parser::RuleName);
 
   auto onExit = finally([=] {
     exitRule();
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(58);
+    setState(72);
     match(Sy2Parser::ID);
    
   }
@@ -604,14 +736,14 @@ antlrcpp::Any Sy2Parser::BitmaskContext::accept(tree::ParseTreeVisitor *visitor)
 
 Sy2Parser::BitmaskContext* Sy2Parser::bitmask() {
   BitmaskContext *_localctx = _tracker.createInstance<BitmaskContext>(_ctx, getState());
-  enterRule(_localctx, 14, Sy2Parser::RuleBitmask);
+  enterRule(_localctx, 16, Sy2Parser::RuleBitmask);
 
   auto onExit = finally([=] {
     exitRule();
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(60);
+    setState(74);
     match(Sy2Parser::BITMASK);
    
   }
@@ -661,14 +793,14 @@ antlrcpp::Any Sy2Parser::OffsetContext::accept(tree::ParseTreeVisitor *visitor) 
 
 Sy2Parser::OffsetContext* Sy2Parser::offset() {
   OffsetContext *_localctx = _tracker.createInstance<OffsetContext>(_ctx, getState());
-  enterRule(_localctx, 16, Sy2Parser::RuleOffset);
+  enterRule(_localctx, 18, Sy2Parser::RuleOffset);
 
   auto onExit = finally([=] {
     exitRule();
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(62);
+    setState(76);
     match(Sy2Parser::OFFSET);
    
   }
@@ -718,14 +850,14 @@ antlrcpp::Any Sy2Parser::AddressContext::accept(tree::ParseTreeVisitor *visitor)
 
 Sy2Parser::AddressContext* Sy2Parser::address() {
   AddressContext *_localctx = _tracker.createInstance<AddressContext>(_ctx, getState());
-  enterRule(_localctx, 18, Sy2Parser::RuleAddress);
+  enterRule(_localctx, 20, Sy2Parser::RuleAddress);
 
   auto onExit = finally([=] {
     exitRule();
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(64);
+    setState(78);
     match(Sy2Parser::ADDRESS);
    
   }
@@ -775,14 +907,14 @@ antlrcpp::Any Sy2Parser::EnumValueContext::accept(tree::ParseTreeVisitor *visito
 
 Sy2Parser::EnumValueContext* Sy2Parser::enumValue() {
   EnumValueContext *_localctx = _tracker.createInstance<EnumValueContext>(_ctx, getState());
-  enterRule(_localctx, 20, Sy2Parser::RuleEnumValue);
+  enterRule(_localctx, 22, Sy2Parser::RuleEnumValue);
 
   auto onExit = finally([=] {
     exitRule();
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(66);
+    setState(80);
     match(Sy2Parser::ENUM_VALUE);
    
   }
@@ -832,14 +964,14 @@ antlrcpp::Any Sy2Parser::SignatureContext::accept(tree::ParseTreeVisitor *visito
 
 Sy2Parser::SignatureContext* Sy2Parser::signature() {
   SignatureContext *_localctx = _tracker.createInstance<SignatureContext>(_ctx, getState());
-  enterRule(_localctx, 22, Sy2Parser::RuleSignature);
+  enterRule(_localctx, 24, Sy2Parser::RuleSignature);
 
   auto onExit = finally([=] {
     exitRule();
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(68);
+    setState(82);
     match(Sy2Parser::SIGNATURE);
    
   }
@@ -861,19 +993,20 @@ atn::ATN Sy2Parser::_atn;
 std::vector<uint16_t> Sy2Parser::_serializedATN;
 
 std::vector<std::string> Sy2Parser::_ruleNames = {
-  "file", "command", "keyword", "cmdValue", "symbol", "type", "name", "bitmask", 
-  "offset", "address", "enumValue", "signature"
+  "file", "command", "encodingValue", "signValue", "typeDefinition", "symbol", 
+  "type", "name", "bitmask", "offset", "address", "enumValue", "signature"
 };
 
 std::vector<std::string> Sy2Parser::_literalNames = {
-  "", "", "", "", "", "", "", "", "", "", "'BIT'", "'STRUCT'", "'UNION'", 
-  "'ENUM'", "'PROC'", "'DATA'"
+  "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "'BIT'", "'STRUCT'", 
+  "'UNION'", "'ENUM'", "'PROC'", "'DATA'"
 };
 
 std::vector<std::string> Sy2Parser::_symbolicNames = {
-  "", "KEYWORD", "CMD_VALUE", "TYPE", "ID", "BITMASK", "OFFSET", "ADDRESS", 
-  "ENUM_VALUE", "SIGNATURE", "BIT", "STRUCT", "UNION", "ENUM", "PROC", "DATA", 
-  "LINE_COMMENT", "WS", "NL"
+  "", "ENCODING", "LITTLE_ENDIAN", "BIG_ENDIAN", "SIGN_VERSION", "V2016", 
+  "REG_VAR", "REG_CMD", "TYPE", "ID", "BITMASK", "OFFSET", "ADDRESS", "ENUM_VALUE", 
+  "SIGNATURE", "BIT", "STRUCT", "UNION", "ENUM", "PROC", "DATA", "LINE_COMMENT", 
+  "WS", "NL"
 };
 
 dfa::Vocabulary Sy2Parser::_vocabulary(_literalNames, _symbolicNames);
@@ -896,48 +1029,57 @@ Sy2Parser::Initializer::Initializer() {
 
   _serializedATN = {
     0x3, 0x608b, 0xa72a, 0x8133, 0xb9ed, 0x417c, 0x3be7, 0x7786, 0x5964, 
-    0x3, 0x14, 0x49, 0x4, 0x2, 0x9, 0x2, 0x4, 0x3, 0x9, 0x3, 0x4, 0x4, 0x9, 
+    0x3, 0x19, 0x57, 0x4, 0x2, 0x9, 0x2, 0x4, 0x3, 0x9, 0x3, 0x4, 0x4, 0x9, 
     0x4, 0x4, 0x5, 0x9, 0x5, 0x4, 0x6, 0x9, 0x6, 0x4, 0x7, 0x9, 0x7, 0x4, 
     0x8, 0x9, 0x8, 0x4, 0x9, 0x9, 0x9, 0x4, 0xa, 0x9, 0xa, 0x4, 0xb, 0x9, 
-    0xb, 0x4, 0xc, 0x9, 0xc, 0x4, 0xd, 0x9, 0xd, 0x3, 0x2, 0x3, 0x2, 0x6, 
-    0x2, 0x1d, 0xa, 0x2, 0xd, 0x2, 0xe, 0x2, 0x1e, 0x3, 0x2, 0x3, 0x2, 0x3, 
-    0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x5, 0x3, 0x29, 
-    0xa, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x4, 0x3, 0x4, 0x3, 0x5, 0x3, 0x5, 
-    0x3, 0x6, 0x3, 0x6, 0x3, 0x6, 0x3, 0x6, 0x3, 0x6, 0x3, 0x6, 0x5, 0x6, 
-    0x37, 0xa, 0x6, 0x3, 0x6, 0x3, 0x6, 0x3, 0x7, 0x3, 0x7, 0x3, 0x8, 0x3, 
-    0x8, 0x3, 0x9, 0x3, 0x9, 0x3, 0xa, 0x3, 0xa, 0x3, 0xb, 0x3, 0xb, 0x3, 
-    0xc, 0x3, 0xc, 0x3, 0xd, 0x3, 0xd, 0x3, 0xd, 0x2, 0x2, 0xe, 0x2, 0x4, 
-    0x6, 0x8, 0xa, 0xc, 0xe, 0x10, 0x12, 0x14, 0x16, 0x18, 0x2, 0x2, 0x2, 
-    0x42, 0x2, 0x1c, 0x3, 0x2, 0x2, 0x2, 0x4, 0x28, 0x3, 0x2, 0x2, 0x2, 
-    0x6, 0x2c, 0x3, 0x2, 0x2, 0x2, 0x8, 0x2e, 0x3, 0x2, 0x2, 0x2, 0xa, 0x30, 
-    0x3, 0x2, 0x2, 0x2, 0xc, 0x3a, 0x3, 0x2, 0x2, 0x2, 0xe, 0x3c, 0x3, 0x2, 
-    0x2, 0x2, 0x10, 0x3e, 0x3, 0x2, 0x2, 0x2, 0x12, 0x40, 0x3, 0x2, 0x2, 
-    0x2, 0x14, 0x42, 0x3, 0x2, 0x2, 0x2, 0x16, 0x44, 0x3, 0x2, 0x2, 0x2, 
-    0x18, 0x46, 0x3, 0x2, 0x2, 0x2, 0x1a, 0x1d, 0x7, 0x14, 0x2, 0x2, 0x1b, 
-    0x1d, 0x5, 0x4, 0x3, 0x2, 0x1c, 0x1a, 0x3, 0x2, 0x2, 0x2, 0x1c, 0x1b, 
-    0x3, 0x2, 0x2, 0x2, 0x1d, 0x1e, 0x3, 0x2, 0x2, 0x2, 0x1e, 0x1c, 0x3, 
-    0x2, 0x2, 0x2, 0x1e, 0x1f, 0x3, 0x2, 0x2, 0x2, 0x1f, 0x20, 0x3, 0x2, 
-    0x2, 0x2, 0x20, 0x21, 0x7, 0x2, 0x2, 0x3, 0x21, 0x3, 0x3, 0x2, 0x2, 
-    0x2, 0x22, 0x23, 0x5, 0x6, 0x4, 0x2, 0x23, 0x24, 0x5, 0x8, 0x5, 0x2, 
-    0x24, 0x29, 0x3, 0x2, 0x2, 0x2, 0x25, 0x26, 0x5, 0x6, 0x4, 0x2, 0x26, 
-    0x27, 0x5, 0xa, 0x6, 0x2, 0x27, 0x29, 0x3, 0x2, 0x2, 0x2, 0x28, 0x22, 
-    0x3, 0x2, 0x2, 0x2, 0x28, 0x25, 0x3, 0x2, 0x2, 0x2, 0x29, 0x2a, 0x3, 
-    0x2, 0x2, 0x2, 0x2a, 0x2b, 0x7, 0x14, 0x2, 0x2, 0x2b, 0x5, 0x3, 0x2, 
-    0x2, 0x2, 0x2c, 0x2d, 0x7, 0x3, 0x2, 0x2, 0x2d, 0x7, 0x3, 0x2, 0x2, 
-    0x2, 0x2e, 0x2f, 0x7, 0x4, 0x2, 0x2, 0x2f, 0x9, 0x3, 0x2, 0x2, 0x2, 
-    0x30, 0x31, 0x5, 0xc, 0x7, 0x2, 0x31, 0x36, 0x5, 0xe, 0x8, 0x2, 0x32, 
-    0x37, 0x5, 0x10, 0x9, 0x2, 0x33, 0x37, 0x5, 0x12, 0xa, 0x2, 0x34, 0x37, 
-    0x5, 0x14, 0xb, 0x2, 0x35, 0x37, 0x5, 0x16, 0xc, 0x2, 0x36, 0x32, 0x3, 
-    0x2, 0x2, 0x2, 0x36, 0x33, 0x3, 0x2, 0x2, 0x2, 0x36, 0x34, 0x3, 0x2, 
-    0x2, 0x2, 0x36, 0x35, 0x3, 0x2, 0x2, 0x2, 0x37, 0x38, 0x3, 0x2, 0x2, 
-    0x2, 0x38, 0x39, 0x5, 0x18, 0xd, 0x2, 0x39, 0xb, 0x3, 0x2, 0x2, 0x2, 
-    0x3a, 0x3b, 0x7, 0x5, 0x2, 0x2, 0x3b, 0xd, 0x3, 0x2, 0x2, 0x2, 0x3c, 
-    0x3d, 0x7, 0x6, 0x2, 0x2, 0x3d, 0xf, 0x3, 0x2, 0x2, 0x2, 0x3e, 0x3f, 
-    0x7, 0x7, 0x2, 0x2, 0x3f, 0x11, 0x3, 0x2, 0x2, 0x2, 0x40, 0x41, 0x7, 
-    0x8, 0x2, 0x2, 0x41, 0x13, 0x3, 0x2, 0x2, 0x2, 0x42, 0x43, 0x7, 0x9, 
-    0x2, 0x2, 0x43, 0x15, 0x3, 0x2, 0x2, 0x2, 0x44, 0x45, 0x7, 0xa, 0x2, 
-    0x2, 0x45, 0x17, 0x3, 0x2, 0x2, 0x2, 0x46, 0x47, 0x7, 0xb, 0x2, 0x2, 
-    0x47, 0x19, 0x3, 0x2, 0x2, 0x2, 0x6, 0x1c, 0x1e, 0x28, 0x36, 
+    0xb, 0x4, 0xc, 0x9, 0xc, 0x4, 0xd, 0x9, 0xd, 0x4, 0xe, 0x9, 0xe, 0x3, 
+    0x2, 0x3, 0x2, 0x6, 0x2, 0x1f, 0xa, 0x2, 0xd, 0x2, 0xe, 0x2, 0x20, 0x3, 
+    0x2, 0x3, 0x2, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 
+    0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 
+    0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x5, 0x3, 0x35, 0xa, 0x3, 0x3, 0x4, 
+    0x3, 0x4, 0x3, 0x5, 0x3, 0x5, 0x3, 0x6, 0x3, 0x6, 0x3, 0x6, 0x3, 0x6, 
+    0x3, 0x6, 0x5, 0x6, 0x40, 0xa, 0x6, 0x3, 0x6, 0x3, 0x6, 0x3, 0x7, 0x3, 
+    0x7, 0x3, 0x7, 0x3, 0x7, 0x3, 0x7, 0x3, 0x8, 0x3, 0x8, 0x3, 0x9, 0x3, 
+    0x9, 0x3, 0xa, 0x3, 0xa, 0x3, 0xb, 0x3, 0xb, 0x3, 0xc, 0x3, 0xc, 0x3, 
+    0xd, 0x3, 0xd, 0x3, 0xe, 0x3, 0xe, 0x3, 0xe, 0x2, 0x2, 0xf, 0x2, 0x4, 
+    0x6, 0x8, 0xa, 0xc, 0xe, 0x10, 0x12, 0x14, 0x16, 0x18, 0x1a, 0x2, 0x3, 
+    0x3, 0x2, 0x4, 0x5, 0x2, 0x50, 0x2, 0x1e, 0x3, 0x2, 0x2, 0x2, 0x4, 0x34, 
+    0x3, 0x2, 0x2, 0x2, 0x6, 0x36, 0x3, 0x2, 0x2, 0x2, 0x8, 0x38, 0x3, 0x2, 
+    0x2, 0x2, 0xa, 0x3a, 0x3, 0x2, 0x2, 0x2, 0xc, 0x43, 0x3, 0x2, 0x2, 0x2, 
+    0xe, 0x48, 0x3, 0x2, 0x2, 0x2, 0x10, 0x4a, 0x3, 0x2, 0x2, 0x2, 0x12, 
+    0x4c, 0x3, 0x2, 0x2, 0x2, 0x14, 0x4e, 0x3, 0x2, 0x2, 0x2, 0x16, 0x50, 
+    0x3, 0x2, 0x2, 0x2, 0x18, 0x52, 0x3, 0x2, 0x2, 0x2, 0x1a, 0x54, 0x3, 
+    0x2, 0x2, 0x2, 0x1c, 0x1f, 0x7, 0x19, 0x2, 0x2, 0x1d, 0x1f, 0x5, 0x4, 
+    0x3, 0x2, 0x1e, 0x1c, 0x3, 0x2, 0x2, 0x2, 0x1e, 0x1d, 0x3, 0x2, 0x2, 
+    0x2, 0x1f, 0x20, 0x3, 0x2, 0x2, 0x2, 0x20, 0x1e, 0x3, 0x2, 0x2, 0x2, 
+    0x20, 0x21, 0x3, 0x2, 0x2, 0x2, 0x21, 0x22, 0x3, 0x2, 0x2, 0x2, 0x22, 
+    0x23, 0x7, 0x2, 0x2, 0x3, 0x23, 0x3, 0x3, 0x2, 0x2, 0x2, 0x24, 0x25, 
+    0x7, 0x3, 0x2, 0x2, 0x25, 0x26, 0x5, 0x6, 0x4, 0x2, 0x26, 0x27, 0x7, 
+    0x19, 0x2, 0x2, 0x27, 0x35, 0x3, 0x2, 0x2, 0x2, 0x28, 0x29, 0x7, 0x6, 
+    0x2, 0x2, 0x29, 0x2a, 0x5, 0x8, 0x5, 0x2, 0x2a, 0x2b, 0x7, 0x19, 0x2, 
+    0x2, 0x2b, 0x35, 0x3, 0x2, 0x2, 0x2, 0x2c, 0x2d, 0x7, 0x8, 0x2, 0x2, 
+    0x2d, 0x2e, 0x5, 0xa, 0x6, 0x2, 0x2e, 0x2f, 0x7, 0x19, 0x2, 0x2, 0x2f, 
+    0x35, 0x3, 0x2, 0x2, 0x2, 0x30, 0x31, 0x7, 0x9, 0x2, 0x2, 0x31, 0x32, 
+    0x5, 0xc, 0x7, 0x2, 0x32, 0x33, 0x7, 0x19, 0x2, 0x2, 0x33, 0x35, 0x3, 
+    0x2, 0x2, 0x2, 0x34, 0x24, 0x3, 0x2, 0x2, 0x2, 0x34, 0x28, 0x3, 0x2, 
+    0x2, 0x2, 0x34, 0x2c, 0x3, 0x2, 0x2, 0x2, 0x34, 0x30, 0x3, 0x2, 0x2, 
+    0x2, 0x35, 0x5, 0x3, 0x2, 0x2, 0x2, 0x36, 0x37, 0x9, 0x2, 0x2, 0x2, 
+    0x37, 0x7, 0x3, 0x2, 0x2, 0x2, 0x38, 0x39, 0x7, 0x7, 0x2, 0x2, 0x39, 
+    0x9, 0x3, 0x2, 0x2, 0x2, 0x3a, 0x3b, 0x5, 0xe, 0x8, 0x2, 0x3b, 0x3f, 
+    0x5, 0x10, 0x9, 0x2, 0x3c, 0x40, 0x5, 0x12, 0xa, 0x2, 0x3d, 0x40, 0x5, 
+    0x14, 0xb, 0x2, 0x3e, 0x40, 0x5, 0x18, 0xd, 0x2, 0x3f, 0x3c, 0x3, 0x2, 
+    0x2, 0x2, 0x3f, 0x3d, 0x3, 0x2, 0x2, 0x2, 0x3f, 0x3e, 0x3, 0x2, 0x2, 
+    0x2, 0x40, 0x41, 0x3, 0x2, 0x2, 0x2, 0x41, 0x42, 0x5, 0x1a, 0xe, 0x2, 
+    0x42, 0xb, 0x3, 0x2, 0x2, 0x2, 0x43, 0x44, 0x5, 0xe, 0x8, 0x2, 0x44, 
+    0x45, 0x5, 0x10, 0x9, 0x2, 0x45, 0x46, 0x5, 0x16, 0xc, 0x2, 0x46, 0x47, 
+    0x5, 0x1a, 0xe, 0x2, 0x47, 0xd, 0x3, 0x2, 0x2, 0x2, 0x48, 0x49, 0x7, 
+    0xa, 0x2, 0x2, 0x49, 0xf, 0x3, 0x2, 0x2, 0x2, 0x4a, 0x4b, 0x7, 0xb, 
+    0x2, 0x2, 0x4b, 0x11, 0x3, 0x2, 0x2, 0x2, 0x4c, 0x4d, 0x7, 0xc, 0x2, 
+    0x2, 0x4d, 0x13, 0x3, 0x2, 0x2, 0x2, 0x4e, 0x4f, 0x7, 0xd, 0x2, 0x2, 
+    0x4f, 0x15, 0x3, 0x2, 0x2, 0x2, 0x50, 0x51, 0x7, 0xe, 0x2, 0x2, 0x51, 
+    0x17, 0x3, 0x2, 0x2, 0x2, 0x52, 0x53, 0x7, 0xf, 0x2, 0x2, 0x53, 0x19, 
+    0x3, 0x2, 0x2, 0x2, 0x54, 0x55, 0x7, 0x10, 0x2, 0x2, 0x55, 0x1b, 0x3, 
+    0x2, 0x2, 0x2, 0x6, 0x1e, 0x20, 0x34, 0x3f, 
   };
 
   atn::ATNDeserializer deserializer;

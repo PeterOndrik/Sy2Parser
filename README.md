@@ -32,7 +32,7 @@ The Sy2 Parser generates following AST for example above:
 
 ![alt text][Sy2-1]
 
-[Sy2-1]: https://github.com/PeterOndrik/Sy2Parser/blob/master/doc/img/Sy2-1.PNG "Figure 1: Sy2 AST Example"
+[Sy2-1]: https://github.com/PeterOndrik/Sy2Parser/blob/feat/typedef/doc/img/Sy2-1.PNG "Figure 1: Sy2 AST Example"
 Figure 1: Sy2 AST Example
 </td>
 </tr>
@@ -44,14 +44,14 @@ Figure 1: Sy2 AST Example
 
 ![alt text][Sign2016-1]
 
-[Sign2016-1]: https://github.com/PeterOndrik/Sy2Parser/blob/master/doc/img/Sign2016-1.PNG "Figure 2: Sign2016 I32 AST Example"
+[Sign2016-1]: https://github.com/PeterOndrik/Sy2Parser/blob/feat/typedef/doc/img/Sign2016-1.PNG "Figure 2: Sign2016 I32 AST Example"
 Figure 2: Sign2016 "I32" AST Example
 </td>
 <td>
 
 ![alt text][Sign2016-2]
 
-[Sign2016-2]: https://github.com/PeterOndrik/Sy2Parser/blob/master/doc/img/Sign2016-2.PNG "Figure 3: Sign2016 C_PTR32_UI8 AST Example"
+[Sign2016-2]: https://github.com/PeterOndrik/Sy2Parser/blob/feat/typedef/doc/img/Sign2016-2.PNG "Figure 3: Sign2016 C_PTR32_UI8 AST Example"
 Figure 3: Sign2016 "C_PTR32_UI8" AST Example
 </td>
 </tr>
@@ -239,6 +239,10 @@ int main()
 ```
 Input the test.sy2 file: 
 ```
+# Header
+
+Encoding little_endian
+
 TEngSetSignVersion 2016
 
 # Structure TAG PointTag, sizeof(PointTag) is 16 Byte(s):
@@ -265,7 +269,7 @@ Progress: 2%
 
 Progress: 35%
  COMMAND: RegVar
-  SYMBOL: PointTag
+  TYPEDEF: PointTag
    TYPE: STRUCT
    NAME: PointTag
    OFFSET: 0
@@ -275,7 +279,7 @@ Progress: 35%
 
 Progress: 46%
  COMMAND: RegVar
-  SYMBOL: PointTag_x
+  TYPEDEF: PointTag_x
    TYPE: STRUCT
    NAME: PointTag_x
    OFFSET: 0
@@ -285,7 +289,7 @@ Progress: 46%
 
 Progress: 51%
  COMMAND: RegVar
-  SYMBOL: PointTag_y
+  TYPEDEF: PointTag_y
    TYPE: STRUCT
    NAME: PointTag_y
    OFFSET: 4

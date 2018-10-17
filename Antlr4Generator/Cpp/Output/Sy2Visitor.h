@@ -23,9 +23,11 @@ public:
 
     virtual antlrcpp::Any visitCommand(Sy2Parser::CommandContext *context) = 0;
 
-    virtual antlrcpp::Any visitKeyword(Sy2Parser::KeywordContext *context) = 0;
+    virtual antlrcpp::Any visitEncodingValue(Sy2Parser::EncodingValueContext *context) = 0;
 
-    virtual antlrcpp::Any visitCmdValue(Sy2Parser::CmdValueContext *context) = 0;
+    virtual antlrcpp::Any visitSignValue(Sy2Parser::SignValueContext *context) = 0;
+
+    virtual antlrcpp::Any visitTypeDefinition(Sy2Parser::TypeDefinitionContext *context) = 0;
 
     virtual antlrcpp::Any visitSymbol(Sy2Parser::SymbolContext *context) = 0;
 

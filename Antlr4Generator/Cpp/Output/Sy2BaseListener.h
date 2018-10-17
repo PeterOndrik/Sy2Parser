@@ -22,11 +22,14 @@ public:
   virtual void enterCommand(Sy2Parser::CommandContext * /*ctx*/) override { }
   virtual void exitCommand(Sy2Parser::CommandContext * /*ctx*/) override { }
 
-  virtual void enterKeyword(Sy2Parser::KeywordContext * /*ctx*/) override { }
-  virtual void exitKeyword(Sy2Parser::KeywordContext * /*ctx*/) override { }
+  virtual void enterEncodingValue(Sy2Parser::EncodingValueContext * /*ctx*/) override { }
+  virtual void exitEncodingValue(Sy2Parser::EncodingValueContext * /*ctx*/) override { }
 
-  virtual void enterCmdValue(Sy2Parser::CmdValueContext * /*ctx*/) override { }
-  virtual void exitCmdValue(Sy2Parser::CmdValueContext * /*ctx*/) override { }
+  virtual void enterSignValue(Sy2Parser::SignValueContext * /*ctx*/) override { }
+  virtual void exitSignValue(Sy2Parser::SignValueContext * /*ctx*/) override { }
+
+  virtual void enterTypeDefinition(Sy2Parser::TypeDefinitionContext * /*ctx*/) override { }
+  virtual void exitTypeDefinition(Sy2Parser::TypeDefinitionContext * /*ctx*/) override { }
 
   virtual void enterSymbol(Sy2Parser::SymbolContext * /*ctx*/) override { }
   virtual void exitSymbol(Sy2Parser::SymbolContext * /*ctx*/) override { }

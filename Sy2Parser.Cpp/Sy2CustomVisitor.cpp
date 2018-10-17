@@ -27,11 +27,11 @@ Any Sy2CustomVisitor::visitFile(Sy2Parser::FileContext *ctx)
 	for (auto sy2CommandCtx : ctx->commands)
 	{
 		Model::Command *command = new Model::Command();
-		command->setValue(sy2CommandCtx->keyword()->getText());
+		command->setValue(sy2CommandCtx->getText());
 
-		if (sy2CommandCtx->cmdValue() != nullptr)
+		if (sy2CommandCtx->encodingValue() != nullptr)
 		{
-			auto sy2CmdValueCtx = sy2CommandCtx->cmdValue();
+			auto sy2CmdValueCtx = sy2CommandCtx->encodingValue();
 			Model::CmdValue *value = new Model::CmdValue();
 			value->setValue(sy2CmdValueCtx->getText());
 
@@ -54,26 +54,8 @@ Any Sy2CustomVisitor::visitFile(Sy2Parser::FileContext *ctx)
 			symbol->setValue(name->getValue());
 
 			Model::Position *position = nullptr;
-			if (sy2SymbolCtx->bitmask())
-			{
-				position = new Model::Bitmask();
-				position->setValue(sy2SymbolCtx->bitmask()->getText());
-			}
-			else if (sy2SymbolCtx->offset())
-			{
-				position = new Model::Offset();
-				position->setValue(sy2SymbolCtx->offset()->getText());
-			}
-			else if (sy2SymbolCtx->address())
-			{
-				position = new Model::Address();
-				position->setValue(sy2SymbolCtx->address()->getText());
-			}
-			else
-			{
-				position = new Model::EnumValue();
-				position->setValue(sy2SymbolCtx->enumValue()->getText());
-			}
+			position = new Model::Address();
+			position->setValue(sy2SymbolCtx->address()->getText());
 			symbol->add(position);
 
 			Model::Signature *signature = new Model::Signature();
