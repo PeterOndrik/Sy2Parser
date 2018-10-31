@@ -23,7 +23,6 @@ public:
 
   	int afterSize = 0;
   	int isStruct = 0;
-  	int isSep = 0;
 
   virtual std::string getGrammarFileName() const override;
   virtual const std::vector<std::string>& getRuleNames() const override;
@@ -60,9 +59,8 @@ private:
   void FLOAT_TYPEAction(antlr4::RuleContext *context, size_t actionIndex);
   void STRUCT_TYPEAction(antlr4::RuleContext *context, size_t actionIndex);
   void PTR_TYPEAction(antlr4::RuleContext *context, size_t actionIndex);
-  void ARRAY_SIZEAction(antlr4::RuleContext *context, size_t actionIndex);
   void SIZEAction(antlr4::RuleContext *context, size_t actionIndex);
-  void SEPAction(antlr4::RuleContext *context, size_t actionIndex);
+  void IDAction(antlr4::RuleContext *context, size_t actionIndex);
 
   // Individual semantic predicate functions triggered by sempred() above.
   bool ARRAY_SIZESempred(antlr4::RuleContext *_localctx, size_t predicateIndex);

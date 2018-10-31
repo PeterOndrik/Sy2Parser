@@ -34,17 +34,14 @@ public:
   virtual void enterSymbol(Sy2Parser::SymbolContext * /*ctx*/) override { }
   virtual void exitSymbol(Sy2Parser::SymbolContext * /*ctx*/) override { }
 
-  virtual void enterType(Sy2Parser::TypeContext * /*ctx*/) override { }
-  virtual void exitType(Sy2Parser::TypeContext * /*ctx*/) override { }
-
   virtual void enterName(Sy2Parser::NameContext * /*ctx*/) override { }
   virtual void exitName(Sy2Parser::NameContext * /*ctx*/) override { }
 
-  virtual void enterBitmask(Sy2Parser::BitmaskContext * /*ctx*/) override { }
-  virtual void exitBitmask(Sy2Parser::BitmaskContext * /*ctx*/) override { }
-
   virtual void enterOffset(Sy2Parser::OffsetContext * /*ctx*/) override { }
   virtual void exitOffset(Sy2Parser::OffsetContext * /*ctx*/) override { }
+
+  virtual void enterBitmask(Sy2Parser::BitmaskContext * /*ctx*/) override { }
+  virtual void exitBitmask(Sy2Parser::BitmaskContext * /*ctx*/) override { }
 
   virtual void enterAddress(Sy2Parser::AddressContext * /*ctx*/) override { }
   virtual void exitAddress(Sy2Parser::AddressContext * /*ctx*/) override { }

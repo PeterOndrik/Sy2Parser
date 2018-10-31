@@ -18,9 +18,11 @@
 #include "Sign2016Lexer.h"
 #include "Sign2016Parser.h"
 #include "Sign2016CustomListener.h"
+#include "Sign2016ErrorListener.h"
 
 using namespace std;
 using namespace antlr4;
+using namespace antlr4::tree;
 
 Sy2CustomListener::Sy2CustomListener()
 	: _fileName(""), _syntaxErrors(0)
@@ -106,44 +108,63 @@ void Sy2CustomListener::exitCommand(Sy2Parser::CommandContext *ctx)
 		command->add(typeDefinition);
 		typeDefinition->setValue("UnknowTypeName");
 
-		auto sy2TypeCtx = sy2TypeDefinitionCtx->type();
-		type = new Model::Type(sy2TypeCtx->start->getLine(), sy2TypeCtx->start->getCharPositionInLine());
-		type->setValue(sy2TypeCtx->getText());
-		typeDefinition->add(type);
-
-		auto sy2NameCtx = sy2TypeDefinitionCtx->name();
-		name = new Model::Name(sy2NameCtx->start->getLine(), sy2NameCtx->start->getCharPositionInLine());
-		name->setValue(sy2NameCtx->getText());
-		typeDefinition->add(name);
-		typeDefinition->setValue(name->getValue());
-
-		ParserRuleContext *sy2PositionCtx = nullptr;
-		if (sy2TypeDefinitionCtx->bitmask())
+		TerminalNode *typedefType = nullptr;
+		if (sy2TypeDefinitionCtx->BIT())
 		{
-			sy2PositionCtx = sy2TypeDefinitionCtx->bitmask();
-			bitmask = new Model::Bitmask(sy2PositionCtx->start->getLine(), sy2PositionCtx->start->getCharPositionInLine());
-			bitmask->setValue(sy2PositionCtx->getText());
-			typeDefinition->add(bitmask);
+			typedefType = sy2TypeDefinitionCtx->BIT();
 		}
-		else if (sy2TypeDefinitionCtx->offset())
+		else if (sy2TypeDefinitionCtx->STRUCT())
 		{
-			sy2PositionCtx = sy2TypeDefinitionCtx->offset();
-			offset = new Model::Offset(sy2PositionCtx->start->getLine(), sy2PositionCtx->start->getCharPositionInLine());
-			offset->setValue(sy2PositionCtx->getText());
-			typeDefinition->add(offset);
+			typedefType = sy2TypeDefinitionCtx->STRUCT();
 		}
-		else if (sy2TypeDefinitionCtx->enumValue())
+		else if (sy2TypeDefinitionCtx->UNION())
 		{
-			sy2PositionCtx = sy2TypeDefinitionCtx->enumValue();
-			enumValue = new Model::EnumValue(sy2PositionCtx->start->getLine(), sy2PositionCtx->start->getCharPositionInLine());
-			enumValue->setValue(sy2PositionCtx->getText());
-			typeDefinition->add(enumValue);
+			typedefType = sy2TypeDefinitionCtx->UNION();
 		}
+		else if (sy2TypeDefinitionCtx->ENUM())
+		{
+			typedefType = sy2TypeDefinitionCtx->ENUM();
+		}
+		if (typedefType)
+		{
+			type = new Model::Type(typedefType->getSymbol()->getLine(), typedefType->getSymbol()->getCharPositionInLine());
+			type->setValue(typedefType->getText());
+			typeDefinition->add(type);
 
-		auto sy2SignatureCtx = sy2TypeDefinitionCtx->signature();
-		signature = new Model::Signature(sy2SignatureCtx->start->getLine(), sy2SignatureCtx->start->getCharPositionInLine());
-		signature->setValue(sy2SignatureCtx->getText());
-		typeDefinition->add(signature);
+			auto sy2NameCtx = sy2TypeDefinitionCtx->name();
+			name = new Model::Name(sy2NameCtx->start->getLine(), sy2NameCtx->start->getCharPositionInLine());
+			name->setValue(sy2NameCtx->getText());
+			typeDefinition->add(name);
+			typeDefinition->setValue(name->getValue());
+
+			ParserRuleContext *sy2PositionCtx = nullptr;
+			if (sy2TypeDefinitionCtx->offset())
+			{
+				sy2PositionCtx = sy2TypeDefinitionCtx->offset();
+				offset = new Model::Offset(sy2PositionCtx->start->getLine(), sy2PositionCtx->start->getCharPositionInLine());
+				offset->setValue(sy2PositionCtx->getText());
+				typeDefinition->add(offset);
+			}
+			if (sy2TypeDefinitionCtx->bitmask())
+			{
+				sy2PositionCtx = sy2TypeDefinitionCtx->bitmask();
+				bitmask = new Model::Bitmask(sy2PositionCtx->start->getLine(), sy2PositionCtx->start->getCharPositionInLine());
+				bitmask->setValue(sy2PositionCtx->getText());
+				typeDefinition->add(bitmask);
+			}
+			if (sy2TypeDefinitionCtx->enumValue())
+			{
+				sy2PositionCtx = sy2TypeDefinitionCtx->enumValue();
+				enumValue = new Model::EnumValue(sy2PositionCtx->start->getLine(), sy2PositionCtx->start->getCharPositionInLine());
+				enumValue->setValue(sy2PositionCtx->getText());
+				typeDefinition->add(enumValue);
+			}
+
+			auto sy2SignatureCtx = sy2TypeDefinitionCtx->signature();
+			signature = new Model::Signature(sy2SignatureCtx->start->getLine(), sy2SignatureCtx->start->getCharPositionInLine());
+			signature->setValue(sy2SignatureCtx->getText());
+			typeDefinition->add(signature);
+		}
 	}
 	else if (ctx->symbol() != nullptr)
 	{
@@ -154,33 +175,44 @@ void Sy2CustomListener::exitCommand(Sy2Parser::CommandContext *ctx)
 		command->add(symbol);
 		symbol->setValue("UnknowSymbolName");
 
-		auto sy2TypeCtx = sy2SymbolCtx->type();
-		type = new Model::Type(sy2TypeCtx->start->getLine(), sy2TypeCtx->start->getCharPositionInLine());
-		type->setValue(sy2TypeCtx->getText());
-		symbol->add(type);
+		TerminalNode *symbolType = nullptr;
+		if (sy2SymbolCtx->PROC())
+		{
+			symbolType = sy2SymbolCtx->PROC();
+		}
+		else if (sy2SymbolCtx->DATA())
+		{
+			symbolType = sy2SymbolCtx->DATA();
+		}
+		if (symbolType)
+		{
+			type = new Model::Type(symbolType->getSymbol()->getLine(), symbolType->getSymbol()->getCharPositionInLine());
+			type->setValue(symbolType->getText());
+			symbol->add(type);
 
-		auto sy2NameCtx = sy2SymbolCtx->name();
-		name = new Model::Name(sy2NameCtx->start->getLine(), sy2NameCtx->start->getCharPositionInLine());
-		name->setValue(sy2NameCtx->getText());
-		symbol->add(name);
-		symbol->setValue(name->getValue());
+			auto sy2NameCtx = sy2SymbolCtx->name();
+			name = new Model::Name(sy2NameCtx->start->getLine(), sy2NameCtx->start->getCharPositionInLine());
+			name->setValue(sy2NameCtx->getText());
+			symbol->add(name);
+			symbol->setValue(name->getValue());
 
-		auto sy2AddressCtx = sy2SymbolCtx->address();
-		address = new Model::Address(sy2AddressCtx->start->getLine(), sy2AddressCtx->start->getCharPositionInLine());
-		address->setValue(sy2AddressCtx->getText());
-		symbol->add(address);
+			auto sy2AddressCtx = sy2SymbolCtx->address();
+			address = new Model::Address(sy2AddressCtx->start->getLine(), sy2AddressCtx->start->getCharPositionInLine());
+			address->setValue(sy2AddressCtx->getText());
+			symbol->add(address);
 
-		auto sy2SignatureCtx = sy2SymbolCtx->signature();
-		signature = new Model::Signature(sy2SignatureCtx->start->getLine(), sy2SignatureCtx->start->getCharPositionInLine());
-		signature->setValue(sy2SignatureCtx->getText());
-		symbol->add(signature);
+			auto sy2SignatureCtx = sy2SymbolCtx->signature();
+			signature = new Model::Signature(sy2SignatureCtx->start->getLine(), sy2SignatureCtx->start->getCharPositionInLine());
+			signature->setValue(sy2SignatureCtx->getText());
+			symbol->add(signature);
+		}
 	}
 
 	if (signature != nullptr)
 	{
 		ANTLRInputStream sign2016Input(signature->getValue());
 
-		Sy2ErrorListener sign2016ErrorListener(signature->getLine(), signature->getColumn());
+		Sign2016ErrorListener sign2016ErrorListener(signature->getLine(), signature->getColumn());
 		sign2016ErrorListener.setErrorCallback(_errorCb);
 
 		Sign2016Lexer sign2016Lexer(&sign2016Input);

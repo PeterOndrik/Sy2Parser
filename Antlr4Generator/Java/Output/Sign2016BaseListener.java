@@ -178,6 +178,18 @@ public class Sign2016BaseListener implements Sign2016Listener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitArraySize(Sign2016Parser.ArraySizeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterName(Sign2016Parser.NameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitName(Sign2016Parser.NameContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

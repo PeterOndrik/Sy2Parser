@@ -33,9 +33,9 @@ C-style syntax:
 \endcode
 \code
 # Command Type   Name            Address     Signature
-# ----------------------------------------------------
+# ------------------------------------------------------
 RegCmd    DATA   var1            0040DD0C    I32
-RegCmd    DATA   var2            0040DE20    C_PTR32_UI8
+RegCmd    DATA   var2            0040DE20    C-PTR32-UI8
 \endcode
 
 A line started by the '#' sign is a comment. Columns "Type", "Name", "Address" and "Signature" are symbol attributes, where "Signature" describes data type. The Sy2 format is used to describe data type 
@@ -52,7 +52,7 @@ For example AST for the signatures above is following:
 \image html Sign2016-1.PNG Figure 2: Sign2016 "I32" AST Example
 </td>
 <td>
-\image html Sign2016-2.PNG Figure 3: Sign2016 "C_PTR32_UI8" AST Example
+\image html Sign2016-2.PNG Figure 3: Sign2016 "C-PTR32-UI8" AST Example
 </td>
 </tr>
 </table>
@@ -136,9 +136,9 @@ Encoding little_endian
 TEngSetSignVersion 2016
 
 # Command Type   Name            Address     Signature
-# ----------------------------------------------------
+# ------------------------------------------------------
 RegCmd    DATA   var1            0040DD0C    I32
-RegCmd    DATA   var2            0040DE20    C_PTR32_UI8
+RegCmd    DATA   var2            0040DE20    C-PTR32-UI8
 \endcode
 
 Output:
@@ -255,16 +255,16 @@ TEngSetSignVersion 2016
 
 # Structure TAG PointTag, sizeof(PointTag) is 16 Byte(s):
 # Command Type   Name              Offset      Signature
-# -------------------------------------------------------------------------------------------------------
-RegVar    STRUCT PointTag          0           S128_PointTag                                             
+# ----------------------------------------------------------
+RegVar    STRUCT PointTag          0           S128-PointTag                                             
 RegVar    STRUCT PointTag_x        0           F32                                                       
 RegVar    STRUCT PointTag_y        4           F96 
 
 # Command Type   Name            Address     Signature
-# ----------------------------------------------------
-RegCmd    DATA   var2            0040DD0C    C_UI8
-RegCmd    DATA   var3            0040DE20    C_PTR32_C_I32
-RegCmd    DATA   point1          0040DF20    S128_PointTag                                             
+# --------------------------------------------------------
+RegCmd    DATA   var2            0040DD0C    C-UI8
+RegCmd    DATA   var3            0040DE20    C-PTR32-C-I32
+RegCmd    DATA   point1          0040DF20    S128-PointTag                                             
 RegCmd    DATA   point1_x        0040DF20    F32                                                       
 RegCmd    DATA   point1_y        0040DF24    F96
 \endcode
@@ -405,7 +405,7 @@ It can use udaGetApiVersion() to retrieve the API version implemented by the DLL
 //! Major version number of the programming interface.
 #define SY2PARSER_API_MAJOR_VERSION   1U
 //! Minor version number of the programming interface.
-#define SY2PARSER_API_MINOR_VERSION   1U
+#define SY2PARSER_API_MINOR_VERSION   2U
 
 //! Version number of the programming interface as DWORD.
 #define SY2PARSER_API_VERSION ( (SY2PARSER_API_MAJOR_VERSION << 16) | SY2PARSER_API_MINOR_VERSION ) 
@@ -437,7 +437,7 @@ typedef enum Sy2ParserStatusCode
 	SY2_FILE_NOT_FOUND	= 0x2,			//!< File not found.
 	SY2_EOF				= 0x3,			//!< End of file.
 	SY2_UNKNOWN_TOKEN	= 0x4,			//!< Unknown token.
-	SY2_INVALID_HANDLE = 0x05,
+	SY2_INVALID_HANDLE	= 0x5
 } T_Sy2ParserStatusCode;
 
 //! Sy2 Node types.
@@ -515,23 +515,23 @@ typedef struct Sy2Node
 //! The date and time of a parsed file.
 typedef struct FileDateTime
 {
-	unsigned short year;
-	unsigned short month;
-	unsigned short dayOfWeek;
-	unsigned short day;
-	unsigned short hour;
-	unsigned short minute;
-	unsigned short second;
-	unsigned short milliseconds;
+	unsigned short year;			//!< The year.
+	unsigned short month;			//!< The month.
+	unsigned short dayOfWeek;		//!< The day of the week. 0 - Sunday, ..., 6 - Saturday
+	unsigned short day;				//!< The day of the month. The valid values for this member are 1 through 31.
+	unsigned short hour;			//!< The hour. The valid values for this member are 0 through 23.
+	unsigned short minute;			//!< The minute. The valid values for this member are 0 through 59.
+	unsigned short second;			//!< The second. The valid values for this member are 0 through 59.
+	unsigned short milliseconds;	//!< The millisecond.The valid values for this member are 0 through 999.
 } T_FileDateTime;
 
 //! The parsed file information.
 typedef struct Sy2FileInfo
 {
-	unsigned int size;
-	T_FileDateTime creation;
-	T_FileDateTime lastAccess;
-	T_FileDateTime lastWrite;
+	unsigned int size;				//!< The size of the specified file, in bytes.
+	T_FileDateTime creation;		//!< The date and time the file was created.
+	T_FileDateTime lastAccess;		//!< The date and time the file was last accessed.
+	T_FileDateTime lastWrite;		//!< The date and time the file was last written to.
 } T_Sy2FileInfo;
 
 /*!
@@ -769,7 +769,7 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Parse(Sy2ParserHandle handle
   \return
 	The function returns #SY2_SUCCESS if successful, an error code otherwise.
 */
-SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2ReadNext(const Sy2ParserHandle handle, T_Sy2Node *node);
+SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2ReadNext(Sy2ParserHandle handle, T_Sy2Node *node);
 
 /*!
 \brief Terminate the parsing process that is currently being performed. 
@@ -780,7 +780,7 @@ A descriptor identifying a Sy2 Parser.
 \return
 The function returns #SY2_SUCCESS if successful, an error code otherwise.
 */
-SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2AbortParsing(const Sy2ParserHandle handle);
+SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2AbortParsing(Sy2ParserHandle handle);
 
 /*!
 @}
@@ -795,12 +795,14 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2AbortParsing(const Sy2Parser
 
 typedef Sy2ParserStatus(SY2PARSER_API_CALL *T_sy2Open)(const char *fileName, Sy2ParserHandle *handle);
 typedef Sy2ParserStatus(SY2PARSER_API_CALL *T_sy2Close)(Sy2ParserHandle handle);
+typedef Sy2ParserStatus(SY2PARSER_API_CALL *T_sy2GetFileInfo)(Sy2ParserHandle handle, T_Sy2FileInfo *fileInfo);
 typedef Sy2ParserStatus(SY2PARSER_API_CALL *T_sy2SetParsingErrorCallback)(Sy2ParserHandle handle, ParsingErrorCallback *callback, void *callbackContext);
 typedef Sy2ParserStatus(SY2PARSER_API_CALL *T_sy2SetParsingProgressCallback)(Sy2ParserHandle handle, ParsingProgressCallback *callback, void *callbackContext);
 typedef Sy2ParserStatus(SY2PARSER_API_CALL *T_sy2AddParsedNodeCallback)(Sy2ParserHandle handle, T_Sy2NodeType nodeType, ParsedNodeCallback *callback, void *callbackContext);
 typedef Sy2ParserStatus(SY2PARSER_API_CALL *T_sy2RemoveParsedNodeCallback)(Sy2ParserHandle handle, T_Sy2NodeType nodeType, ParsedNodeCallback *callback);
 typedef Sy2ParserStatus(SY2PARSER_API_CALL *T_sy2Parse)(Sy2ParserHandle handle);
-typedef Sy2ParserStatus(SY2PARSER_API_CALL *T_sy2ReadNext)(const Sy2ParserHandle handle, T_Sy2Node *node);
+typedef Sy2ParserStatus(SY2PARSER_API_CALL *T_sy2ReadNext)(Sy2ParserHandle handle, T_Sy2Node *node);
+typedef Sy2ParserStatus(SY2PARSER_API_CALL *T_sy2AbortParsing)(Sy2ParserHandle handle);
 
 /*!
 @}

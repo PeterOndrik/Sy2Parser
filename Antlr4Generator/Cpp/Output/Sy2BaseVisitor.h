@@ -39,19 +39,15 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitType(Sy2Parser::TypeContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
   virtual antlrcpp::Any visitName(Sy2Parser::NameContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitBitmask(Sy2Parser::BitmaskContext *ctx) override {
+  virtual antlrcpp::Any visitOffset(Sy2Parser::OffsetContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitOffset(Sy2Parser::OffsetContext *ctx) override {
+  virtual antlrcpp::Any visitBitmask(Sy2Parser::BitmaskContext *ctx) override {
     return visitChildren(ctx);
   }
 

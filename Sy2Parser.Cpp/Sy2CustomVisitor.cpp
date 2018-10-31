@@ -45,7 +45,14 @@ Any Sy2CustomVisitor::visitFile(Sy2Parser::FileContext *ctx)
 			symbol->setValue("UnknowSymbolName");
 
 			Model::Type *type = new Model::Type();
-			type->setValue(sy2SymbolCtx->type()->getText());
+			if (sy2SymbolCtx->PROC())
+			{
+				type->setValue(sy2SymbolCtx->PROC()->getText());
+			}
+			else if (sy2SymbolCtx->DATA())
+			{
+				type->setValue(sy2SymbolCtx->DATA()->getText());
+			}
 			symbol->add(type);
 
 			Model::Name *name = new Model::Name();

@@ -32,17 +32,14 @@ public:
   virtual void enterSymbol(Sy2Parser::SymbolContext *ctx) = 0;
   virtual void exitSymbol(Sy2Parser::SymbolContext *ctx) = 0;
 
-  virtual void enterType(Sy2Parser::TypeContext *ctx) = 0;
-  virtual void exitType(Sy2Parser::TypeContext *ctx) = 0;
-
   virtual void enterName(Sy2Parser::NameContext *ctx) = 0;
   virtual void exitName(Sy2Parser::NameContext *ctx) = 0;
 
-  virtual void enterBitmask(Sy2Parser::BitmaskContext *ctx) = 0;
-  virtual void exitBitmask(Sy2Parser::BitmaskContext *ctx) = 0;
-
   virtual void enterOffset(Sy2Parser::OffsetContext *ctx) = 0;
   virtual void exitOffset(Sy2Parser::OffsetContext *ctx) = 0;
+
+  virtual void enterBitmask(Sy2Parser::BitmaskContext *ctx) = 0;
+  virtual void exitBitmask(Sy2Parser::BitmaskContext *ctx) = 0;
 
   virtual void enterAddress(Sy2Parser::AddressContext *ctx) = 0;
   virtual void exitAddress(Sy2Parser::AddressContext *ctx) = 0;

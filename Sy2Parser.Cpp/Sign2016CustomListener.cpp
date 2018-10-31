@@ -25,7 +25,7 @@ static T* initiateNode(ParserRuleContext *ctx, Model::Node<> *node)
 	return subNode;
 }
 
-static Model::Node<>* leaveNode(ParserRuleContext *ctx, Model::Node<> *node, string value)
+static Model::Node<>* leaveNode(ParserRuleContext *ctx, Model::Node<> *node, const string &value)
 {
 	node->setValue(value);
 	return node->parent();
@@ -108,7 +108,16 @@ void Sign2016CustomListener::enterStructType(Sign2016Parser::StructTypeContext *
 void Sign2016CustomListener::exitStructType(Sign2016Parser::StructTypeContext *ctx)
 {
 	Model::Node<> *temp = _current;
-	_current = leaveNode(ctx, temp, ctx->ID()->getText());
+
+	// check if structure name missing behind signature, e.g. S32 then <missing NAME> is used
+	if (ctx->name())
+	{
+		_current = leaveNode(ctx, temp, ctx->name()->getText());
+	}
+	else
+	{
+		_current = leaveNode(ctx, temp, "<missing NAME>");
+	}
 	this->callCallback(temp, Model::Sy2Node::SY2_STRUCT);
 }
 

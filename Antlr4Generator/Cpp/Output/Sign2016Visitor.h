@@ -47,6 +47,8 @@ public:
 
     virtual antlrcpp::Any visitArraySize(Sign2016Parser::ArraySizeContext *context) = 0;
 
+    virtual antlrcpp::Any visitName(Sign2016Parser::NameContext *context) = 0;
+
 
 };
 

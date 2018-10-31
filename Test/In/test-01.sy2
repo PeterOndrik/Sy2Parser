@@ -1,5 +1,5 @@
 # Command Type   Name            Address     Signature
 # ----------------------------------------------------
 RegCmd    DATA   var1            0040DE3C    I32
-RegCmd    DATA   var2            0040DD0C    C_UI8
-RegCmd    DATA   var3            0040DE20    C_PTR32_C_PTR32_C_PTR32_I32
+RegCmd    DATA   var2            0040DD0C    C-UI8
+RegCmd    DATA   var3            0040DE20    C-PTR32-C-PTR32-C-PTR32-I32

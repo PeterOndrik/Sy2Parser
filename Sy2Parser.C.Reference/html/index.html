@@ -94,9 +94,9 @@ Introduction</h1>
 <li>commands to specify a variable of 32-bit integer data type and const pointer to unsigned char data type C-style syntax: <div class="fragment"><div class="line">uint32_t var1;</div>
 <div class="line">uint8_t * <span class="keyword">const</span> var2;</div>
 </div><!-- fragment --> <div class="fragment"><div class="line"><span class="preprocessor"># Command Type   Name            Address     Signature</span></div>
-<div class="line"><span class="preprocessor"># ----------------------------------------------------</span></div>
+<div class="line"><span class="preprocessor"># ------------------------------------------------------</span></div>
 <div class="line">RegCmd    DATA   var1            0040DD0C    I32</div>
-<div class="line">RegCmd    DATA   var2            0040DE20    C_PTR32_UI8</div>
+<div class="line">RegCmd    DATA   var2            0040DE20    C-PTR32-UI8</div>
 </div><!-- fragment --></li>
 </ul>
 <p>A line started by the '#' sign is a comment. Columns "Type", "Name", "Address" and "Signature" are symbol attributes, where "Signature" describes data type. The Sy2 format is used to describe data type signature version 2016.</p>
@@ -113,7 +113,7 @@ Figure 2: Sign2016 "I32" AST Example</div></div>
   </td><td><div class="image">
 <img src="Sign2016-2.PNG" alt="Sign2016-2.PNG"/>
 <div class="caption">
-Figure 3: Sign2016 "C_PTR32_UI8" AST Example</div></div>
+Figure 3: Sign2016 "C-PTR32-UI8" AST Example</div></div>
    </td></tr>
 </table>
 <p>The Sy2 Parser is provided as dynamic link library. The following files are needed:</p><ul>
@@ -168,14 +168,14 @@ Read AST after parsing</h1>
 <div class="line">  status = <a class="code" href="group__sy2parser__api__functions.html#ga2b15567a938a0b33f1c9aba5fc9cf2fe">sy2Parse</a>(handle);</div>
 <div class="line"></div>
 <div class="line">  <span class="comment">// printing AST</span></div>
-<div class="line">  status = <a class="code" href="group__sy2parser__api__functions.html#ga122163cbc3d1f5c12f484e10355e54a7">sy2ReadNext</a>(handle, &amp;node);</div>
+<div class="line">  status = <a class="code" href="group__sy2parser__api__functions.html#ga5301f0d7a51e2d3467db66a0e498bed3">sy2ReadNext</a>(handle, &amp;node);</div>
 <div class="line">  <span class="keywordflow">while</span> (status == <a class="code" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba0c523e2a0e55d51471f7f0179bd74a32">SY2_SUCCESS</a>)</div>
 <div class="line">  {</div>
 <div class="line">    setIndent(indent, node.<a class="code" href="struct_sy2_node.html#a44e75bf670e4ae02b3a1e3a6f2d82904">depth</a>);</div>
 <div class="line">    printf(<span class="stringliteral">&quot;%s%s: %s\n&quot;</span>, indent, <a class="code" href="group__uda__device__constants__types.html#ga3852ce8af18e9e47389c12172f7baf90">sy2NodeName</a>[node.<a class="code" href="struct_sy2_node.html#a4a808900b6a4dfad757f019fb50eac18">type</a>], node.<a class="code" href="struct_sy2_node.html#a78f6166f06f17913ae32b56ee86d441c">value</a>);</div>
 <div class="line">    resetIndent(indent);</div>
 <div class="line"></div>
-<div class="line">    status = <a class="code" href="group__sy2parser__api__functions.html#ga122163cbc3d1f5c12f484e10355e54a7">sy2ReadNext</a>(handle, &amp;node);</div>
+<div class="line">    status = <a class="code" href="group__sy2parser__api__functions.html#ga5301f0d7a51e2d3467db66a0e498bed3">sy2ReadNext</a>(handle, &amp;node);</div>
 <div class="line">  }</div>
 <div class="line"></div>
 <div class="line">  <span class="comment">// closing</span></div>
@@ -190,9 +190,9 @@ Read AST after parsing</h1>
 <div class="line">TEngSetSignVersion 2016</div>
 <div class="line"></div>
 <div class="line"><span class="preprocessor"># Command Type   Name            Address     Signature</span></div>
-<div class="line"><span class="preprocessor"># ----------------------------------------------------</span></div>
+<div class="line"><span class="preprocessor"># ------------------------------------------------------</span></div>
 <div class="line">RegCmd    DATA   var1            0040DD0C    I32</div>
-<div class="line">RegCmd    DATA   var2            0040DE20    C_PTR32_UI8</div>
+<div class="line">RegCmd    DATA   var2            0040DE20    C-PTR32-UI8</div>
 </div><!-- fragment --><p>Output: </p><div class="fragment"><div class="line">Progress: 9%</div>
 <div class="line">Progress: 75%</div>
 <div class="line">Progress: 99%</div>
@@ -261,14 +261,14 @@ Read AST during parsing</h1>
 <div class="line">  printf(<span class="stringliteral">&quot;%s%s: %s\n&quot;</span>, indent, <a class="code" href="group__uda__device__constants__types.html#ga3852ce8af18e9e47389c12172f7baf90">sy2NodeName</a>[node-&gt;<a class="code" href="struct_sy2_node.html#a4a808900b6a4dfad757f019fb50eac18">type</a>], node-&gt;<a class="code" href="struct_sy2_node.html#a78f6166f06f17913ae32b56ee86d441c">value</a>);</div>
 <div class="line"></div>
 <div class="line">  <a class="code" href="struct_sy2_node.html">T_Sy2Node</a> newNode = { 0 };</div>
-<div class="line">  <a class="code" href="group__uda__device__constants__types.html#ga2a6b7a98923516eba7750a06b43fc577">Sy2ParserStatus</a> status = <a class="code" href="group__sy2parser__api__functions.html#ga122163cbc3d1f5c12f484e10355e54a7">sy2ReadNext</a>(handle, &amp;newNode);</div>
+<div class="line">  <a class="code" href="group__uda__device__constants__types.html#ga2a6b7a98923516eba7750a06b43fc577">Sy2ParserStatus</a> status = <a class="code" href="group__sy2parser__api__functions.html#ga5301f0d7a51e2d3467db66a0e498bed3">sy2ReadNext</a>(handle, &amp;newNode);</div>
 <div class="line">  <span class="keywordflow">while</span> (status == <a class="code" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba0c523e2a0e55d51471f7f0179bd74a32">SY2_SUCCESS</a> &amp;&amp; newNode.<a class="code" href="struct_sy2_node.html#a44e75bf670e4ae02b3a1e3a6f2d82904">depth</a> &gt; node-&gt;<a class="code" href="struct_sy2_node.html#a44e75bf670e4ae02b3a1e3a6f2d82904">depth</a>)</div>
 <div class="line">  {</div>
 <div class="line">    setIndent(indent, newNode.<a class="code" href="struct_sy2_node.html#a44e75bf670e4ae02b3a1e3a6f2d82904">depth</a>);</div>
 <div class="line">    printf(<span class="stringliteral">&quot;%s%s: %s\n&quot;</span>, indent, <a class="code" href="group__uda__device__constants__types.html#ga3852ce8af18e9e47389c12172f7baf90">sy2NodeName</a>[newNode.<a class="code" href="struct_sy2_node.html#a4a808900b6a4dfad757f019fb50eac18">type</a>], newNode.<a class="code" href="struct_sy2_node.html#a78f6166f06f17913ae32b56ee86d441c">value</a>);</div>
 <div class="line">    resetIndent(indent);</div>
 <div class="line"></div>
-<div class="line">    status = <a class="code" href="group__sy2parser__api__functions.html#ga122163cbc3d1f5c12f484e10355e54a7">sy2ReadNext</a>(handle, &amp;newNode);</div>
+<div class="line">    status = <a class="code" href="group__sy2parser__api__functions.html#ga5301f0d7a51e2d3467db66a0e498bed3">sy2ReadNext</a>(handle, &amp;newNode);</div>
 <div class="line">  }</div>
 <div class="line">  printf(<span class="stringliteral">&quot;\n&quot;</span>);</div>
 <div class="line">}</div>
@@ -299,16 +299,16 @@ Read AST during parsing</h1>
 <div class="line"></div>
 <div class="line"><span class="preprocessor"># Structure TAG PointTag, sizeof(PointTag) is 16 Byte(s):</span></div>
 <div class="line"><span class="preprocessor"># Command Type   Name              Offset      Signature</span></div>
-<div class="line"><span class="preprocessor"># -------------------------------------------------------------------------------------------------------</span></div>
-<div class="line">RegVar    STRUCT PointTag          0           S128_PointTag                                             </div>
+<div class="line"><span class="preprocessor"># ----------------------------------------------------------</span></div>
+<div class="line">RegVar    STRUCT PointTag          0           S128-PointTag                                             </div>
 <div class="line">RegVar    STRUCT PointTag_x        0           F32                                                       </div>
 <div class="line">RegVar    STRUCT PointTag_y        4           F96 </div>
 <div class="line"></div>
 <div class="line"><span class="preprocessor"># Command Type   Name            Address     Signature</span></div>
-<div class="line"><span class="preprocessor"># ----------------------------------------------------</span></div>
-<div class="line">RegCmd    DATA   var2            0040DD0C    C_UI8</div>
-<div class="line">RegCmd    DATA   var3            0040DE20    C_PTR32_C_I32</div>
-<div class="line">RegCmd    DATA   point1          0040DF20    S128_PointTag                                             </div>
+<div class="line"><span class="preprocessor"># --------------------------------------------------------</span></div>
+<div class="line">RegCmd    DATA   var2            0040DD0C    C-UI8</div>
+<div class="line">RegCmd    DATA   var3            0040DE20    C-PTR32-C-I32</div>
+<div class="line">RegCmd    DATA   point1          0040DF20    S128-PointTag                                             </div>
 <div class="line">RegCmd    DATA   point1_x        0040DF20    F32                                                       </div>
 <div class="line">RegCmd    DATA   point1_y        0040DF24    F96</div>
 </div><!-- fragment --><p>Output: </p><div class="fragment"><div class="line">Progress: 2%</div>
@@ -408,7 +408,7 @@ Read AST during parsing</h1>
 </div><!-- fragment --> </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Oct 17 2018 18:34:55 for Sy2 Parser API by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 31 2018 17:03:36 for Sy2 Parser API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

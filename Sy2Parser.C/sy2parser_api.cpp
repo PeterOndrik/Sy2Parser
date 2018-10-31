@@ -318,7 +318,7 @@ static Sy2ParserStatus processNode(const Model::Node<> *node, T_Sy2Node *apiNode
 		}
 		else
 		{
-			strncpy_s(apiNode->value, value.c_str(), sizeof(apiNode->value));
+			strncpy_s(apiNode->value, value.c_str(), sizeof(apiNode->value) - 1);
 			apiNode->value[sizeof(apiNode->value) - 1] = '\0';
 		}
 		apiNode->depth = node->getDepth();

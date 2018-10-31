@@ -71,6 +71,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitName(Sign2016Parser::NameContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
 
 };
 

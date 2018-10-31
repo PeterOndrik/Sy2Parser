@@ -1,9 +1,9 @@
 var indexSectionsWithContent =
 {
-  0: "cdfilprstv",
+  0: "cdfhilmprstvy",
   1: "fs",
   2: "s",
-  3: "cdlstv",
+  3: "cdhlmstvy",
   4: "pst",
   5: "s",
   6: "s",

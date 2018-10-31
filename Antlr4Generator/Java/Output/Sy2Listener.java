@@ -67,16 +67,6 @@ public interface Sy2Listener extends ParseTreeListener {
 	 */
 	void exitSymbol(Sy2Parser.SymbolContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link Sy2Parser#type}.
-	 * @param ctx the parse tree
-	 */
-	void enterType(Sy2Parser.TypeContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link Sy2Parser#type}.
-	 * @param ctx the parse tree
-	 */
-	void exitType(Sy2Parser.TypeContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link Sy2Parser#name}.
 	 * @param ctx the parse tree
 	 */
@@ -87,16 +77,6 @@ public interface Sy2Listener extends ParseTreeListener {
 	 */
 	void exitName(Sy2Parser.NameContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link Sy2Parser#bitmask}.
-	 * @param ctx the parse tree
-	 */
-	void enterBitmask(Sy2Parser.BitmaskContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link Sy2Parser#bitmask}.
-	 * @param ctx the parse tree
-	 */
-	void exitBitmask(Sy2Parser.BitmaskContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link Sy2Parser#offset}.
 	 * @param ctx the parse tree
 	 */
@@ -106,6 +86,16 @@ public interface Sy2Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitOffset(Sy2Parser.OffsetContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Sy2Parser#bitmask}.
+	 * @param ctx the parse tree
+	 */
+	void enterBitmask(Sy2Parser.BitmaskContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Sy2Parser#bitmask}.
+	 * @param ctx the parse tree
+	 */
+	void exitBitmask(Sy2Parser.BitmaskContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link Sy2Parser#address}.
 	 * @param ctx the parse tree

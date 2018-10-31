@@ -146,4 +146,14 @@ public interface Sign2016Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitArraySize(Sign2016Parser.ArraySizeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link Sign2016Parser#name}.
+	 * @param ctx the parse tree
+	 */
+	void enterName(Sign2016Parser.NameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link Sign2016Parser#name}.
+	 * @param ctx the parse tree
+	 */
+	void exitName(Sign2016Parser.NameContext ctx);
 }

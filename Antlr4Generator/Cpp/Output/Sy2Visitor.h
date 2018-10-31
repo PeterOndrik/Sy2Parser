@@ -31,13 +31,11 @@ public:
 
     virtual antlrcpp::Any visitSymbol(Sy2Parser::SymbolContext *context) = 0;
 
-    virtual antlrcpp::Any visitType(Sy2Parser::TypeContext *context) = 0;
-
     virtual antlrcpp::Any visitName(Sy2Parser::NameContext *context) = 0;
 
-    virtual antlrcpp::Any visitBitmask(Sy2Parser::BitmaskContext *context) = 0;
-
     virtual antlrcpp::Any visitOffset(Sy2Parser::OffsetContext *context) = 0;
+
+    virtual antlrcpp::Any visitBitmask(Sy2Parser::BitmaskContext *context) = 0;
 
     virtual antlrcpp::Any visitAddress(Sy2Parser::AddressContext *context) = 0;
 

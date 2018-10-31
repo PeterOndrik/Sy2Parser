@@ -17,9 +17,9 @@ uint8_t * const var2;
 ```
 ```
 # Command Type   Name            Address     Signature
-# ----------------------------------------------------
+# ------------------------------------------------------
 RegCmd    DATA   var1            0040DD0C    I32
-RegCmd    DATA   var2            0040DE20    C_PTR32_UI8
+RegCmd    DATA   var2            0040DE20    C-PTR32-UI8
 ```
 
 A line started by the '#' sign is a comment. Columns "Type", "Name", "Address" and "Signature" are symbol attributes, where "Signature" describes data type. The Sy2 format is used to describe data type signature version 2016.
@@ -133,9 +133,9 @@ Input the test.sy2 file:
 TEngSetSignVersion 2016
 
 # Command Type   Name            Address     Signature
-# ----------------------------------------------------
+# ------------------------------------------------------
 RegCmd    DATA   var1            0040DD0C    I32
-RegCmd    DATA   var2            0040DE20    C_PTR32_UI8
+RegCmd    DATA   var2            0040DE20    C-PTR32-UI8
 ```
 Output:
 ```
@@ -247,19 +247,18 @@ TEngSetSignVersion 2016
 
 # Structure TAG PointTag, sizeof(PointTag) is 16 Byte(s):
 # Command Type   Name              Offset      Signature
-# -------------------------------------------------------------------------------------------------------
-RegVar    STRUCT PointTag          0           S128_PointTag                                             
+# ----------------------------------------------------------
+RegVar    STRUCT PointTag          0           S128-PointTag                                             
 RegVar    STRUCT PointTag_x        0           F32                                                       
 RegVar    STRUCT PointTag_y        4           F96 
 
 # Command Type   Name            Address     Signature
 # ----------------------------------------------------
-RegCmd    DATA   var2            0040DD0C    C_UI8
-RegCmd    DATA   var3            0040DE20    C_PTR32_C_I32
-RegCmd    DATA   point1          0040DF20    S128_PointTag                                             
+RegCmd    DATA   var2            0040DD0C    C-UI8
+RegCmd    DATA   var3            0040DE20    C-PTR32-C-I32
+RegCmd    DATA   point1          0040DF20    S128-PointTag                                             
 RegCmd    DATA   point1_x        0040DF20    F32                                                       
 RegCmd    DATA   point1_y        0040DF24    F96
-RegCmd    DATA   var2            0040DE20    C_PTR32_UI8
 ```
 Output:
 ```
