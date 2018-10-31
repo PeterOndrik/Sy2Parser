@@ -51,7 +51,7 @@ Figure 2: Sign2016 "I32" AST Example
 
 ![alt text][Sign2016-2]
 
-[Sign2016-2]: https://production.github.bshg.com/ondrik/Sy2Parser/blob/feat/typedef/doc/img/Sign2016-2.PNG "Figure 3: Sign2016 C_PTR32_UI8 AST Example"
+[Sign2016-2]: https://production.github.bshg.com/ondrik/Sy2Parser/blob/feat/typedef/doc/img/Sign2016-2.PNG "Figure 3: Sign2016 C-PTR32-UI8 AST Example"
 Figure 3: Sign2016 "C_PTR32_UI8" AST Example
 </td>
 </tr>
