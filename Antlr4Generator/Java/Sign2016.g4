@@ -1,3 +1,14 @@
+/*
+An ANTLR4 grammar for the signature data type description version 2016.
+
+Summary:
+- the upper case letter combination is used to describe a signature type name
+- the size of data type is based on idea fixed size according to the C99 standard
+- the pointers are specified together with a data type they point to
+- the beginning and the end of a function is clearly stated
+- a type qualifier is applied to a signature type
+*/
+
 grammar Sign2016;
 
 options
@@ -9,7 +20,6 @@ options
 {
 	int afterSize = 0;
 	int isStruct = 0;
-	int isSep = 0;
 }
 
 /*
@@ -22,7 +32,7 @@ boolType : typeQualifier? BOOL_TYPE (arraySizes += arraySize)* ;
 intType : typeQualifier? INT_TYPE size (arraySizes += arraySize)* ;
 uintType : typeQualifier? UINT_TYPE size (arraySizes += arraySize)* ;
 floatType : typeQualifier? FLOAT_TYPE size (arraySizes += arraySize)* ;
-structType : typeQualifier? STRUCT_TYPE size (arraySizes += arraySize)* SEP ID ;
+structType : typeQualifier? STRUCT_TYPE size (arraySizes += arraySize)* SEP name ;
 ptrType : typeQualifier? PTR_TYPE size (arraySizes += arraySize)* SEP (voidType | boolType | intType | uintType | floatType | structType | ptrType | function) ;
 function : FB SEP returnType (SEP paramType)+ SEP FE ;
 returnType : (voidType | boolType | intType | uintType | floatType | structType | ptrType) ;
@@ -30,6 +40,7 @@ paramType : (voidType | boolType | intType | uintType | floatType | structType |
 typeQualifier : TYPE_QUALIFIER SEP ;
 size : SIZE ;
 arraySize : SEP ARRAY_SIZE ;
+name : ID ;
 
 /*
  * Lexer Rules
@@ -45,7 +56,9 @@ STRUCT_TYPE : 'S' { afterSize = 0; isStruct++; } ;
 PTR_TYPE : 'PTR' { afterSize = 0; } ;
 FB : 'FB' ;
 FE : 'FE' ;
-ARRAY_SIZE : SIZE { afterSize > 0 }? { isSep = 0; } ;
-SIZE : [0-9]+ { afterSize++; isSep = 0; } ;
-SEP : '_' { isSep++; } ;
-ID : [a-zA-Z_][a-zA-Z_0-9]* { isStruct > 0 && ((isSep == 0 && getText().charAt(0) != '_') || (isSep > 0) ) }? ;
+ARRAY_SIZE : SIZE { afterSize > 0 }? ;
+SIZE : [0-9]+ { afterSize++; } ;
+SEP : '-' ;
+ID : CHAR+ { isStruct > 0 }? { isStruct = 0 ; } ;
+
+fragment CHAR : [a-zA-Z_0-9\u002A\u002C\u002E\u003A\u003C\u003E\u007E] ;

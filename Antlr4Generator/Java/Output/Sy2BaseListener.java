@@ -87,18 +87,6 @@ public class Sy2BaseListener implements Sy2Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterType(Sy2Parser.TypeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitType(Sy2Parser.TypeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterName(Sy2Parser.NameContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -111,18 +99,6 @@ public class Sy2BaseListener implements Sy2Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBitmask(Sy2Parser.BitmaskContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBitmask(Sy2Parser.BitmaskContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterOffset(Sy2Parser.OffsetContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -130,6 +106,18 @@ public class Sy2BaseListener implements Sy2Listener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitOffset(Sy2Parser.OffsetContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBitmask(Sy2Parser.BitmaskContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBitmask(Sy2Parser.BitmaskContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

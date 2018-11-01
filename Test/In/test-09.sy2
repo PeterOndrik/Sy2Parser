@@ -1,7 +1,29 @@
+TEngSetSignVersion 2016f
 TEngSetSignVersion 2016
+
+RegwVar    STRUCT struct0            0    S32-struct0
+RegVar    STRUCT struct1            0    aS32
+RegVar    STRUCT stru-ct2            0    S32
+RegVar    STRUCT struct3            0    S32
+RegVar    STRUCT struct4            0    S32-struct4
+RegVar    ST?RUCT struct5            0    S32-struct5
+RegVar    STRUCT st?ruct6            0    S32-st?ruct6
+RegVar    STRUCT basic_string<char,_std::char_traits<char>,_std::allocator<char>_>               0           S32-basic_string<char,_std::char_traits<char>,_std::allocator<char>_>
 
 # Command Type   Name            Address     Signature
 # ----------------------------------------------------
-RegCmd    DATA   var1            0040DE3C    Is32
-
-
+RegCmd    DATA   var1<d>            0040DE3C    I32
+RegCmd    DATA   var2            0040DE3C    Is32
+RegCmd    DATA   var3            0040DE3C    I~32
+Reg<Cmd    DATA   var4            0040DE3C    I32
+RegCmd    DATA   var5            0040DE3C    I32
+Reg+Cmd    DATA   var6            0040DE3C    I32
+RegCmd    DATA   var7            0040DE3C    I32
+RegCmd    DA:TA   var8            0040DE3C    I32
+RegCmd    DATA   var9            0040DE3C    I32
+RegCmd    DATA   var-10            0040DE3C    I32
+RegCmd    DATA   var11            0040DE3C    I32
+RegCmd    DATA   var12            0.040DE3C    I32
+RegCmd    DATA   var13            0040DE3C    I32
+RegCmd    DATA   var14            0040DE3C    aI32
+RegCmd    DATA   var15            0040DE3C    I32

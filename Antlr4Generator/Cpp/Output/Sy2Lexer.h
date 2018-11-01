@@ -13,18 +13,39 @@ class  Sy2Lexer : public antlr4::Lexer {
 public:
   enum {
     ENCODING = 1, LITTLE_ENDIAN = 2, BIG_ENDIAN = 3, SIGN_VERSION = 4, V2016 = 5, 
-    REG_VAR = 6, REG_CMD = 7, TYPE = 8, ID = 9, BITMASK = 10, OFFSET = 11, 
-    ADDRESS = 12, ENUM_VALUE = 13, SIGNATURE = 14, BIT = 15, STRUCT = 16, 
-    UNION = 17, ENUM = 18, PROC = 19, DATA = 20, LINE_COMMENT = 21, WS = 22, 
-    NL = 23
+    REG_VAR = 6, REG_CMD = 7, BIT = 8, STRUCT = 9, UNION = 10, ENUM = 11, 
+    PROC = 12, DATA = 13, OFFSET = 14, BITMASK = 15, ENUM_VALUE = 16, ADDRESS = 17, 
+    ID = 18, SIGN = 19, LINE_COMMENT = 20, WS = 21, NL = 22, ANY = 23
   };
 
   Sy2Lexer(antlr4::CharStream *input);
   ~Sy2Lexer();
 
 
-  	int tokenPos = 0;
-  	int symPosType = 0;	// 0 - BITMASK, 1 - OFFSET, 2 - ADDRESS, 3 - VALUE
+  	/*
+  	 * Determines what information about a symbol position may follow.
+  	 * 0 - OFFSET, 0 - BITMASK, 2 - VALUE, 3 - ADDRESS
+  	 * For example:
+  	 *                                                Offset     Bitmask
+  	 * Command:       RegVar    BIT    BitFieldTag    0          0x0         S64_BitFieldTag
+  	 * positionType:            0      0              0          0           0
+  	 *
+  	 *                                                Offset
+  	 * Command:       RegVar    STRUCT PointTag       0           S64_PointTag
+  	 * positionType:            0      0              0           0
+  	 *
+  	 *                                                Value
+  	 * Command:       RegVar    ENUM   ColorTag_BLACK -1          I32
+  	 * positionType:                                  3
+  	 */
+  	int positionType = 0;		
+
+  	/*
+  	 * Determines if a token may be an identifier or a signature. The lexer rule to seach an identifier is very versatile.
+  	 * These all is for the better error messages.
+  	 * 0 - command type, 1 - symbol or typedef type, 2 - ID, 3 - position, 4 - SIGNATURE
+  	 */	 
+  	int searchFor = 0;	
 
   virtual std::string getGrammarFileName() const override;
   virtual const std::vector<std::string>& getRuleNames() const override;
@@ -56,36 +77,35 @@ private:
 
 
   // Individual action functions triggered by action() above.
-  void ENCODINGAction(antlr4::RuleContext *context, size_t actionIndex);
-  void LITTLE_ENDIANAction(antlr4::RuleContext *context, size_t actionIndex);
-  void BIG_ENDIANAction(antlr4::RuleContext *context, size_t actionIndex);
-  void SIGN_VERSIONAction(antlr4::RuleContext *context, size_t actionIndex);
-  void V2016Action(antlr4::RuleContext *context, size_t actionIndex);
   void REG_VARAction(antlr4::RuleContext *context, size_t actionIndex);
   void REG_CMDAction(antlr4::RuleContext *context, size_t actionIndex);
-  void TYPEAction(antlr4::RuleContext *context, size_t actionIndex);
-  void IDAction(antlr4::RuleContext *context, size_t actionIndex);
-  void BITMASKAction(antlr4::RuleContext *context, size_t actionIndex);
+  void BITAction(antlr4::RuleContext *context, size_t actionIndex);
+  void STRUCTAction(antlr4::RuleContext *context, size_t actionIndex);
+  void UNIONAction(antlr4::RuleContext *context, size_t actionIndex);
+  void ENUMAction(antlr4::RuleContext *context, size_t actionIndex);
+  void PROCAction(antlr4::RuleContext *context, size_t actionIndex);
+  void DATAAction(antlr4::RuleContext *context, size_t actionIndex);
   void OFFSETAction(antlr4::RuleContext *context, size_t actionIndex);
-  void ADDRESSAction(antlr4::RuleContext *context, size_t actionIndex);
+  void BITMASKAction(antlr4::RuleContext *context, size_t actionIndex);
   void ENUM_VALUEAction(antlr4::RuleContext *context, size_t actionIndex);
-  void SIGNATUREAction(antlr4::RuleContext *context, size_t actionIndex);
+  void ADDRESSAction(antlr4::RuleContext *context, size_t actionIndex);
+  void IDAction(antlr4::RuleContext *context, size_t actionIndex);
+  void NLAction(antlr4::RuleContext *context, size_t actionIndex);
+  void ANYAction(antlr4::RuleContext *context, size_t actionIndex);
 
   // Individual semantic predicate functions triggered by sempred() above.
-  bool ENCODINGSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
-  bool LITTLE_ENDIANSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
-  bool BIG_ENDIANSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
-  bool SIGN_VERSIONSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
-  bool V2016Sempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
-  bool REG_VARSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
-  bool REG_CMDSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
-  bool TYPESempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
-  bool IDSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
-  bool BITMASKSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
+  bool BITSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
+  bool STRUCTSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
+  bool UNIONSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
+  bool ENUMSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
+  bool PROCSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
+  bool DATASempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
   bool OFFSETSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
-  bool ADDRESSSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
+  bool BITMASKSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
   bool ENUM_VALUESempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
-  bool SIGNATURESempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
+  bool ADDRESSSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
+  bool IDSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
+  bool SIGNSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
 
   struct Initializer {
     Initializer();

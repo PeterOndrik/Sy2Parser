@@ -29,12 +29,13 @@ public class Sign2016Lexer extends Lexer {
 
 	public static final String[] ruleNames = {
 		"TYPE_QUALIFIER", "VOID_TYPE", "BOOL_TYPE", "INT_TYPE", "UINT_TYPE", "FLOAT_TYPE", 
-		"STRUCT_TYPE", "PTR_TYPE", "FB", "FE", "ARRAY_SIZE", "SIZE", "SEP", "ID"
+		"STRUCT_TYPE", "PTR_TYPE", "FB", "FE", "ARRAY_SIZE", "SIZE", "SEP", "ID", 
+		"CHAR"
 	};
 
 	private static final String[] _LITERAL_NAMES = {
 		null, "'C'", "'V'", "'B'", "'I'", "'UI'", "'F'", "'S'", "'PTR'", "'FB'", 
-		"'FE'", null, null, "'_'"
+		"'FE'", null, null, "'-'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
 		null, "TYPE_QUALIFIER", "VOID_TYPE", "BOOL_TYPE", "INT_TYPE", "UINT_TYPE", 
@@ -77,7 +78,6 @@ public class Sign2016Lexer extends Lexer {
 
 		int afterSize = 0;
 		int isStruct = 0;
-		int isSep = 0;
 
 
 	public Sign2016Lexer(CharStream input) {
@@ -121,14 +121,11 @@ public class Sign2016Lexer extends Lexer {
 		case 7:
 			PTR_TYPE_action((RuleContext)_localctx, actionIndex);
 			break;
-		case 10:
-			ARRAY_SIZE_action((RuleContext)_localctx, actionIndex);
-			break;
 		case 11:
 			SIZE_action((RuleContext)_localctx, actionIndex);
 			break;
-		case 12:
-			SEP_action((RuleContext)_localctx, actionIndex);
+		case 13:
+			ID_action((RuleContext)_localctx, actionIndex);
 			break;
 		}
 	}
@@ -167,24 +164,17 @@ public class Sign2016Lexer extends Lexer {
 			break;
 		}
 	}
-	private void ARRAY_SIZE_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		case 5:
-			 isSep = 0; 
-			break;
-		}
-	}
 	private void SIZE_action(RuleContext _localctx, int actionIndex) {
 		switch (actionIndex) {
-		case 6:
-			 afterSize++; isSep = 0; 
+		case 5:
+			 afterSize++; 
 			break;
 		}
 	}
-	private void SEP_action(RuleContext _localctx, int actionIndex) {
+	private void ID_action(RuleContext _localctx, int actionIndex) {
 		switch (actionIndex) {
-		case 7:
-			 isSep++; 
+		case 6:
+			 isStruct = 0 ; 
 			break;
 		}
 	}
@@ -208,35 +198,35 @@ public class Sign2016Lexer extends Lexer {
 	private boolean ID_sempred(RuleContext _localctx, int predIndex) {
 		switch (predIndex) {
 		case 1:
-			return  isStruct > 0 && ((isSep == 0 && getText().charAt(0) != '_') || (isSep > 0) ) ;
+			return  isStruct > 0 ;
 		}
 		return true;
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\2\20V\b\1\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\2\20W\b\1\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
-		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\3\2\3\2\3\3\3\3\3\4\3\4\3\5\3"+
-		"\5\3\5\3\6\3\6\3\6\3\6\3\6\3\7\3\7\3\7\3\b\3\b\3\b\3\t\3\t\3\t\3\t\3\t"+
-		"\3\t\3\n\3\n\3\n\3\13\3\13\3\13\3\f\3\f\3\f\3\f\3\r\6\rE\n\r\r\r\16\r"+
-		"F\3\r\3\r\3\16\3\16\3\16\3\17\3\17\7\17P\n\17\f\17\16\17S\13\17\3\17\3"+
-		"\17\2\2\20\3\3\5\4\7\5\t\6\13\7\r\b\17\t\21\n\23\13\25\f\27\r\31\16\33"+
-		"\17\35\20\3\2\5\3\2\62;\5\2C\\aac|\6\2\62;C\\aac|\2W\2\3\3\2\2\2\2\5\3"+
-		"\2\2\2\2\7\3\2\2\2\2\t\3\2\2\2\2\13\3\2\2\2\2\r\3\2\2\2\2\17\3\2\2\2\2"+
-		"\21\3\2\2\2\2\23\3\2\2\2\2\25\3\2\2\2\2\27\3\2\2\2\2\31\3\2\2\2\2\33\3"+
-		"\2\2\2\2\35\3\2\2\2\3\37\3\2\2\2\5!\3\2\2\2\7#\3\2\2\2\t%\3\2\2\2\13("+
-		"\3\2\2\2\r-\3\2\2\2\17\60\3\2\2\2\21\63\3\2\2\2\239\3\2\2\2\25<\3\2\2"+
-		"\2\27?\3\2\2\2\31D\3\2\2\2\33J\3\2\2\2\35M\3\2\2\2\37 \7E\2\2 \4\3\2\2"+
-		"\2!\"\7X\2\2\"\6\3\2\2\2#$\7D\2\2$\b\3\2\2\2%&\7K\2\2&\'\b\5\2\2\'\n\3"+
-		"\2\2\2()\7W\2\2)*\7K\2\2*+\3\2\2\2+,\b\6\3\2,\f\3\2\2\2-.\7H\2\2./\b\7"+
-		"\4\2/\16\3\2\2\2\60\61\7U\2\2\61\62\b\b\5\2\62\20\3\2\2\2\63\64\7R\2\2"+
-		"\64\65\7V\2\2\65\66\7T\2\2\66\67\3\2\2\2\678\b\t\6\28\22\3\2\2\29:\7H"+
-		"\2\2:;\7D\2\2;\24\3\2\2\2<=\7H\2\2=>\7G\2\2>\26\3\2\2\2?@\5\31\r\2@A\6"+
-		"\f\2\2AB\b\f\7\2B\30\3\2\2\2CE\t\2\2\2DC\3\2\2\2EF\3\2\2\2FD\3\2\2\2F"+
-		"G\3\2\2\2GH\3\2\2\2HI\b\r\b\2I\32\3\2\2\2JK\7a\2\2KL\b\16\t\2L\34\3\2"+
-		"\2\2MQ\t\3\2\2NP\t\4\2\2ON\3\2\2\2PS\3\2\2\2QO\3\2\2\2QR\3\2\2\2RT\3\2"+
-		"\2\2SQ\3\2\2\2TU\6\17\3\2U\36\3\2\2\2\5\2FQ\n\3\5\2\3\6\3\3\7\4\3\b\5"+
-		"\3\t\6\3\f\7\3\r\b\3\16\t";
+		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\3\2\3\2\3\3\3\3\3\4"+
+		"\3\4\3\5\3\5\3\5\3\6\3\6\3\6\3\6\3\6\3\7\3\7\3\7\3\b\3\b\3\b\3\t\3\t\3"+
+		"\t\3\t\3\t\3\t\3\n\3\n\3\n\3\13\3\13\3\13\3\f\3\f\3\f\3\r\6\rF\n\r\r\r"+
+		"\16\rG\3\r\3\r\3\16\3\16\3\17\6\17O\n\17\r\17\16\17P\3\17\3\17\3\17\3"+
+		"\20\3\20\2\2\21\3\3\5\4\7\5\t\6\13\7\r\b\17\t\21\n\23\13\25\f\27\r\31"+
+		"\16\33\17\35\20\37\2\3\2\4\3\2\62;\f\2,,..\60\60\62<>>@@C\\aac|\u0080"+
+		"\u0080\2W\2\3\3\2\2\2\2\5\3\2\2\2\2\7\3\2\2\2\2\t\3\2\2\2\2\13\3\2\2\2"+
+		"\2\r\3\2\2\2\2\17\3\2\2\2\2\21\3\2\2\2\2\23\3\2\2\2\2\25\3\2\2\2\2\27"+
+		"\3\2\2\2\2\31\3\2\2\2\2\33\3\2\2\2\2\35\3\2\2\2\3!\3\2\2\2\5#\3\2\2\2"+
+		"\7%\3\2\2\2\t\'\3\2\2\2\13*\3\2\2\2\r/\3\2\2\2\17\62\3\2\2\2\21\65\3\2"+
+		"\2\2\23;\3\2\2\2\25>\3\2\2\2\27A\3\2\2\2\31E\3\2\2\2\33K\3\2\2\2\35N\3"+
+		"\2\2\2\37U\3\2\2\2!\"\7E\2\2\"\4\3\2\2\2#$\7X\2\2$\6\3\2\2\2%&\7D\2\2"+
+		"&\b\3\2\2\2\'(\7K\2\2()\b\5\2\2)\n\3\2\2\2*+\7W\2\2+,\7K\2\2,-\3\2\2\2"+
+		"-.\b\6\3\2.\f\3\2\2\2/\60\7H\2\2\60\61\b\7\4\2\61\16\3\2\2\2\62\63\7U"+
+		"\2\2\63\64\b\b\5\2\64\20\3\2\2\2\65\66\7R\2\2\66\67\7V\2\2\678\7T\2\2"+
+		"89\3\2\2\29:\b\t\6\2:\22\3\2\2\2;<\7H\2\2<=\7D\2\2=\24\3\2\2\2>?\7H\2"+
+		"\2?@\7G\2\2@\26\3\2\2\2AB\5\31\r\2BC\6\f\2\2C\30\3\2\2\2DF\t\2\2\2ED\3"+
+		"\2\2\2FG\3\2\2\2GE\3\2\2\2GH\3\2\2\2HI\3\2\2\2IJ\b\r\7\2J\32\3\2\2\2K"+
+		"L\7/\2\2L\34\3\2\2\2MO\5\37\20\2NM\3\2\2\2OP\3\2\2\2PN\3\2\2\2PQ\3\2\2"+
+		"\2QR\3\2\2\2RS\6\17\3\2ST\b\17\b\2T\36\3\2\2\2UV\t\3\2\2V \3\2\2\2\5\2"+
+		"GP\t\3\5\2\3\6\3\3\7\4\3\b\5\3\t\6\3\r\7\3\17\b";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

@@ -21,7 +21,7 @@ public:
     RuleSignature = 0, RuleVoidType = 1, RuleBoolType = 2, RuleIntType = 3, 
     RuleUintType = 4, RuleFloatType = 5, RuleStructType = 6, RulePtrType = 7, 
     RuleFunction = 8, RuleReturnType = 9, RuleParamType = 10, RuleTypeQualifier = 11, 
-    RuleSize = 12, RuleArraySize = 13
+    RuleSize = 12, RuleArraySize = 13, RuleName = 14
   };
 
   Sign2016Parser(antlr4::TokenStream *input);
@@ -36,7 +36,6 @@ public:
 
   	int afterSize = 0;
   	int isStruct = 0;
-  	int isSep = 0;
 
 
   class SignatureContext;
@@ -52,7 +51,8 @@ public:
   class ParamTypeContext;
   class TypeQualifierContext;
   class SizeContext;
-  class ArraySizeContext; 
+  class ArraySizeContext;
+  class NameContext; 
 
   class  SignatureContext : public antlr4::ParserRuleContext {
   public:
@@ -183,7 +183,7 @@ public:
     antlr4::tree::TerminalNode *STRUCT_TYPE();
     SizeContext *size();
     antlr4::tree::TerminalNode *SEP();
-    antlr4::tree::TerminalNode *ID();
+    NameContext *name();
     TypeQualifierContext *typeQualifier();
     std::vector<ArraySizeContext *> arraySize();
     ArraySizeContext* arraySize(size_t i);
@@ -336,6 +336,21 @@ public:
   };
 
   ArraySizeContext* arraySize();
+
+  class  NameContext : public antlr4::ParserRuleContext {
+  public:
+    NameContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *ID();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  NameContext* name();
 
 
 private:

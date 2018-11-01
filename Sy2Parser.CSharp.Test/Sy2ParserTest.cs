@@ -61,7 +61,7 @@ namespace Sy2Parser.CSharp.Test
         [TestMethod]
         public void TestSymboList()
         {
-            Sy2Parser parser = this.Setup("TEngSetSignVersion 2016\nRegCmd DATA var1 0040DE3C I32 RW\nRegCmd DATA var2 0040DD0C C_UI8 RW\n");
+            Sy2Parser parser = this.Setup("TEngSetSignVersion 2016\nRegCmd DATA var1 0040DE3C I32\nRegCmd DATA var2 0040DD0C C-UI8\n");
 
             Sy2Parser.FileContext context = parser.file();
             Sy2Visitor visitor = new Sy2Visitor();

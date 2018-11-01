@@ -1,7 +1,7 @@
 # Bit field TAG BitFieldTag, sizeof(BitFieldTag) is 8 Byte(s):
 # Command Type   Name            Bitmask     Signature
 # ----------------------------------------------------
-RegVar    BIT    BitFieldTag     0           S64_BitFieldTag
+RegVar    BIT    BitFieldTag     0           S64-BitFieldTag
 RegVar    BIT    BitFieldTag_a   1           UI32
 RegVar    BIT    BitFieldTag_b   2           UI32
 RegVar    BIT    BitFieldTag_c   12          UI32
@@ -9,19 +9,19 @@ RegVar    BIT    BitFieldTag_c   12          UI32
 # Structure TAG PointTag, sizeof(PointTag) is 8 Byte(s):
 # Command Type   Name            Offset      Signature
 # ----------------------------------------------------
-RegVar    STRUCT PointTag        0           S64_PointTag
+RegVar    STRUCT PointTag        0           S64-PointTag
 RegVar    STRUCT PointTag_x      0           F32
 RegVar    STRUCT PointTag_y      4           F32
 
 # Command Type   Name             Address     Signature
 # ------------------------------------------------------------------------------------------------------
-RegCmd    PROC   func1           00401410     FB_V_V_FE                                                 
-RegCmd    PROC   func2           00401415     FB_I32_C_PTR32_C_I8_FE                                    
-RegCmd    PROC   func3           0040141A     FB_PTR32_FB_PTR32_V_I16_FE_PTR32_FB_I8_F32_FE_PTR32_I16_FE
+RegCmd    PROC   func1           00401410     FB-V-V-FE                                                 
+RegCmd    PROC   func2           00401415     FB-I32-C-PTR32-C-I8-FE                                    
+RegCmd    PROC   func3           0040141A     FB-PTR32-FB-PTR32-V-I16-FE-PTR32-FB-I8-F32-FE-PTR32-I16-FE
 
 # Command Type   Name            Address     Signature
 # ----------------------------------------------------
 RegCmd    DATA   var1            0040DE3C    I32
-RegCmd    DATA   var2            0040DD0C    C_UI8
-RegCmd    DATA   var3            0040DE20    C_PTR32_C_PTR32_C_PTR32_I32
+RegCmd    DATA   var2            0040DD0C    C-UI8
+RegCmd    DATA   var3            0040DE20    C-PTR32-C-PTR32-C-PTR32-I32
 

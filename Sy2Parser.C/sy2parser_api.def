@@ -2,9 +2,11 @@ LIBRARY sy2parser
 EXPORTS
 	sy2Open
 	sy2Close
+	sy2GetFileInfo
 	sy2SetParsingErrorCallback
 	sy2SetParsingProgressCallback
 	sy2AddParsedNodeCallback
 	sy2RemoveParsedNodeCallback
 	sy2Parse
 	sy2ReadNext
+	sy2AbortParsing

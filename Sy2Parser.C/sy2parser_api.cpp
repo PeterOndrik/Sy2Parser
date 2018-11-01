@@ -245,7 +245,7 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2AddParsedNodeCallback(Sy2Par
 				//parser->currentNode = node->next();
 				parser->currentNode = node;
 				T_Sy2Node apiNode = { (T_Sy2NodeType)node->getType(),  "\0", node->getDepth(), node->getLine(), node->getColumn() };
-				strncpy_s(apiNode.value, node->getValue().c_str(), sizeof(apiNode.value));	// copy at most N, zero-padding if shorter
+				strncpy_s(apiNode.value, node->getValue().c_str(), sizeof(apiNode.value) - 1);	// copy at most N, zero-padding if shorter
 				apiNode.value[sizeof(apiNode.value) - 1] = '\0';							// ensure NUL terminated
 				callback(handle, &apiNode, callbackContext);
 				if (node->parent())
@@ -318,7 +318,7 @@ static Sy2ParserStatus processNode(const Model::Node<> *node, T_Sy2Node *apiNode
 		}
 		else
 		{
-			strncpy_s(apiNode->value, value.c_str(), sizeof(apiNode->value));
+			strncpy_s(apiNode->value, value.c_str(), sizeof(apiNode->value) - 1);
 			apiNode->value[sizeof(apiNode->value) - 1] = '\0';
 		}
 		apiNode->depth = node->getDepth();

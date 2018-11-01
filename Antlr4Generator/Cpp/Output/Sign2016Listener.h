@@ -56,6 +56,9 @@ public:
   virtual void enterArraySize(Sign2016Parser::ArraySizeContext *ctx) = 0;
   virtual void exitArraySize(Sign2016Parser::ArraySizeContext *ctx) = 0;
 
+  virtual void enterName(Sign2016Parser::NameContext *ctx) = 0;
+  virtual void exitName(Sign2016Parser::NameContext *ctx) = 0;
+
 
 };
 

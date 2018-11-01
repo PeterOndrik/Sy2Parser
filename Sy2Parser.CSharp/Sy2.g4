@@ -1,6 +1,9 @@
-grammar Sy2;
-
 /*
+An ANTLR4 grammar for the Sy2 format. The Sy2 format represents a simple symbol and data type extraction from an object file formatted file.
+
+The Sy2 format is represented by a list of commands where each command consists from series of attributes ended by a new line. 
+The last Signature attribute is parsed according to the Sign2016 grammar.
+
 Example:
 
 # Header
@@ -10,49 +13,53 @@ Encoding little_endian
 TEngSetSignVersion 2016
 
 # Bit field TAG BitFieldTag, sizeof(BitFieldTag) is 8 Byte(s):
-# Command Type   Name            Bitmask     Signature
-# ----------------------------------------------------
-RegVar    BIT    BitFieldTag     0           S64_BitFieldTag
-RegVar    BIT    BitFieldTag_a   1           UI32
-RegVar    BIT    BitFieldTag_b   2           UI32
-RegVar    BIT    BitFieldTag_c   12          UI32
+# Command Type   Name            Offset     Bitmask     Signature
+# -------------------------------------------------------------------------------------------------------
+RegVar    BIT    BitFieldTag     0          0x0         S64-BitFieldTag
+RegVar    BIT    BitFieldTag_a   0          0x1         UI32
+RegVar    BIT    BitFieldTag_b   0          0x2         UI32
+RegVar    BIT    BitFieldTag_c   0          0xC         UI32
 
 # Structure TAG PointTag, sizeof(PointTag) is 8 Byte(s):
 # Command Type   Name            Offset      Signature
-# ----------------------------------------------------
-RegVar    STRUCT PointTag        0           S64_PointTag
+# -------------------------------------------------------------------------------------------------------
+RegVar    STRUCT PointTag        0           S64-PointTag
 RegVar    STRUCT PointTag_x      0           F32
 RegVar    STRUCT PointTag_y      4           F32
 
 # Union TAG DataTag, sizeof(DataTag) is 20 Byte(s):
 # Command Type   Name              Offset      Signature
 # -------------------------------------------------------------------------------------------------------
-RegVar    UNION  DataTag           0           S160_DataTag                                              
+RegVar    UNION  DataTag           0           S160-DataTag                                              
 RegVar    UNION  DataTag_i         0           I32                                                       
 RegVar    UNION  DataTag_f         0           F32                                                       
-RegVar    UNION  DataTag_str       0           I8_20                                                     
+RegVar    UNION  DataTag_str       0           I8-20                                                     
 
 # Enumeration TAG ColorTag, sizeof(ColorTag) is 4 Byte(s):
 # Command Type   Name              Value       Signature
 # -------------------------------------------------------------------------------------------------------
-RegVar    ENUM   ColorTag_RED      0           UI32                                                      
-RegVar    ENUM   ColorTag_BLUE     1           UI32                                                      
-RegVar    ENUM   ColorTag_GREEN    2           UI32                                                      
-RegVar    ENUM   ColorTag_YELLOW   3           UI32                                                      
-RegVar    ENUM   ColorTag_WHITE    4           UI32  
+RegVar    ENUM   ColorTag_BLACK    -1          I32                                                      
+RegVar    ENUM   ColorTag_RED      0           I32                                                      
+RegVar    ENUM   ColorTag_BLUE     1           I32                                                      
+RegVar    ENUM   ColorTag_GREEN    2           I32                                                      
+RegVar    ENUM   ColorTag_YELLOW   3           I32                                                      
+RegVar    ENUM   ColorTag_WHITE    4           I32  
 
 # Command Type   Name             Address     Signature
 # ------------------------------------------------------------------------------------------------------
-RegCmd    PROC   func1           00401410     FB_V_V_FE                                                 
-RegCmd    PROC   func2           00401415     FB_I32_C_PTR32_C_I8_FE                                    
-RegCmd    PROC   func3           0040141A     FB_PTR32_FB_PTR32_V_I16_FE_PTR32_FB_I8_F32_FE_PTR32_I16_FE
+RegCmd    PROC   func1           00401410     FB-V-V-FE                                                 
+RegCmd    PROC   func2           00401415     FB-I32-C-PTR32-C-I8-FE                                    
+RegCmd    PROC   func3           0040141A     FB-PTR32-FB-PTR32-V-I16-FE-PTR32-FB-I8-F32-FE-PTR32-I16-FE
+RegCmd    PROC   func4           00401454     FB-C-PTR32-S64-PointTag-PTR32-C-S64-PointTag-UI32-UI8-FE
 
 # Command Type   Name            Address     Signature
-# ----------------------------------------------------
+# ------------------------------------------------------------------------------------------------------
 RegCmd    DATA   var1            0040DE3C    I32
-RegCmd    DATA   var2            0040DD0C    C_UI8
-RegCmd    DATA   var3            0040DE20    C_PTR32_C_PTR32_C_PTR32_I32
+RegCmd    DATA   var2            0040DD0C    C-UI8
+RegCmd    DATA   var3            0040DE20    C-PTR32-C-PTR32-C-PTR32-I32
 */
+
+grammar Sy2;
 
 options
 {
@@ -61,8 +68,30 @@ options
 
 @members
 {
-	int tokenPos = 0;
-	int symPosType = 0;	// 0 - BITMASK, 1 - OFFSET, 2 - ADDRESS, 3 - VALUE
+	/*
+	 * Determines what information about a symbol position may follow.
+	 * 0 - OFFSET, 0 - BITMASK, 2 - VALUE, 3 - ADDRESS
+	 * For example:
+	 *                                                Offset     Bitmask
+	 * Command:       RegVar    BIT    BitFieldTag    0          0x0         S64_BitFieldTag
+	 * positionType:            0      0              0          0           0
+	 *
+	 *                                                Offset
+	 * Command:       RegVar    STRUCT PointTag       0           S64_PointTag
+	 * positionType:            0      0              0           0
+	 *
+	 *                                                Value
+	 * Command:       RegVar    ENUM   ColorTag_BLACK -1          I32
+	 * positionType:                                  3
+	 */
+	int positionType = 0;		
+
+	/*
+	 * Determines if a token may be an identifier or a signature. The lexer rule to seach an identifier is very versatile.
+	 * These all is for the better error messages.
+	 * 0 - command type, 1 - symbol or typedef type, 2 - ID, 3 - position, 4 - SIGNATURE
+	 */	 
+	int searchFor = 0;	
 }
 
 /*
@@ -78,49 +107,57 @@ command
 	;
 encodingValue : LITTLE_ENDIAN | BIG_ENDIAN ;
 signValue : V2016 ;
-typeDefinition : type name (bitmask | offset | enumValue) signature ;
-symbol : type name address signature ;
-type : TYPE ;
+typeDefinition 
+	: BIT name offset bitmask signature
+	| STRUCT name offset signature
+	| UNION name offset signature
+	| ENUM name enumValue signature
+	;
+symbol 
+	: PROC name address signature
+	| DATA name address signature
+	;
 name : ID ;
-bitmask : BITMASK ;
 offset : OFFSET ;
+bitmask : BITMASK ;
 address : ADDRESS ;
 enumValue : ENUM_VALUE ;
-signature : SIGNATURE ;
+signature : SIGN ;
 
 /*
  * Lexer Rules
  */
 
-ENCODING : 'Encoding' { tokenPos == 0 }? { tokenPos++; } ;
-LITTLE_ENDIAN : 'little_endian' { tokenPos == 1 }? { tokenPos = 0; } ;
-BIG_ENDIAN : 'big_endian' { tokenPos == 1 }? { tokenPos = 0; } ;
+ENCODING : 'Encoding' ;
+LITTLE_ENDIAN : 'little_endian' ;
+BIG_ENDIAN : 'big_endian' ;
 
-SIGN_VERSION : 'TEngSetSignVersion' { tokenPos == 0 }? { tokenPos++; } ;
-V2016 : '2016' { tokenPos == 1 }? { tokenPos = 0; } ;
+SIGN_VERSION : 'TEngSetSignVersion' ;
+V2016 : '2016' ;
 
-REG_VAR : 'RegVar' { tokenPos == 0 }? { tokenPos++; } ;
-REG_CMD : 'RegCmd' { tokenPos == 0 }? { tokenPos++; } ;
-TYPE : ( BIT | STRUCT | UNION | ENUM | PROC | DATA ) { tokenPos == 1 }? { tokenPos++;
-															if (Text.CompareTo("BIT") == 0) symPosType = 0; 
-															if (Text.CompareTo("STRUCT") == 0 || Text.CompareTo("UNION") == 0) symPosType = 1; 
-															if (Text.CompareTo("PROC") == 0 || Text.CompareTo("DATA") == 0) symPosType = 2;
-															if (Text.CompareTo("ENUM") == 0) symPosType = 3;
-														} ;
-ID : CHAR+ { tokenPos == 2 }? { tokenPos++; } ;
-BITMASK : [0-9]+ { tokenPos == 3 && symPosType == 0 }? { tokenPos++; } ;
-OFFSET : [0-9]+ { tokenPos == 3 && symPosType == 1 }? { tokenPos++; } ;
-ADDRESS : NUMBER NUMBER NUMBER NUMBER NUMBER NUMBER NUMBER NUMBER { tokenPos == 3 && symPosType == 2 }? { tokenPos++; } ;
-ENUM_VALUE : [0-9]+ { tokenPos == 3 && symPosType == 3 }? { tokenPos++; } ;
-SIGNATURE : CHAR+ { tokenPos == 4 }? { tokenPos = 0; } ;
-BIT : 'BIT' ;
-STRUCT : 'STRUCT' ;
-UNION : 'UNION' ;
-ENUM : 'ENUM' ;
-PROC : 'PROC' ;
-DATA : 'DATA' ;
+REG_VAR : 'RegVar' { searchFor = 1; } ;
+REG_CMD : 'RegCmd' { searchFor = 1; } ;
+
+BIT : 'BIT' { searchFor == 1 }? { positionType = 0; searchFor = 2; } ;
+STRUCT : 'STRUCT' { searchFor == 1 }? { positionType = 0; searchFor = 2; } ;
+UNION : 'UNION' { searchFor == 1 }? { positionType = 0; searchFor = 2; } ;
+ENUM : 'ENUM' { searchFor == 1 }? { positionType = 2; searchFor = 2; } ;
+PROC : 'PROC' { searchFor == 1 }? { positionType = 3; searchFor = 2; } ;
+DATA : 'DATA' { searchFor == 1 }? { positionType = 3; searchFor = 2; } ;
+
+OFFSET : NUM+ { positionType == 0 }? { searchFor = 4; } ;
+BITMASK : '0x' HEX+ { positionType == 0 }? { searchFor = 4; } ;
+ENUM_VALUE : '-'? NUM+ { positionType == 2 }? { searchFor = 4; } ;
+ADDRESS : HEX HEX HEX HEX HEX HEX HEX HEX { positionType == 3 }? { searchFor = 4; } ;
+
+ID : CHAR+ { searchFor == 2 }? { searchFor = 3; } ;
+SIGN : CHAR ('-' | CHAR)* { searchFor == 4 }? ; 
+
 LINE_COMMENT : '#' .*? NL -> channel(HIDDEN) ;
 WS : (' ' | '\t' ) -> skip ;
-NL : ('\r'? '\n' | '\r')+ ;
-fragment NUMBER : [a-fA-F0-9] ;
+NL : ('\r'? '\n' | '\r')+ { searchFor = 0; } ;
+ANY : ~[ \t\r\n]+ { searchFor++; } ;
+
+fragment NUM : [0-9] ;
+fragment HEX : [a-fA-F0-9] ;
 fragment CHAR : [a-zA-Z_0-9\u002A\u002C\u002E\u003A\u003C\u003E\u007E] ;

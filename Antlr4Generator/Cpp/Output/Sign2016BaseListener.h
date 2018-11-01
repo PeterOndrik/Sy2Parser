@@ -58,6 +58,9 @@ public:
   virtual void enterArraySize(Sign2016Parser::ArraySizeContext * /*ctx*/) override { }
   virtual void exitArraySize(Sign2016Parser::ArraySizeContext * /*ctx*/) override { }
 
+  virtual void enterName(Sign2016Parser::NameContext * /*ctx*/) override { }
+  virtual void exitName(Sign2016Parser::NameContext * /*ctx*/) override { }
+
 
   virtual void enterEveryRule(antlr4::ParserRuleContext * /*ctx*/) override { }
   virtual void exitEveryRule(antlr4::ParserRuleContext * /*ctx*/) override { }

@@ -190,6 +190,7 @@
     <ClInclude Include="ParamType.h" />
     <ClInclude Include="PtrType.h" />
     <ClInclude Include="ReturnType.h" />
+    <ClInclude Include="Sign2016ErrorListener.h" />
     <ClInclude Include="StorageSize.h" />
     <ClInclude Include="StructType.h" />
     <ClInclude Include="Sy2ErrorListener.h" />
@@ -230,6 +231,7 @@
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Sign2016CustomListener.cpp" />
     <ClCompile Include="Sign2016CustomVisitor.cpp" />
+    <ClCompile Include="Sign2016ErrorListener.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
