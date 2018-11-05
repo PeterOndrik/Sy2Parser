@@ -15,7 +15,7 @@ public:
     ENCODING = 1, LITTLE_ENDIAN = 2, BIG_ENDIAN = 3, SIGN_VERSION = 4, V2016 = 5, 
     REG_VAR = 6, REG_CMD = 7, BIT = 8, STRUCT = 9, UNION = 10, ENUM = 11, 
     PROC = 12, DATA = 13, OFFSET = 14, BITMASK = 15, ENUM_VALUE = 16, ADDRESS = 17, 
-    ID = 18, SIGN = 19, LINE_COMMENT = 20, WS = 21, NL = 22, ANY = 23
+    SIGN = 18, ID = 19, LINE_COMMENT = 20, WS = 21, NL = 22
   };
 
   Sy2Lexer(antlr4::CharStream *input);
@@ -91,7 +91,6 @@ private:
   void ADDRESSAction(antlr4::RuleContext *context, size_t actionIndex);
   void IDAction(antlr4::RuleContext *context, size_t actionIndex);
   void NLAction(antlr4::RuleContext *context, size_t actionIndex);
-  void ANYAction(antlr4::RuleContext *context, size_t actionIndex);
 
   // Individual semantic predicate functions triggered by sempred() above.
   bool BITSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
@@ -104,7 +103,6 @@ private:
   bool BITMASKSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
   bool ENUM_VALUESempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
   bool ADDRESSSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
-  bool IDSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
   bool SIGNSempred(antlr4::RuleContext *_localctx, size_t predicateIndex);
 
   struct Initializer {

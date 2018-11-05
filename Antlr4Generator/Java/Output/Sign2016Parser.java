@@ -678,8 +678,11 @@ public class Sign2016Parser extends Parser {
 		public FunctionContext function() {
 			return getRuleContext(FunctionContext.class,0);
 		}
-		public TypeQualifierContext typeQualifier() {
-			return getRuleContext(TypeQualifierContext.class,0);
+		public List<TypeQualifierContext> typeQualifier() {
+			return getRuleContexts(TypeQualifierContext.class);
+		}
+		public TypeQualifierContext typeQualifier(int i) {
+			return getRuleContext(TypeQualifierContext.class,i);
 		}
 		public List<ArraySizeContext> arraySize() {
 			return getRuleContexts(ArraySizeContext.class);
@@ -742,54 +745,64 @@ public class Sign2016Parser extends Parser {
 			}
 			setState(111);
 			match(SEP);
-			setState(120);
+			setState(123);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,13,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,14,_ctx) ) {
 			case 1:
 				{
-				setState(112);
+				setState(113);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				if (_la==TYPE_QUALIFIER) {
+					{
+					setState(112);
+					typeQualifier();
+					}
+				}
+
+				setState(115);
 				voidType();
 				}
 				break;
 			case 2:
 				{
-				setState(113);
+				setState(116);
 				boolType();
 				}
 				break;
 			case 3:
 				{
-				setState(114);
+				setState(117);
 				intType();
 				}
 				break;
 			case 4:
 				{
-				setState(115);
+				setState(118);
 				uintType();
 				}
 				break;
 			case 5:
 				{
-				setState(116);
+				setState(119);
 				floatType();
 				}
 				break;
 			case 6:
 				{
-				setState(117);
+				setState(120);
 				structType();
 				}
 				break;
 			case 7:
 				{
-				setState(118);
+				setState(121);
 				ptrType();
 				}
 				break;
 			case 8:
 				{
-				setState(119);
+				setState(122);
 				function();
 				}
 				break;
@@ -844,13 +857,13 @@ public class Sign2016Parser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(122);
+			setState(125);
 			match(FB);
-			setState(123);
+			setState(126);
 			match(SEP);
-			setState(124);
+			setState(127);
 			returnType();
-			setState(127); 
+			setState(130); 
 			_errHandler.sync(this);
 			_alt = 1;
 			do {
@@ -858,9 +871,9 @@ public class Sign2016Parser extends Parser {
 				case 1:
 					{
 					{
-					setState(125);
+					setState(128);
 					match(SEP);
-					setState(126);
+					setState(129);
 					paramType();
 					}
 					}
@@ -868,13 +881,13 @@ public class Sign2016Parser extends Parser {
 				default:
 					throw new NoViableAltException(this);
 				}
-				setState(129); 
+				setState(132); 
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,14,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,15,_ctx);
 			} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
-			setState(131);
+			setState(134);
 			match(SEP);
-			setState(132);
+			setState(135);
 			match(FE);
 			}
 		}
@@ -931,48 +944,48 @@ public class Sign2016Parser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(141);
+			setState(144);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,15,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,16,_ctx) ) {
 			case 1:
 				{
-				setState(134);
+				setState(137);
 				voidType();
 				}
 				break;
 			case 2:
 				{
-				setState(135);
+				setState(138);
 				boolType();
 				}
 				break;
 			case 3:
 				{
-				setState(136);
+				setState(139);
 				intType();
 				}
 				break;
 			case 4:
 				{
-				setState(137);
+				setState(140);
 				uintType();
 				}
 				break;
 			case 5:
 				{
-				setState(138);
+				setState(141);
 				floatType();
 				}
 				break;
 			case 6:
 				{
-				setState(139);
+				setState(142);
 				structType();
 				}
 				break;
 			case 7:
 				{
-				setState(140);
+				setState(143);
 				ptrType();
 				}
 				break;
@@ -1032,48 +1045,48 @@ public class Sign2016Parser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(150);
+			setState(153);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,16,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,17,_ctx) ) {
 			case 1:
 				{
-				setState(143);
+				setState(146);
 				voidType();
 				}
 				break;
 			case 2:
 				{
-				setState(144);
+				setState(147);
 				boolType();
 				}
 				break;
 			case 3:
 				{
-				setState(145);
+				setState(148);
 				intType();
 				}
 				break;
 			case 4:
 				{
-				setState(146);
+				setState(149);
 				uintType();
 				}
 				break;
 			case 5:
 				{
-				setState(147);
+				setState(150);
 				floatType();
 				}
 				break;
 			case 6:
 				{
-				setState(148);
+				setState(151);
 				structType();
 				}
 				break;
 			case 7:
 				{
-				setState(149);
+				setState(152);
 				ptrType();
 				}
 				break;
@@ -1114,9 +1127,9 @@ public class Sign2016Parser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(152);
+			setState(155);
 			match(TYPE_QUALIFIER);
-			setState(153);
+			setState(156);
 			match(SEP);
 			}
 		}
@@ -1153,7 +1166,7 @@ public class Sign2016Parser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(155);
+			setState(158);
 			match(SIZE);
 			}
 		}
@@ -1191,9 +1204,9 @@ public class Sign2016Parser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(157);
+			setState(160);
 			match(SEP);
-			setState(158);
+			setState(161);
 			match(ARRAY_SIZE);
 			}
 		}
@@ -1230,7 +1243,7 @@ public class Sign2016Parser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(160);
+			setState(163);
 			match(ID);
 			}
 		}
@@ -1246,7 +1259,7 @@ public class Sign2016Parser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\20\u00a5\4\2\t\2"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\20\u00a8\4\2\t\2"+
 		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
 		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\3\2\3\2\3\2\3\2\3"+
 		"\2\3\2\3\2\5\2(\n\2\3\2\3\2\3\3\3\3\3\4\5\4/\n\4\3\4\3\4\7\4\63\n\4\f"+
@@ -1254,47 +1267,48 @@ public class Sign2016Parser extends Parser {
 		"\6D\n\6\3\6\3\6\3\6\7\6I\n\6\f\6\16\6L\13\6\3\7\5\7O\n\7\3\7\3\7\3\7\7"+
 		"\7T\n\7\f\7\16\7W\13\7\3\b\5\bZ\n\b\3\b\3\b\3\b\7\b_\n\b\f\b\16\bb\13"+
 		"\b\3\b\3\b\3\b\3\t\5\th\n\t\3\t\3\t\3\t\7\tm\n\t\f\t\16\tp\13\t\3\t\3"+
-		"\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\5\t{\n\t\3\n\3\n\3\n\3\n\3\n\6\n\u0082"+
-		"\n\n\r\n\16\n\u0083\3\n\3\n\3\n\3\13\3\13\3\13\3\13\3\13\3\13\3\13\5\13"+
-		"\u0090\n\13\3\f\3\f\3\f\3\f\3\f\3\f\3\f\5\f\u0099\n\f\3\r\3\r\3\r\3\16"+
-		"\3\16\3\17\3\17\3\17\3\20\3\20\3\20\2\2\21\2\4\6\b\n\f\16\20\22\24\26"+
-		"\30\32\34\36\2\2\2\u00bb\2\'\3\2\2\2\4+\3\2\2\2\6.\3\2\2\2\b8\3\2\2\2"+
-		"\nC\3\2\2\2\fN\3\2\2\2\16Y\3\2\2\2\20g\3\2\2\2\22|\3\2\2\2\24\u008f\3"+
-		"\2\2\2\26\u0098\3\2\2\2\30\u009a\3\2\2\2\32\u009d\3\2\2\2\34\u009f\3\2"+
-		"\2\2\36\u00a2\3\2\2\2 (\5\6\4\2!(\5\b\5\2\"(\5\n\6\2#(\5\f\7\2$(\5\16"+
-		"\b\2%(\5\20\t\2&(\5\22\n\2\' \3\2\2\2\'!\3\2\2\2\'\"\3\2\2\2\'#\3\2\2"+
-		"\2\'$\3\2\2\2\'%\3\2\2\2\'&\3\2\2\2()\3\2\2\2)*\7\2\2\3*\3\3\2\2\2+,\7"+
-		"\4\2\2,\5\3\2\2\2-/\5\30\r\2.-\3\2\2\2./\3\2\2\2/\60\3\2\2\2\60\64\7\5"+
-		"\2\2\61\63\5\34\17\2\62\61\3\2\2\2\63\66\3\2\2\2\64\62\3\2\2\2\64\65\3"+
-		"\2\2\2\65\7\3\2\2\2\66\64\3\2\2\2\679\5\30\r\28\67\3\2\2\289\3\2\2\29"+
-		":\3\2\2\2:;\7\6\2\2;?\5\32\16\2<>\5\34\17\2=<\3\2\2\2>A\3\2\2\2?=\3\2"+
-		"\2\2?@\3\2\2\2@\t\3\2\2\2A?\3\2\2\2BD\5\30\r\2CB\3\2\2\2CD\3\2\2\2DE\3"+
-		"\2\2\2EF\7\7\2\2FJ\5\32\16\2GI\5\34\17\2HG\3\2\2\2IL\3\2\2\2JH\3\2\2\2"+
-		"JK\3\2\2\2K\13\3\2\2\2LJ\3\2\2\2MO\5\30\r\2NM\3\2\2\2NO\3\2\2\2OP\3\2"+
-		"\2\2PQ\7\b\2\2QU\5\32\16\2RT\5\34\17\2SR\3\2\2\2TW\3\2\2\2US\3\2\2\2U"+
-		"V\3\2\2\2V\r\3\2\2\2WU\3\2\2\2XZ\5\30\r\2YX\3\2\2\2YZ\3\2\2\2Z[\3\2\2"+
-		"\2[\\\7\t\2\2\\`\5\32\16\2]_\5\34\17\2^]\3\2\2\2_b\3\2\2\2`^\3\2\2\2`"+
-		"a\3\2\2\2ac\3\2\2\2b`\3\2\2\2cd\7\17\2\2de\5\36\20\2e\17\3\2\2\2fh\5\30"+
-		"\r\2gf\3\2\2\2gh\3\2\2\2hi\3\2\2\2ij\7\n\2\2jn\5\32\16\2km\5\34\17\2l"+
-		"k\3\2\2\2mp\3\2\2\2nl\3\2\2\2no\3\2\2\2oq\3\2\2\2pn\3\2\2\2qz\7\17\2\2"+
-		"r{\5\4\3\2s{\5\6\4\2t{\5\b\5\2u{\5\n\6\2v{\5\f\7\2w{\5\16\b\2x{\5\20\t"+
-		"\2y{\5\22\n\2zr\3\2\2\2zs\3\2\2\2zt\3\2\2\2zu\3\2\2\2zv\3\2\2\2zw\3\2"+
-		"\2\2zx\3\2\2\2zy\3\2\2\2{\21\3\2\2\2|}\7\13\2\2}~\7\17\2\2~\u0081\5\24"+
-		"\13\2\177\u0080\7\17\2\2\u0080\u0082\5\26\f\2\u0081\177\3\2\2\2\u0082"+
-		"\u0083\3\2\2\2\u0083\u0081\3\2\2\2\u0083\u0084\3\2\2\2\u0084\u0085\3\2"+
-		"\2\2\u0085\u0086\7\17\2\2\u0086\u0087\7\f\2\2\u0087\23\3\2\2\2\u0088\u0090"+
-		"\5\4\3\2\u0089\u0090\5\6\4\2\u008a\u0090\5\b\5\2\u008b\u0090\5\n\6\2\u008c"+
-		"\u0090\5\f\7\2\u008d\u0090\5\16\b\2\u008e\u0090\5\20\t\2\u008f\u0088\3"+
-		"\2\2\2\u008f\u0089\3\2\2\2\u008f\u008a\3\2\2\2\u008f\u008b\3\2\2\2\u008f"+
-		"\u008c\3\2\2\2\u008f\u008d\3\2\2\2\u008f\u008e\3\2\2\2\u0090\25\3\2\2"+
-		"\2\u0091\u0099\5\4\3\2\u0092\u0099\5\6\4\2\u0093\u0099\5\b\5\2\u0094\u0099"+
-		"\5\n\6\2\u0095\u0099\5\f\7\2\u0096\u0099\5\16\b\2\u0097\u0099\5\20\t\2"+
-		"\u0098\u0091\3\2\2\2\u0098\u0092\3\2\2\2\u0098\u0093\3\2\2\2\u0098\u0094"+
-		"\3\2\2\2\u0098\u0095\3\2\2\2\u0098\u0096\3\2\2\2\u0098\u0097\3\2\2\2\u0099"+
-		"\27\3\2\2\2\u009a\u009b\7\3\2\2\u009b\u009c\7\17\2\2\u009c\31\3\2\2\2"+
-		"\u009d\u009e\7\16\2\2\u009e\33\3\2\2\2\u009f\u00a0\7\17\2\2\u00a0\u00a1"+
-		"\7\r\2\2\u00a1\35\3\2\2\2\u00a2\u00a3\7\20\2\2\u00a3\37\3\2\2\2\23\'."+
-		"\648?CJNUY`gnz\u0083\u008f\u0098";
+		"\t\5\tt\n\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\5\t~\n\t\3\n\3\n\3\n\3\n\3"+
+		"\n\6\n\u0085\n\n\r\n\16\n\u0086\3\n\3\n\3\n\3\13\3\13\3\13\3\13\3\13\3"+
+		"\13\3\13\5\13\u0093\n\13\3\f\3\f\3\f\3\f\3\f\3\f\3\f\5\f\u009c\n\f\3\r"+
+		"\3\r\3\r\3\16\3\16\3\17\3\17\3\17\3\20\3\20\3\20\2\2\21\2\4\6\b\n\f\16"+
+		"\20\22\24\26\30\32\34\36\2\2\2\u00bf\2\'\3\2\2\2\4+\3\2\2\2\6.\3\2\2\2"+
+		"\b8\3\2\2\2\nC\3\2\2\2\fN\3\2\2\2\16Y\3\2\2\2\20g\3\2\2\2\22\177\3\2\2"+
+		"\2\24\u0092\3\2\2\2\26\u009b\3\2\2\2\30\u009d\3\2\2\2\32\u00a0\3\2\2\2"+
+		"\34\u00a2\3\2\2\2\36\u00a5\3\2\2\2 (\5\6\4\2!(\5\b\5\2\"(\5\n\6\2#(\5"+
+		"\f\7\2$(\5\16\b\2%(\5\20\t\2&(\5\22\n\2\' \3\2\2\2\'!\3\2\2\2\'\"\3\2"+
+		"\2\2\'#\3\2\2\2\'$\3\2\2\2\'%\3\2\2\2\'&\3\2\2\2()\3\2\2\2)*\7\2\2\3*"+
+		"\3\3\2\2\2+,\7\4\2\2,\5\3\2\2\2-/\5\30\r\2.-\3\2\2\2./\3\2\2\2/\60\3\2"+
+		"\2\2\60\64\7\5\2\2\61\63\5\34\17\2\62\61\3\2\2\2\63\66\3\2\2\2\64\62\3"+
+		"\2\2\2\64\65\3\2\2\2\65\7\3\2\2\2\66\64\3\2\2\2\679\5\30\r\28\67\3\2\2"+
+		"\289\3\2\2\29:\3\2\2\2:;\7\6\2\2;?\5\32\16\2<>\5\34\17\2=<\3\2\2\2>A\3"+
+		"\2\2\2?=\3\2\2\2?@\3\2\2\2@\t\3\2\2\2A?\3\2\2\2BD\5\30\r\2CB\3\2\2\2C"+
+		"D\3\2\2\2DE\3\2\2\2EF\7\7\2\2FJ\5\32\16\2GI\5\34\17\2HG\3\2\2\2IL\3\2"+
+		"\2\2JH\3\2\2\2JK\3\2\2\2K\13\3\2\2\2LJ\3\2\2\2MO\5\30\r\2NM\3\2\2\2NO"+
+		"\3\2\2\2OP\3\2\2\2PQ\7\b\2\2QU\5\32\16\2RT\5\34\17\2SR\3\2\2\2TW\3\2\2"+
+		"\2US\3\2\2\2UV\3\2\2\2V\r\3\2\2\2WU\3\2\2\2XZ\5\30\r\2YX\3\2\2\2YZ\3\2"+
+		"\2\2Z[\3\2\2\2[\\\7\t\2\2\\`\5\32\16\2]_\5\34\17\2^]\3\2\2\2_b\3\2\2\2"+
+		"`^\3\2\2\2`a\3\2\2\2ac\3\2\2\2b`\3\2\2\2cd\7\17\2\2de\5\36\20\2e\17\3"+
+		"\2\2\2fh\5\30\r\2gf\3\2\2\2gh\3\2\2\2hi\3\2\2\2ij\7\n\2\2jn\5\32\16\2"+
+		"km\5\34\17\2lk\3\2\2\2mp\3\2\2\2nl\3\2\2\2no\3\2\2\2oq\3\2\2\2pn\3\2\2"+
+		"\2q}\7\17\2\2rt\5\30\r\2sr\3\2\2\2st\3\2\2\2tu\3\2\2\2u~\5\4\3\2v~\5\6"+
+		"\4\2w~\5\b\5\2x~\5\n\6\2y~\5\f\7\2z~\5\16\b\2{~\5\20\t\2|~\5\22\n\2}s"+
+		"\3\2\2\2}v\3\2\2\2}w\3\2\2\2}x\3\2\2\2}y\3\2\2\2}z\3\2\2\2}{\3\2\2\2}"+
+		"|\3\2\2\2~\21\3\2\2\2\177\u0080\7\13\2\2\u0080\u0081\7\17\2\2\u0081\u0084"+
+		"\5\24\13\2\u0082\u0083\7\17\2\2\u0083\u0085\5\26\f\2\u0084\u0082\3\2\2"+
+		"\2\u0085\u0086\3\2\2\2\u0086\u0084\3\2\2\2\u0086\u0087\3\2\2\2\u0087\u0088"+
+		"\3\2\2\2\u0088\u0089\7\17\2\2\u0089\u008a\7\f\2\2\u008a\23\3\2\2\2\u008b"+
+		"\u0093\5\4\3\2\u008c\u0093\5\6\4\2\u008d\u0093\5\b\5\2\u008e\u0093\5\n"+
+		"\6\2\u008f\u0093\5\f\7\2\u0090\u0093\5\16\b\2\u0091\u0093\5\20\t\2\u0092"+
+		"\u008b\3\2\2\2\u0092\u008c\3\2\2\2\u0092\u008d\3\2\2\2\u0092\u008e\3\2"+
+		"\2\2\u0092\u008f\3\2\2\2\u0092\u0090\3\2\2\2\u0092\u0091\3\2\2\2\u0093"+
+		"\25\3\2\2\2\u0094\u009c\5\4\3\2\u0095\u009c\5\6\4\2\u0096\u009c\5\b\5"+
+		"\2\u0097\u009c\5\n\6\2\u0098\u009c\5\f\7\2\u0099\u009c\5\16\b\2\u009a"+
+		"\u009c\5\20\t\2\u009b\u0094\3\2\2\2\u009b\u0095\3\2\2\2\u009b\u0096\3"+
+		"\2\2\2\u009b\u0097\3\2\2\2\u009b\u0098\3\2\2\2\u009b\u0099\3\2\2\2\u009b"+
+		"\u009a\3\2\2\2\u009c\27\3\2\2\2\u009d\u009e\7\3\2\2\u009e\u009f\7\17\2"+
+		"\2\u009f\31\3\2\2\2\u00a0\u00a1\7\16\2\2\u00a1\33\3\2\2\2\u00a2\u00a3"+
+		"\7\17\2\2\u00a3\u00a4\7\r\2\2\u00a4\35\3\2\2\2\u00a5\u00a6\7\20\2\2\u00a6"+
+		"\37\3\2\2\2\24\'.\648?CJNUY`gns}\u0086\u0092\u009b";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

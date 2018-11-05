@@ -147,16 +147,21 @@ DATA : 'DATA' { searchFor == 1 }? { positionType = 3; searchFor = 2; } ;
 OFFSET : NUM+ { positionType == 0 }? { searchFor = 4; } ;
 BITMASK : '0x' HEX+ { positionType == 0 }? { searchFor = 4; } ;
 ENUM_VALUE : '-'? NUM+ { positionType == 2 }? { searchFor = 4; } ;
-ADDRESS : HEX HEX HEX HEX HEX HEX HEX HEX { positionType == 3 }? { searchFor = 4; } ;
+ADDRESS : HEX_QUAD HEX_QUAD { positionType == 3 }? { searchFor = 4; } ;
 
-ID : CHAR+ { searchFor == 2 }? { searchFor = 3; } ;
-SIGN : CHAR ('-' | CHAR)* { searchFor == 4 }? ;
+SIGN : SIGN_CHAR ('-' | SIGN_CHAR)* { searchFor == 4 }? ; 
+ID : ~[ \t\r\n]+ { searchFor++; } ;
 
 LINE_COMMENT : '#' .*? NL -> channel(HIDDEN) ;
 WS : (' ' | '\t' ) -> skip ;
 NL : ('\r'? '\n' | '\r')+ { searchFor = 0; } ;
-ANY : ~[ \t\r\n]+ { searchFor++; } ;
 
 fragment NUM : [0-9] ;
 fragment HEX : [a-fA-F0-9] ;
-fragment CHAR : [a-zA-Z_0-9\u002A\u002C\u002E\u003A\u003C\u003E\u007E] ;
+fragment HEX_QUAD : HEX HEX HEX HEX ;
+fragment ID_CHAR : '\\u' HEX_QUAD ;
+/*
+ * 002A = *, 002C = ,, 002E = ., 003A = :, 003C = <, 003E = >, 007E = ~
+ * - is separator, don't put it to SIGN_CHAR
+ */
+fragment SIGN_CHAR : [a-zA-Z_0-9\u002A\u002C\u002E\u003A\u003C\u003E\u007E] ;

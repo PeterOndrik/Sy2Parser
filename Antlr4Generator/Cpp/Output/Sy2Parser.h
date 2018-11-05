@@ -15,7 +15,7 @@ public:
     ENCODING = 1, LITTLE_ENDIAN = 2, BIG_ENDIAN = 3, SIGN_VERSION = 4, V2016 = 5, 
     REG_VAR = 6, REG_CMD = 7, BIT = 8, STRUCT = 9, UNION = 10, ENUM = 11, 
     PROC = 12, DATA = 13, OFFSET = 14, BITMASK = 15, ENUM_VALUE = 16, ADDRESS = 17, 
-    ID = 18, SIGN = 19, LINE_COMMENT = 20, WS = 21, NL = 22, ANY = 23
+    SIGN = 18, ID = 19, LINE_COMMENT = 20, WS = 21, NL = 22
   };
 
   enum {

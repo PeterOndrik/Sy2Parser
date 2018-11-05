@@ -61,4 +61,8 @@ SIZE : [0-9]+ { afterSize++; } ;
 SEP : '-' ;
 ID : CHAR+ { isStruct > 0 }? { isStruct = 0 ; } ;
 
+/*
+ * 002A = *, 002C = ,, 002E = ., 003A = :, 003C = <, 003E = >, 007E = ~
+ * - is separator, don't put it to CHAR
+ */
 fragment CHAR : [a-zA-Z_0-9\u002A\u002C\u002E\u003A\u003C\u003E\u007E] ;

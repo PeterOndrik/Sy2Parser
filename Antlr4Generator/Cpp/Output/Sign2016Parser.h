@@ -214,7 +214,8 @@ public:
     StructTypeContext *structType();
     PtrTypeContext *ptrType();
     FunctionContext *function();
-    TypeQualifierContext *typeQualifier();
+    std::vector<TypeQualifierContext *> typeQualifier();
+    TypeQualifierContext* typeQualifier(size_t i);
     std::vector<ArraySizeContext *> arraySize();
     ArraySizeContext* arraySize(size_t i);
 

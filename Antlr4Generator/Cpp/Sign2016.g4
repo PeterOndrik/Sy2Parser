@@ -33,7 +33,7 @@ intType : typeQualifier? INT_TYPE size (arraySizes += arraySize)* ;
 uintType : typeQualifier? UINT_TYPE size (arraySizes += arraySize)* ;
 floatType : typeQualifier? FLOAT_TYPE size (arraySizes += arraySize)* ;
 structType : typeQualifier? STRUCT_TYPE size (arraySizes += arraySize)* SEP name ;
-ptrType : typeQualifier? PTR_TYPE size (arraySizes += arraySize)* SEP (voidType | boolType | intType | uintType | floatType | structType | ptrType | function) ;
+ptrType : typeQualifier? PTR_TYPE size (arraySizes += arraySize)* SEP (typeQualifier? voidType | boolType | intType | uintType | floatType | structType | ptrType | function) ;
 function : FB SEP returnType (SEP paramType)+ SEP FE ;
 returnType : (voidType | boolType | intType | uintType | floatType | structType | ptrType) ;
 paramType : (voidType | boolType | intType | uintType | floatType | structType | ptrType) ;
@@ -61,4 +61,8 @@ SIZE : [0-9]+ { afterSize++; } ;
 SEP : '-' ;
 ID : CHAR+ { isStruct > 0 }? { isStruct = 0 ; } ;
 
+/*
+ * 002A = *, 002C = ,, 002E = ., 003A = :, 003C = <, 003E = >, 007E = ~
+ * - is separator, don't put it to CHAR
+ */
 fragment CHAR : [a-zA-Z_0-9\u002A\u002C\u002E\u003A\u003C\u003E\u007E] ;

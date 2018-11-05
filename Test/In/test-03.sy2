@@ -4,7 +4,7 @@
 
 # Loaded DWARF Library: L:\Projects\EDS-TOOLS_TEST_ENGINE\ComplexSolution\MS_STUDIO_DOT_NET\Debug\dwarf_gnu_mid0003.dll
 # Origin:               L:\Projects\EDS-TOOLS_TEST_ENGINE\_test\MyTest\i386.elf
-# Created at:           Fri Oct 26 14:47:11 2018
+# Created at:           Mon Nov  5 13:26:20 2018
 
 Encoding little_endian
 
@@ -14,113 +14,186 @@ TEngSetSignVersion 2016
 #             unit name: test.c
 
 # Bit field TAG BitFieldTag, sizeof(BitFieldTag) is 8 Byte(s):
-# Command Type   Name              Offset     Bitmask     Signature
-# ------------------------------------------------------------------------------------------------------------------
-RegVar    BIT    BitFieldTag       0          0x0         S64-BitFieldTag                                           
-RegVar    BIT    BitFieldTag_a     0          0x1         UI32                                                      
-RegVar    BIT    BitFieldTag_b     0          0x2         UI32                                                      
-RegVar    BIT    BitFieldTag_c     0          0xC         UI32                                                      
-RegVar    BIT    BitFieldTag_d     0          0x70        UI32                                                      
-RegVar    BIT    BitFieldTag_e     0          0x180       UI32                                                      
-RegVar    BIT    BitFieldTag_f     0          0x1FE00     UI32                                                      
-RegVar    BIT    BitFieldTag_g     4          0xFFFF      UI32                                                      
+# Command Type   Name                                                  Offset     Bitmask     Signature
+# ------------------------------------------------------------------------------------------------------------------------------------------------------
+RegVar    BIT    BitFieldTag                                           0          0x0         S64-BitFieldTag                                           
+RegVar    BIT    BitFieldTag_a                                         0          0x1         UI32                                                      
+RegVar    BIT    BitFieldTag_b                                         0          0x2         UI32                                                      
+RegVar    BIT    BitFieldTag_c                                         0          0xC         UI32                                                      
+RegVar    BIT    BitFieldTag_d                                         0          0x70        UI32                                                      
+RegVar    BIT    BitFieldTag_e                                         0          0x180       UI32                                                      
+RegVar    BIT    BitFieldTag_f                                         0          0x1FE00     UI32                                                      
+RegVar    BIT    BitFieldTag_g                                         4          0xFFFF      UI32                                                      
 
 # Structure TAG PointTag, sizeof(PointTag) is 16 Byte(s):
-# Command Type   Name              Offset      Signature
-# -------------------------------------------------------------------------------------------------------
-RegVar    STRUCT PointTag          0           S128-PointTag                                             
-RegVar    STRUCT PointTag_x        0           F32                                                       
-RegVar    STRUCT PointTag_y        4           F96                                                       
+# Command Type   Name                                                  Offset      Signature
+# -------------------------------------------------------------------------------------------------------------------------------------------
+RegVar    STRUCT PointTag                                              0           S128-PointTag                                             
+RegVar    STRUCT PointTag_x                                            0           F32                                                       
+RegVar    STRUCT PointTag_y                                            4           F96                                                       
+
+# Structure TAG AnonymousStructType, sizeof(AnonymousStructType) is 8 Byte(s):
+# Command Type   Name                                                  Offset      Signature
+# -------------------------------------------------------------------------------------------------------------------------------------------
+RegVar    STRUCT AnonymousStructType                                   0           S64-AnonymousStructType                                   
+RegVar    STRUCT AnonymousStructType_alpha                             0           I8                                                        
+RegVar    STRUCT AnonymousStructType_num                               4           I32                                                       
+
+# Structure TAG Object0x295, sizeof(Object0x295) is 4 Byte(s):
+# Command Type   Name                                                  Offset      Signature
+# -------------------------------------------------------------------------------------------------------------------------------------------
+RegVar    STRUCT Object0x295                                           0           S32-Object0x295                                           
+RegVar    STRUCT Object0x295_num                                       0           I32                                                       
+
+# Structure TAG AnonymousStructType2, sizeof(AnonymousStructType2) is 8 Byte(s):
+# Command Type   Name                                                  Offset      Signature
+# -------------------------------------------------------------------------------------------------------------------------------------------
+RegVar    STRUCT AnonymousStructType2                                  0           S64-AnonymousStructType2                                  
+RegVar    STRUCT AnonymousStructType2_alpha                            0           I8                                                        
+RegVar    STRUCT AnonymousStructType2_beta                             4           S32-Object0x295                                           
 
 # Union TAG DataTag, sizeof(DataTag) is 20 Byte(s):
-# Command Type   Name              Offset      Signature
-# -------------------------------------------------------------------------------------------------------
-RegVar    UNION  DataTag           0           S160-DataTag                                              
-RegVar    UNION  DataTag_i         0           I32                                                       
-RegVar    UNION  DataTag_f         0           F32                                                       
-RegVar    UNION  DataTag_str       0           I8-20                                                     
+# Command Type   Name                                                  Offset      Signature
+# -------------------------------------------------------------------------------------------------------------------------------------------
+RegVar    UNION  DataTag                                               0           S160-DataTag                                              
+RegVar    UNION  DataTag_i                                             0           I32                                                       
+RegVar    UNION  DataTag_f                                             0           F32                                                       
+RegVar    UNION  DataTag_str                                           0           I8-20                                                     
+
+# Enumeration TAG Object0x34a, sizeof(Object0x34a) is 4 Byte(s):
+# Command Type   Name                                                  Value       Signature
+# -------------------------------------------------------------------------------------------------------------------------------------------
+RegVar    ENUM   Object0x34a_SND_MSG_TYPE_FILE                         0           UI32                                                      
+
+# Structure TAG SND_FileSettings, sizeof(SND_FileSettings) is 12 Byte(s):
+# Command Type   Name                                                  Offset      Signature
+# -------------------------------------------------------------------------------------------------------------------------------------------
+RegVar    STRUCT SND_FileSettings                                      0           S96-SND_FileSettings                                      
+RegVar    STRUCT SND_FileSettings_samplerate                           0           UI32                                                      
+RegVar    STRUCT SND_FileSettings_channels                             4           UI32                                                      
+RegVar    STRUCT SND_FileSettings_bits_per_channel                     8           UI32                                                      
+
+# Structure TAG SND_WaveFile, sizeof(SND_WaveFile) is 20 Byte(s):
+# Command Type   Name                                                  Offset      Signature
+# -------------------------------------------------------------------------------------------------------------------------------------------
+RegVar    STRUCT SND_WaveFile                                          0           S160-SND_WaveFile                                         
+RegVar    STRUCT SND_WaveFile_file_settings                            0           S96-SND_FileSettings                                      
+RegVar    STRUCT SND_WaveFile_data                                     12          PTR32-C-V                                                 
+RegVar    STRUCT SND_WaveFile_samples                                  16          UI32                                                      
+
+# Union TAG Object0x440, sizeof(Object0x440) is 20 Byte(s):
+# Command Type   Name                                                  Offset      Signature
+# -------------------------------------------------------------------------------------------------------------------------------------------
+RegVar    UNION  Object0x440                                           0           S160-Object0x440                                          
+RegVar    UNION  Object0x440_wave_file                                 0           S160-SND_WaveFile                                         
+
+# Structure TAG SND_MSG, sizeof(SND_MSG) is 24 Byte(s):
+# Command Type   Name                                                  Offset      Signature
+# -------------------------------------------------------------------------------------------------------------------------------------------
+RegVar    STRUCT SND_MSG                                               0           S192-SND_MSG                                              
+RegVar    STRUCT SND_MSG_type                                          0           I8                                                        
+RegVar    STRUCT SND_MSG_msg                                           4           S160-Object0x440                                          
 
 # Enumeration TAG ColorTag, sizeof(ColorTag) is 4 Byte(s):
-# Command Type   Name              Value       Signature
-# -------------------------------------------------------------------------------------------------------
-RegVar    ENUM   ColorTag_BLACK    -1          I32                                                       
-RegVar    ENUM   ColorTag_RED      0           I32                                                       
-RegVar    ENUM   ColorTag_BLUE     1           I32                                                       
-RegVar    ENUM   ColorTag_GREEN    2           I32                                                       
-RegVar    ENUM   ColorTag_YELLOW   3           I32                                                       
-RegVar    ENUM   ColorTag_WHITE    4           I32                                                       
+# Command Type   Name                                                  Value       Signature
+# -------------------------------------------------------------------------------------------------------------------------------------------
+RegVar    ENUM   ColorTag_BLACK                                        -1          I32                                                       
+RegVar    ENUM   ColorTag_RED                                          0           I32                                                       
+RegVar    ENUM   ColorTag_BLUE                                         1           I32                                                       
+RegVar    ENUM   ColorTag_GREEN                                        2           I32                                                       
+RegVar    ENUM   ColorTag_YELLOW                                       3           I32                                                       
+RegVar    ENUM   ColorTag_WHITE                                        4           I32                                                       
 
-# Command Type   Name              Address     Signature
-# -------------------------------------------------------------------------------------------------------
-RegCmd    PROC   func1             004013E0    FB-V-V-FE                                                 
-RegCmd    PROC   func2             004013E5    FB-I32-C-PTR32-I8-FE                                      
-RegCmd    PROC   func3             004013EF    FB-PTR32-FB-PTR32-V-I16-FE-PTR32-FB-I8-F32-FE-PTR32-I16-FE
-RegCmd    PROC   func4             004013F9    FB-I16-C-PTR32-FB-I16-I16-I32-UI8-FE-FE                   
-RegCmd    PROC   func5             00401403    FB-V-I8-F32-FE                                            
-RegCmd    PROC   func6             00401411    FB-V-F64-F96-FE                                           
-RegCmd    PROC   func7             00401425    FB-F96-F64-F96-FE                                         
-RegCmd    PROC   func8             00401454    FB-C-PTR32-S128-PointTag-PTR32-C-S128-PointTag-UI32-UI8-FE
-RegCmd    PROC   main              00401467    FB-I32-I32-PTR32-PTR32-I8-FE                              
+# Command Type   Name                                                  Address     Signature
+# -------------------------------------------------------------------------------------------------------------------------------------------
+RegCmd    PROC   func1                                                 004013E0    FB-V-V-FE                                                 
+RegCmd    PROC   func2                                                 004013E5    FB-I32-C-PTR32-I8-FE                                      
+RegCmd    PROC   func3                                                 004013EF    FB-PTR32-FB-PTR32-V-I16-FE-PTR32-FB-I8-F32-FE-PTR32-I16-FE
+RegCmd    PROC   func4                                                 004013F9    FB-I16-C-PTR32-FB-I16-I16-I32-UI8-FE-FE                   
+RegCmd    PROC   func5                                                 00401403    FB-V-I8-F32-FE                                            
+RegCmd    PROC   func6                                                 00401411    FB-V-F64-F96-FE                                           
+RegCmd    PROC   func7                                                 00401425    FB-F96-F64-F96-FE                                         
+RegCmd    PROC   func8                                                 00401454    FB-C-PTR32-S128-PointTag-PTR32-C-S128-PointTag-UI32-UI8-FE
+RegCmd    PROC   func9                                                 00401467    FB-V-V-FE                                                 
+RegCmd    PROC   main                                                  0040146C    FB-I32-I32-PTR32-PTR32-I8-FE                              
 
-# Command Type   Name              Address     Signature
-# -------------------------------------------------------------------------------------------------------
-RegCmd    DATA   var1              0040DF1C    I32                                                       
-RegCmd    DATA   var2              0040DE1C    C-UI8                                                     
-RegCmd    DATA   var3              0040DF00    C-PTR32-PTR32-PTR32-I32                                   
-RegCmd    DATA   var4              00409000    F32                                                       
-RegCmd    DATA   var5              00409008    F64                                                       
-RegCmd    DATA   var6              00409010    F96                                                       
-RegCmd    DATA   arr1              0040DDA0    UI16-14                                                   
-RegCmd    DATA   arr2              0040DCE0    I32-10                                                    
-RegCmd    DATA   arr3              0040DA40    F32-105                                                   
-RegCmd    DATA   arr4              0040DDC0    C-PTR32-6-I32                                             
-RegCmd    DATA   arr5              0040DF20    C-I32-6                                                   
-RegCmd    DATA   arr6              0040DF04    PTR32-6-C-I32                                             
-RegCmd    DATA   arr7              0040DE20    PTR32-56-UI32-6                                           
-RegCmd    DATA   arr8              0040DDE0    F96-5                                                     
-RegCmd    DATA   ptr1              0040DD38    C-PTR32-I16                                               
-RegCmd    DATA   ptr2              0040DDBC    PTR32-C-UI32                                              
-RegCmd    DATA   ptr3              0040DDD8    C-PTR32-I32                                               
-RegCmd    DATA   bitField1         0040DD30    S64-BitFieldTag                                           
-RegCmd    DATA   bitField1_a       0040DD30    UI32                                                      
-RegCmd    DATA   bitField1_b       0040DD30    UI32                                                      
-RegCmd    DATA   bitField1_c       0040DD30    UI32                                                      
-RegCmd    DATA   bitField1_d       0040DD30    UI32                                                      
-RegCmd    DATA   bitField1_e       0040DD30    UI32                                                      
-RegCmd    DATA   bitField1_f       0040DD30    UI32                                                      
-RegCmd    DATA   bitField1_g       0040DD34    UI32                                                      
-RegCmd    DATA   point1            0040DD20    S128-PointTag                                             
-RegCmd    DATA   point1_x          0040DD20    F32                                                       
-RegCmd    DATA   point1_y          0040DD24    F96                                                       
-RegCmd    DATA   point2            0040DD08    PTR32-S128-PointTag                                       
-RegCmd    DATA   point3            0040DC00    S128-14-PointTag                                          
-RegCmd    DATA   point3_x          0040DC00    F32                                                       
-RegCmd    DATA   point3_y          0040DC04    F96                                                       
-RegCmd    DATA   point4            0040DF40    C-S128-20-PointTag                                        
-RegCmd    DATA   point4_x          0040DF40    F32                                                       
-RegCmd    DATA   point4_y          0040DF44    F96                                                       
-RegCmd    DATA   point5            0040DD40    C-S128-6-PointTag                                         
-RegCmd    DATA   point5_x          0040DD40    F32                                                       
-RegCmd    DATA   point5_y          0040DD44    F96                                                       
-RegCmd    DATA   data1             0040DD0C    S160-DataTag                                              
-RegCmd    DATA   data1_i           0040DD0C    I32                                                       
-RegCmd    DATA   data1_f           0040DD0C    F32                                                       
-RegCmd    DATA   data1_str         0040DD0C    I8-20                                                     
-RegCmd    DATA   color1            0040DA20    I32                                                       
+# Command Type   Name                                                  Address     Signature
+# -------------------------------------------------------------------------------------------------------------------------------------------
+RegCmd    DATA   var1                                                  0040DF5C    I32                                                       
+RegCmd    DATA   var2                                                  0040DE5C    C-UI8                                                     
+RegCmd    DATA   var3                                                  0040DF40    C-PTR32-PTR32-PTR32-I32                                   
+RegCmd    DATA   var4                                                  00409000    F32                                                       
+RegCmd    DATA   var5                                                  00409008    F64                                                       
+RegCmd    DATA   var6                                                  00409010    F96                                                       
+RegCmd    DATA   arr1                                                  0040DDC0    UI16-14                                                   
+RegCmd    DATA   arr2                                                  0040DCE0    I32-10                                                    
+RegCmd    DATA   arr3                                                  0040DA40    F32-105                                                   
+RegCmd    DATA   arr4                                                  0040DDE0    C-PTR32-6-I32                                             
+RegCmd    DATA   arr5                                                  0040DF60    C-I32-6                                                   
+RegCmd    DATA   arr6                                                  0040DF44    PTR32-6-C-I32                                             
+RegCmd    DATA   arr7                                                  0040DE60    PTR32-56-UI32-6                                           
+RegCmd    DATA   arr8                                                  0040DE20    F96-5                                                     
+RegCmd    DATA   ptr1                                                  0040DD3C    C-PTR32-I16                                               
+RegCmd    DATA   ptr2                                                  0040DDDC    PTR32-C-UI32                                              
+RegCmd    DATA   ptr3                                                  0040DDF8    C-PTR32-I32                                               
+RegCmd    DATA   bitField1                                             0040DD34    S64-BitFieldTag                                           
+RegCmd    DATA   bitField1_a                                           0040DD34    UI32                                                      
+RegCmd    DATA   bitField1_b                                           0040DD34    UI32                                                      
+RegCmd    DATA   bitField1_c                                           0040DD34    UI32                                                      
+RegCmd    DATA   bitField1_d                                           0040DD34    UI32                                                      
+RegCmd    DATA   bitField1_e                                           0040DD34    UI32                                                      
+RegCmd    DATA   bitField1_f                                           0040DD34    UI32                                                      
+RegCmd    DATA   bitField1_g                                           0040DD38    UI32                                                      
+RegCmd    DATA   point1                                                0040DD24    S128-PointTag                                             
+RegCmd    DATA   point1_x                                              0040DD24    F32                                                       
+RegCmd    DATA   point1_y                                              0040DD28    F96                                                       
+RegCmd    DATA   point2                                                0040DD0C    PTR32-S128-PointTag                                       
+RegCmd    DATA   point3                                                0040DC00    S128-14-PointTag                                          
+RegCmd    DATA   point3_x                                              0040DC00    F32                                                       
+RegCmd    DATA   point3_y                                              0040DC04    F96                                                       
+RegCmd    DATA   point4                                                0040DF80    C-S128-20-PointTag                                        
+RegCmd    DATA   point4_x                                              0040DF80    F32                                                       
+RegCmd    DATA   point4_y                                              0040DF84    F96                                                       
+RegCmd    DATA   point5                                                0040DD60    C-S128-6-PointTag                                         
+RegCmd    DATA   point5_x                                              0040DD60    F32                                                       
+RegCmd    DATA   point5_y                                              0040DD64    F96                                                       
+RegCmd    DATA   anonymousStruct                                       0040DD40    S64-AnonymousStructType                                   
+RegCmd    DATA   anonymousStruct_alpha                                 0040DD40    I8                                                        
+RegCmd    DATA   anonymousStruct_num                                   0040DD44    I32                                                       
+RegCmd    DATA   anonymousStruct2                                      0040DF78    S64-AnonymousStructType2                                  
+RegCmd    DATA   anonymousStruct2_alpha                                0040DF78    I8                                                        
+RegCmd    DATA   anonymousStruct2_beta                                 0040DF7C    S32-Object0x295                                           
+RegCmd    DATA   anonymousStruct2_beta_num                             0040DF7C    I32                                                       
+RegCmd    DATA   message                                               0040DDFC    S192-SND_MSG                                              
+RegCmd    DATA   message_type                                          0040DDFC    I8                                                        
+RegCmd    DATA   message_msg                                           0040DE00    S160-Object0x440                                          
+RegCmd    DATA   message_msg_wave_file                                 0040DE00    S160-SND_WaveFile                                         
+RegCmd    DATA   message_msg_wave_file_file_settings                   0040DE00    S96-SND_FileSettings                                      
+RegCmd    DATA   message_msg_wave_file_file_settings_samplerate        0040DE00    UI32                                                      
+RegCmd    DATA   message_msg_wave_file_file_settings_channels          0040DE04    UI32                                                      
+RegCmd    DATA   message_msg_wave_file_file_settings_bits_per_channel  0040DE08    UI32                                                      
+RegCmd    DATA   message_msg_wave_file_data                            0040DE0C    PTR32-C-V                                                 
+RegCmd    DATA   message_msg_wave_file_samples                         0040DE10    UI32                                                      
+RegCmd    DATA   message_type                                          0040DD08    UI32                                                      
+RegCmd    DATA   data1                                                 0040DD10    S160-DataTag                                              
+RegCmd    DATA   data1_i                                               0040DD10    I32                                                       
+RegCmd    DATA   data1_f                                               0040DD10    F32                                                       
+RegCmd    DATA   data1_str                                             0040DD10    I8-20                                                     
+RegCmd    DATA   color1                                                0040DA20    I32                                                       
 
 
-# Number of registered DATA objects in this CU: 43
-# Number of registered PROC objects in this CU: 9
+# Number of registered DATA objects in this CU: 61
+# Number of registered PROC objects in this CU: 10
 
 
 
-# Summary of registered objects (70):
+# Summary of registered objects (104):
 
-# Number of Variables:         43
-# Number of Functions:         9
-# Number of Structure members: 9
-# Number of Union members:     3
-# Number of Enumerations:      6
+# Number of Variables:         61
+# Number of Functions:         10
+# Number of Structure members: 22
+# Number of Union members:     4
+# Number of Enumerations:      7
 
 # Warning: Missing address class.
 
