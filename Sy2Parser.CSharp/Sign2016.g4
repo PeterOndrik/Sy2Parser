@@ -48,7 +48,7 @@ name : ID ;
 
 TYPE_QUALIFIER : 'C' ;
 VOID_TYPE : 'V' ;
-BOOL_TYPE : 'B' ;
+BOOL_TYPE : 'B' { afterSize++;} ; // doesn't have token SIZE but may be array e.g. B-5
 INT_TYPE : 'I' { afterSize = 0; };
 UINT_TYPE : 'UI' { afterSize = 0; } ;
 FLOAT_TYPE : 'F' { afterSize = 0; } ;
@@ -62,7 +62,7 @@ SEP : '-' ;
 ID : CHAR+ { isStruct > 0 }? { isStruct = 0 ; } ;
 
 /*
- * 002A = *, 002C = ,, 002E = ., 003A = :, 003C = <, 003E = >, 007E = ~
+ * 0026 = &, 0028 = (, 0029 = ), 002A = *, 002C = ,, 002E = ., 003A = :, 003C = <, 003E = >, 007E = ~
  * - is separator, don't put it to CHAR
  */
-fragment CHAR : [a-zA-Z_0-9\u002A\u002C\u002E\u003A\u003C\u003E\u007E] ;
+fragment CHAR : [a-zA-Z_0-9\u0026\u0028\u0029\u002A\u002C\u002E\u003A\u003C\u003E\u007E] ;

@@ -16,10 +16,10 @@ public class Sy2Parser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		ENCODING=1, LITTLE_ENDIAN=2, BIG_ENDIAN=3, SIGN_VERSION=4, V2016=5, REG_VAR=6, 
-		REG_CMD=7, BIT=8, STRUCT=9, UNION=10, ENUM=11, PROC=12, DATA=13, OFFSET=14, 
-		BITMASK=15, ENUM_VALUE=16, ADDRESS=17, SIGN=18, ID=19, LINE_COMMENT=20, 
-		WS=21, NL=22;
+		ENCODING=1, LITTLE_ENDIAN=2, BIG_ENDIAN=3, SIGNATURE_VERSION=4, V2016=5, 
+		REG_VAR=6, REG_CMD=7, BIT=8, STRUCT=9, UNION=10, ENUM=11, PROC=12, DATA=13, 
+		OFFSET=14, BITMASK=15, ENUM_VALUE=16, ADDRESS=17, SIGNATURE=18, ID=19, 
+		LINE_COMMENT=20, WS=21, NL=22;
 	public static final int
 		RULE_file = 0, RULE_command = 1, RULE_encodingValue = 2, RULE_signValue = 3, 
 		RULE_typeDefinition = 4, RULE_symbol = 5, RULE_name = 6, RULE_offset = 7, 
@@ -34,10 +34,10 @@ public class Sy2Parser extends Parser {
 		"'2016'", "'RegVar'", "'RegCmd'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
-		null, "ENCODING", "LITTLE_ENDIAN", "BIG_ENDIAN", "SIGN_VERSION", "V2016", 
-		"REG_VAR", "REG_CMD", "BIT", "STRUCT", "UNION", "ENUM", "PROC", "DATA", 
-		"OFFSET", "BITMASK", "ENUM_VALUE", "ADDRESS", "SIGN", "ID", "LINE_COMMENT", 
-		"WS", "NL"
+		null, "ENCODING", "LITTLE_ENDIAN", "BIG_ENDIAN", "SIGNATURE_VERSION", 
+		"V2016", "REG_VAR", "REG_CMD", "BIT", "STRUCT", "UNION", "ENUM", "PROC", 
+		"DATA", "OFFSET", "BITMASK", "ENUM_VALUE", "ADDRESS", "SIGNATURE", "ID", 
+		"LINE_COMMENT", "WS", "NL"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -164,7 +164,7 @@ public class Sy2Parser extends Parser {
 					}
 					break;
 				case ENCODING:
-				case SIGN_VERSION:
+				case SIGNATURE_VERSION:
 				case REG_VAR:
 				case REG_CMD:
 					{
@@ -180,7 +180,7 @@ public class Sy2Parser extends Parser {
 				setState(28); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << ENCODING) | (1L << SIGN_VERSION) | (1L << REG_VAR) | (1L << REG_CMD) | (1L << NL))) != 0) );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << ENCODING) | (1L << SIGNATURE_VERSION) | (1L << REG_VAR) | (1L << REG_CMD) | (1L << NL))) != 0) );
 			setState(30);
 			match(EOF);
 			}
@@ -202,7 +202,7 @@ public class Sy2Parser extends Parser {
 			return getRuleContext(EncodingValueContext.class,0);
 		}
 		public TerminalNode NL() { return getToken(Sy2Parser.NL, 0); }
-		public TerminalNode SIGN_VERSION() { return getToken(Sy2Parser.SIGN_VERSION, 0); }
+		public TerminalNode SIGNATURE_VERSION() { return getToken(Sy2Parser.SIGNATURE_VERSION, 0); }
 		public SignValueContext signValue() {
 			return getRuleContext(SignValueContext.class,0);
 		}
@@ -246,11 +246,11 @@ public class Sy2Parser extends Parser {
 				match(NL);
 				}
 				break;
-			case SIGN_VERSION:
+			case SIGNATURE_VERSION:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(36);
-				match(SIGN_VERSION);
+				match(SIGNATURE_VERSION);
 				setState(37);
 				signValue();
 				setState(38);
@@ -748,7 +748,7 @@ public class Sy2Parser extends Parser {
 	}
 
 	public static class SignatureContext extends ParserRuleContext {
-		public TerminalNode SIGN() { return getToken(Sy2Parser.SIGN, 0); }
+		public TerminalNode SIGNATURE() { return getToken(Sy2Parser.SIGNATURE, 0); }
 		public SignatureContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -770,7 +770,7 @@ public class Sy2Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(99);
-			match(SIGN);
+			match(SIGNATURE);
 			}
 		}
 		catch (RecognitionException re) {

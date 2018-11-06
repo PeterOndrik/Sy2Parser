@@ -107,7 +107,7 @@ Sy2Parser::FileContext* Sy2Parser::file() {
         }
 
         case Sy2Parser::ENCODING:
-        case Sy2Parser::SIGN_VERSION:
+        case Sy2Parser::SIGNATURE_VERSION:
         case Sy2Parser::REG_VAR:
         case Sy2Parser::REG_CMD: {
           setState(25);
@@ -124,7 +124,7 @@ Sy2Parser::FileContext* Sy2Parser::file() {
       _la = _input->LA(1);
     } while ((((_la & ~ 0x3fULL) == 0) &&
       ((1ULL << _la) & ((1ULL << Sy2Parser::ENCODING)
-      | (1ULL << Sy2Parser::SIGN_VERSION)
+      | (1ULL << Sy2Parser::SIGNATURE_VERSION)
       | (1ULL << Sy2Parser::REG_VAR)
       | (1ULL << Sy2Parser::REG_CMD)
       | (1ULL << Sy2Parser::NL))) != 0));
@@ -159,8 +159,8 @@ tree::TerminalNode* Sy2Parser::CommandContext::NL() {
   return getToken(Sy2Parser::NL, 0);
 }
 
-tree::TerminalNode* Sy2Parser::CommandContext::SIGN_VERSION() {
-  return getToken(Sy2Parser::SIGN_VERSION, 0);
+tree::TerminalNode* Sy2Parser::CommandContext::SIGNATURE_VERSION() {
+  return getToken(Sy2Parser::SIGNATURE_VERSION, 0);
 }
 
 Sy2Parser::SignValueContext* Sy2Parser::CommandContext::signValue() {
@@ -230,10 +230,10 @@ Sy2Parser::CommandContext* Sy2Parser::command() {
         break;
       }
 
-      case Sy2Parser::SIGN_VERSION: {
+      case Sy2Parser::SIGNATURE_VERSION: {
         enterOuterAlt(_localctx, 2);
         setState(36);
-        match(Sy2Parser::SIGN_VERSION);
+        match(Sy2Parser::SIGNATURE_VERSION);
         setState(37);
         signValue();
         setState(38);
@@ -944,8 +944,8 @@ Sy2Parser::SignatureContext::SignatureContext(ParserRuleContext *parent, size_t 
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* Sy2Parser::SignatureContext::SIGN() {
-  return getToken(Sy2Parser::SIGN, 0);
+tree::TerminalNode* Sy2Parser::SignatureContext::SIGNATURE() {
+  return getToken(Sy2Parser::SIGNATURE, 0);
 }
 
 
@@ -983,7 +983,7 @@ Sy2Parser::SignatureContext* Sy2Parser::signature() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(99);
-    match(Sy2Parser::SIGN);
+    match(Sy2Parser::SIGNATURE);
    
   }
   catch (RecognitionException &e) {
@@ -1014,9 +1014,9 @@ std::vector<std::string> Sy2Parser::_literalNames = {
 };
 
 std::vector<std::string> Sy2Parser::_symbolicNames = {
-  "", "ENCODING", "LITTLE_ENDIAN", "BIG_ENDIAN", "SIGN_VERSION", "V2016", 
+  "", "ENCODING", "LITTLE_ENDIAN", "BIG_ENDIAN", "SIGNATURE_VERSION", "V2016", 
   "REG_VAR", "REG_CMD", "BIT", "STRUCT", "UNION", "ENUM", "PROC", "DATA", 
-  "OFFSET", "BITMASK", "ENUM_VALUE", "ADDRESS", "SIGN", "ID", "LINE_COMMENT", 
+  "OFFSET", "BITMASK", "ENUM_VALUE", "ADDRESS", "SIGNATURE", "ID", "LINE_COMMENT", 
   "WS", "NL"
 };
 

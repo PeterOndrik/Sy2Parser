@@ -16,10 +16,10 @@ public class Sy2Lexer extends Lexer {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		ENCODING=1, LITTLE_ENDIAN=2, BIG_ENDIAN=3, SIGN_VERSION=4, V2016=5, REG_VAR=6, 
-		REG_CMD=7, BIT=8, STRUCT=9, UNION=10, ENUM=11, PROC=12, DATA=13, OFFSET=14, 
-		BITMASK=15, ENUM_VALUE=16, ADDRESS=17, SIGN=18, ID=19, LINE_COMMENT=20, 
-		WS=21, NL=22;
+		ENCODING=1, LITTLE_ENDIAN=2, BIG_ENDIAN=3, SIGNATURE_VERSION=4, V2016=5, 
+		REG_VAR=6, REG_CMD=7, BIT=8, STRUCT=9, UNION=10, ENUM=11, PROC=12, DATA=13, 
+		OFFSET=14, BITMASK=15, ENUM_VALUE=16, ADDRESS=17, SIGNATURE=18, ID=19, 
+		LINE_COMMENT=20, WS=21, NL=22;
 	public static String[] channelNames = {
 		"DEFAULT_TOKEN_CHANNEL", "HIDDEN"
 	};
@@ -29,10 +29,10 @@ public class Sy2Lexer extends Lexer {
 	};
 
 	public static final String[] ruleNames = {
-		"ENCODING", "LITTLE_ENDIAN", "BIG_ENDIAN", "SIGN_VERSION", "V2016", "REG_VAR", 
-		"REG_CMD", "BIT", "STRUCT", "UNION", "ENUM", "PROC", "DATA", "OFFSET", 
-		"BITMASK", "ENUM_VALUE", "ADDRESS", "SIGN", "ID", "LINE_COMMENT", "WS", 
-		"NL", "NUM", "HEX", "HEX_QUAD", "ID_CHAR", "SIGN_CHAR"
+		"ENCODING", "LITTLE_ENDIAN", "BIG_ENDIAN", "SIGNATURE_VERSION", "V2016", 
+		"REG_VAR", "REG_CMD", "BIT", "STRUCT", "UNION", "ENUM", "PROC", "DATA", 
+		"OFFSET", "BITMASK", "ENUM_VALUE", "ADDRESS", "SIGNATURE", "ID", "LINE_COMMENT", 
+		"WS", "NL", "NUM", "HEX", "HEX_QUAD", "ID_CHAR", "SIGNATURE_CHAR"
 	};
 
 	private static final String[] _LITERAL_NAMES = {
@@ -40,10 +40,10 @@ public class Sy2Lexer extends Lexer {
 		"'2016'", "'RegVar'", "'RegCmd'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
-		null, "ENCODING", "LITTLE_ENDIAN", "BIG_ENDIAN", "SIGN_VERSION", "V2016", 
-		"REG_VAR", "REG_CMD", "BIT", "STRUCT", "UNION", "ENUM", "PROC", "DATA", 
-		"OFFSET", "BITMASK", "ENUM_VALUE", "ADDRESS", "SIGN", "ID", "LINE_COMMENT", 
-		"WS", "NL"
+		null, "ENCODING", "LITTLE_ENDIAN", "BIG_ENDIAN", "SIGNATURE_VERSION", 
+		"V2016", "REG_VAR", "REG_CMD", "BIT", "STRUCT", "UNION", "ENUM", "PROC", 
+		"DATA", "OFFSET", "BITMASK", "ENUM_VALUE", "ADDRESS", "SIGNATURE", "ID", 
+		"LINE_COMMENT", "WS", "NL"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -297,7 +297,7 @@ public class Sy2Lexer extends Lexer {
 		case 16:
 			return ADDRESS_sempred((RuleContext)_localctx, predIndex);
 		case 17:
-			return SIGN_sempred((RuleContext)_localctx, predIndex);
+			return SIGNATURE_sempred((RuleContext)_localctx, predIndex);
 		}
 		return true;
 	}
@@ -371,7 +371,7 @@ public class Sy2Lexer extends Lexer {
 		}
 		return true;
 	}
-	private boolean SIGN_sempred(RuleContext _localctx, int predIndex) {
+	private boolean SIGNATURE_sempred(RuleContext _localctx, int predIndex) {
 		switch (predIndex) {
 		case 10:
 			return  searchFor == 4 ;
@@ -403,42 +403,42 @@ public class Sy2Lexer extends Lexer {
 		"\33\3\34\3\34\3\u00ef\2\35\3\3\5\4\7\5\t\6\13\7\r\b\17\t\21\n\23\13\25"+
 		"\f\27\r\31\16\33\17\35\20\37\21!\22#\23%\24\'\25)\26+\27-\30/\2\61\2\63"+
 		"\2\65\2\67\2\3\2\7\5\2\13\f\17\17\"\"\4\2\13\13\"\"\3\2\62;\5\2\62;CH"+
-		"ch\f\2,,..\60\60\62<>>@@C\\aac|\u0080\u0080\2\u011a\2\3\3\2\2\2\2\5\3"+
-		"\2\2\2\2\7\3\2\2\2\2\t\3\2\2\2\2\13\3\2\2\2\2\r\3\2\2\2\2\17\3\2\2\2\2"+
-		"\21\3\2\2\2\2\23\3\2\2\2\2\25\3\2\2\2\2\27\3\2\2\2\2\31\3\2\2\2\2\33\3"+
-		"\2\2\2\2\35\3\2\2\2\2\37\3\2\2\2\2!\3\2\2\2\2#\3\2\2\2\2%\3\2\2\2\2\'"+
-		"\3\2\2\2\2)\3\2\2\2\2+\3\2\2\2\2-\3\2\2\2\39\3\2\2\2\5B\3\2\2\2\7P\3\2"+
-		"\2\2\t[\3\2\2\2\13n\3\2\2\2\rs\3\2\2\2\17|\3\2\2\2\21\u0085\3\2\2\2\23"+
-		"\u008c\3\2\2\2\25\u0096\3\2\2\2\27\u009f\3\2\2\2\31\u00a7\3\2\2\2\33\u00af"+
-		"\3\2\2\2\35\u00b8\3\2\2\2\37\u00bf\3\2\2\2!\u00cb\3\2\2\2#\u00d5\3\2\2"+
-		"\2%\u00da\3\2\2\2\'\u00e5\3\2\2\2)\u00eb\3\2\2\2+\u00f6\3\2\2\2-\u00ff"+
-		"\3\2\2\2/\u0105\3\2\2\2\61\u0107\3\2\2\2\63\u0109\3\2\2\2\65\u010e\3\2"+
-		"\2\2\67\u0113\3\2\2\29:\7G\2\2:;\7p\2\2;<\7e\2\2<=\7q\2\2=>\7f\2\2>?\7"+
-		"k\2\2?@\7p\2\2@A\7i\2\2A\4\3\2\2\2BC\7n\2\2CD\7k\2\2DE\7v\2\2EF\7v\2\2"+
-		"FG\7n\2\2GH\7g\2\2HI\7a\2\2IJ\7g\2\2JK\7p\2\2KL\7f\2\2LM\7k\2\2MN\7c\2"+
-		"\2NO\7p\2\2O\6\3\2\2\2PQ\7d\2\2QR\7k\2\2RS\7i\2\2ST\7a\2\2TU\7g\2\2UV"+
-		"\7p\2\2VW\7f\2\2WX\7k\2\2XY\7c\2\2YZ\7p\2\2Z\b\3\2\2\2[\\\7V\2\2\\]\7"+
-		"G\2\2]^\7p\2\2^_\7i\2\2_`\7U\2\2`a\7g\2\2ab\7v\2\2bc\7U\2\2cd\7k\2\2d"+
-		"e\7i\2\2ef\7p\2\2fg\7X\2\2gh\7g\2\2hi\7t\2\2ij\7u\2\2jk\7k\2\2kl\7q\2"+
-		"\2lm\7p\2\2m\n\3\2\2\2no\7\64\2\2op\7\62\2\2pq\7\63\2\2qr\78\2\2r\f\3"+
-		"\2\2\2st\7T\2\2tu\7g\2\2uv\7i\2\2vw\7X\2\2wx\7c\2\2xy\7t\2\2yz\3\2\2\2"+
-		"z{\b\7\2\2{\16\3\2\2\2|}\7T\2\2}~\7g\2\2~\177\7i\2\2\177\u0080\7E\2\2"+
-		"\u0080\u0081\7o\2\2\u0081\u0082\7f\2\2\u0082\u0083\3\2\2\2\u0083\u0084"+
-		"\b\b\3\2\u0084\20\3\2\2\2\u0085\u0086\7D\2\2\u0086\u0087\7K\2\2\u0087"+
-		"\u0088\7V\2\2\u0088\u0089\3\2\2\2\u0089\u008a\6\t\2\2\u008a\u008b\b\t"+
-		"\4\2\u008b\22\3\2\2\2\u008c\u008d\7U\2\2\u008d\u008e\7V\2\2\u008e\u008f"+
-		"\7T\2\2\u008f\u0090\7W\2\2\u0090\u0091\7E\2\2\u0091\u0092\7V\2\2\u0092"+
-		"\u0093\3\2\2\2\u0093\u0094\6\n\3\2\u0094\u0095\b\n\5\2\u0095\24\3\2\2"+
-		"\2\u0096\u0097\7W\2\2\u0097\u0098\7P\2\2\u0098\u0099\7K\2\2\u0099\u009a"+
-		"\7Q\2\2\u009a\u009b\7P\2\2\u009b\u009c\3\2\2\2\u009c\u009d\6\13\4\2\u009d"+
-		"\u009e\b\13\6\2\u009e\26\3\2\2\2\u009f\u00a0\7G\2\2\u00a0\u00a1\7P\2\2"+
-		"\u00a1\u00a2\7W\2\2\u00a2\u00a3\7O\2\2\u00a3\u00a4\3\2\2\2\u00a4\u00a5"+
-		"\6\f\5\2\u00a5\u00a6\b\f\7\2\u00a6\30\3\2\2\2\u00a7\u00a8\7R\2\2\u00a8"+
-		"\u00a9\7T\2\2\u00a9\u00aa\7Q\2\2\u00aa\u00ab\7E\2\2\u00ab\u00ac\3\2\2"+
-		"\2\u00ac\u00ad\6\r\6\2\u00ad\u00ae\b\r\b\2\u00ae\32\3\2\2\2\u00af\u00b0"+
-		"\7F\2\2\u00b0\u00b1\7C\2\2\u00b1\u00b2\7V\2\2\u00b2\u00b3\7C\2\2\u00b3"+
-		"\u00b4\3\2\2\2\u00b4\u00b5\6\16\7\2\u00b5\u00b6\b\16\t\2\u00b6\34\3\2"+
-		"\2\2\u00b7\u00b9\5/\30\2\u00b8\u00b7\3\2\2\2\u00b9\u00ba\3\2\2\2\u00ba"+
+		"ch\r\2((*,..\60\60\62<>>@@C\\aac|\u0080\u0080\2\u011a\2\3\3\2\2\2\2\5"+
+		"\3\2\2\2\2\7\3\2\2\2\2\t\3\2\2\2\2\13\3\2\2\2\2\r\3\2\2\2\2\17\3\2\2\2"+
+		"\2\21\3\2\2\2\2\23\3\2\2\2\2\25\3\2\2\2\2\27\3\2\2\2\2\31\3\2\2\2\2\33"+
+		"\3\2\2\2\2\35\3\2\2\2\2\37\3\2\2\2\2!\3\2\2\2\2#\3\2\2\2\2%\3\2\2\2\2"+
+		"\'\3\2\2\2\2)\3\2\2\2\2+\3\2\2\2\2-\3\2\2\2\39\3\2\2\2\5B\3\2\2\2\7P\3"+
+		"\2\2\2\t[\3\2\2\2\13n\3\2\2\2\rs\3\2\2\2\17|\3\2\2\2\21\u0085\3\2\2\2"+
+		"\23\u008c\3\2\2\2\25\u0096\3\2\2\2\27\u009f\3\2\2\2\31\u00a7\3\2\2\2\33"+
+		"\u00af\3\2\2\2\35\u00b8\3\2\2\2\37\u00bf\3\2\2\2!\u00cb\3\2\2\2#\u00d5"+
+		"\3\2\2\2%\u00da\3\2\2\2\'\u00e5\3\2\2\2)\u00eb\3\2\2\2+\u00f6\3\2\2\2"+
+		"-\u00ff\3\2\2\2/\u0105\3\2\2\2\61\u0107\3\2\2\2\63\u0109\3\2\2\2\65\u010e"+
+		"\3\2\2\2\67\u0113\3\2\2\29:\7G\2\2:;\7p\2\2;<\7e\2\2<=\7q\2\2=>\7f\2\2"+
+		">?\7k\2\2?@\7p\2\2@A\7i\2\2A\4\3\2\2\2BC\7n\2\2CD\7k\2\2DE\7v\2\2EF\7"+
+		"v\2\2FG\7n\2\2GH\7g\2\2HI\7a\2\2IJ\7g\2\2JK\7p\2\2KL\7f\2\2LM\7k\2\2M"+
+		"N\7c\2\2NO\7p\2\2O\6\3\2\2\2PQ\7d\2\2QR\7k\2\2RS\7i\2\2ST\7a\2\2TU\7g"+
+		"\2\2UV\7p\2\2VW\7f\2\2WX\7k\2\2XY\7c\2\2YZ\7p\2\2Z\b\3\2\2\2[\\\7V\2\2"+
+		"\\]\7G\2\2]^\7p\2\2^_\7i\2\2_`\7U\2\2`a\7g\2\2ab\7v\2\2bc\7U\2\2cd\7k"+
+		"\2\2de\7i\2\2ef\7p\2\2fg\7X\2\2gh\7g\2\2hi\7t\2\2ij\7u\2\2jk\7k\2\2kl"+
+		"\7q\2\2lm\7p\2\2m\n\3\2\2\2no\7\64\2\2op\7\62\2\2pq\7\63\2\2qr\78\2\2"+
+		"r\f\3\2\2\2st\7T\2\2tu\7g\2\2uv\7i\2\2vw\7X\2\2wx\7c\2\2xy\7t\2\2yz\3"+
+		"\2\2\2z{\b\7\2\2{\16\3\2\2\2|}\7T\2\2}~\7g\2\2~\177\7i\2\2\177\u0080\7"+
+		"E\2\2\u0080\u0081\7o\2\2\u0081\u0082\7f\2\2\u0082\u0083\3\2\2\2\u0083"+
+		"\u0084\b\b\3\2\u0084\20\3\2\2\2\u0085\u0086\7D\2\2\u0086\u0087\7K\2\2"+
+		"\u0087\u0088\7V\2\2\u0088\u0089\3\2\2\2\u0089\u008a\6\t\2\2\u008a\u008b"+
+		"\b\t\4\2\u008b\22\3\2\2\2\u008c\u008d\7U\2\2\u008d\u008e\7V\2\2\u008e"+
+		"\u008f\7T\2\2\u008f\u0090\7W\2\2\u0090\u0091\7E\2\2\u0091\u0092\7V\2\2"+
+		"\u0092\u0093\3\2\2\2\u0093\u0094\6\n\3\2\u0094\u0095\b\n\5\2\u0095\24"+
+		"\3\2\2\2\u0096\u0097\7W\2\2\u0097\u0098\7P\2\2\u0098\u0099\7K\2\2\u0099"+
+		"\u009a\7Q\2\2\u009a\u009b\7P\2\2\u009b\u009c\3\2\2\2\u009c\u009d\6\13"+
+		"\4\2\u009d\u009e\b\13\6\2\u009e\26\3\2\2\2\u009f\u00a0\7G\2\2\u00a0\u00a1"+
+		"\7P\2\2\u00a1\u00a2\7W\2\2\u00a2\u00a3\7O\2\2\u00a3\u00a4\3\2\2\2\u00a4"+
+		"\u00a5\6\f\5\2\u00a5\u00a6\b\f\7\2\u00a6\30\3\2\2\2\u00a7\u00a8\7R\2\2"+
+		"\u00a8\u00a9\7T\2\2\u00a9\u00aa\7Q\2\2\u00aa\u00ab\7E\2\2\u00ab\u00ac"+
+		"\3\2\2\2\u00ac\u00ad\6\r\6\2\u00ad\u00ae\b\r\b\2\u00ae\32\3\2\2\2\u00af"+
+		"\u00b0\7F\2\2\u00b0\u00b1\7C\2\2\u00b1\u00b2\7V\2\2\u00b2\u00b3\7C\2\2"+
+		"\u00b3\u00b4\3\2\2\2\u00b4\u00b5\6\16\7\2\u00b5\u00b6\b\16\t\2\u00b6\34"+
+		"\3\2\2\2\u00b7\u00b9\5/\30\2\u00b8\u00b7\3\2\2\2\u00b9\u00ba\3\2\2\2\u00ba"+
 		"\u00b8\3\2\2\2\u00ba\u00bb\3\2\2\2\u00bb\u00bc\3\2\2\2\u00bc\u00bd\6\17"+
 		"\b\2\u00bd\u00be\b\17\n\2\u00be\36\3\2\2\2\u00bf\u00c0\7\62\2\2\u00c0"+
 		"\u00c1\7z\2\2\u00c1\u00c3\3\2\2\2\u00c2\u00c4\5\61\31\2\u00c3\u00c2\3"+

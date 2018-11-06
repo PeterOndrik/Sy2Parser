@@ -54,6 +54,7 @@ private:
 
 
   // Individual action functions triggered by action() above.
+  void BOOL_TYPEAction(antlr4::RuleContext *context, size_t actionIndex);
   void INT_TYPEAction(antlr4::RuleContext *context, size_t actionIndex);
   void UINT_TYPEAction(antlr4::RuleContext *context, size_t actionIndex);
   void FLOAT_TYPEAction(antlr4::RuleContext *context, size_t actionIndex);

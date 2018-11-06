@@ -12,10 +12,10 @@
 class  Sy2Parser : public antlr4::Parser {
 public:
   enum {
-    ENCODING = 1, LITTLE_ENDIAN = 2, BIG_ENDIAN = 3, SIGN_VERSION = 4, V2016 = 5, 
-    REG_VAR = 6, REG_CMD = 7, BIT = 8, STRUCT = 9, UNION = 10, ENUM = 11, 
-    PROC = 12, DATA = 13, OFFSET = 14, BITMASK = 15, ENUM_VALUE = 16, ADDRESS = 17, 
-    SIGN = 18, ID = 19, LINE_COMMENT = 20, WS = 21, NL = 22
+    ENCODING = 1, LITTLE_ENDIAN = 2, BIG_ENDIAN = 3, SIGNATURE_VERSION = 4, 
+    V2016 = 5, REG_VAR = 6, REG_CMD = 7, BIT = 8, STRUCT = 9, UNION = 10, 
+    ENUM = 11, PROC = 12, DATA = 13, OFFSET = 14, BITMASK = 15, ENUM_VALUE = 16, 
+    ADDRESS = 17, SIGNATURE = 18, ID = 19, LINE_COMMENT = 20, WS = 21, NL = 22
   };
 
   enum {
@@ -101,7 +101,7 @@ public:
     antlr4::tree::TerminalNode *ENCODING();
     EncodingValueContext *encodingValue();
     antlr4::tree::TerminalNode *NL();
-    antlr4::tree::TerminalNode *SIGN_VERSION();
+    antlr4::tree::TerminalNode *SIGNATURE_VERSION();
     SignValueContext *signValue();
     antlr4::tree::TerminalNode *REG_VAR();
     TypeDefinitionContext *typeDefinition();
@@ -269,7 +269,7 @@ public:
   public:
     SignatureContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *SIGN();
+    antlr4::tree::TerminalNode *SIGNATURE();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
