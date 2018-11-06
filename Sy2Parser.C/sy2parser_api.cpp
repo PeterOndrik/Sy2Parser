@@ -13,6 +13,11 @@ using namespace std;
 using namespace antlr4;
 using namespace antlrcpp;
 
+typedef std::mutex Sy2CallbackMutex;
+typedef std::lock_guard<Sy2CallbackMutex> Sy2CallbackMutexWrapper;
+
+extern unsigned int dllVersion;
+
 // Holds info about callback.
 struct ParsedNodeCallbackStorage
 {
@@ -50,10 +55,80 @@ struct OpenParser
 	vector<ParsedNodeCallbackStorage> parsedNodeCbList;
 };
 
-// Hold open parser and corresponding handle.
+typedef std::mutex Sy2HandleListMutex;
+typedef std::lock_guard<std::mutex> Sy2HandleListMutexWrapper;
+Sy2HandleListMutex sy2HandleListMutex;
+// Holds open parser and corresponding handle.
 std::map<Sy2ParserHandle, shared_ptr<OpenParser>> handleList;
 // Start handle value.
 Sy2ParserHandle lastHandle = 0x1000;
+
+static void ConvertDateTime(const FILETIME * const ft, T_FileDateTime *const fileDateTime)
+{
+	SYSTEMTIME stUTC, stLocal;
+
+	FileTimeToSystemTime(ft, &stUTC);
+	SystemTimeToTzSpecificLocalTime(NULL, &stUTC, &stLocal);
+
+	fileDateTime->year = stLocal.wYear;
+	fileDateTime->month = stLocal.wMonth;
+	fileDateTime->dayOfWeek = stLocal.wDayOfWeek;
+	fileDateTime->day = stLocal.wDay;
+	fileDateTime->hour = stLocal.wHour;
+	fileDateTime->minute = stLocal.wMinute;
+	fileDateTime->second = stLocal.wSecond;
+	fileDateTime->milliseconds = stLocal.wMilliseconds;
+}
+
+static shared_ptr<OpenParser> GetParser(Sy2ParserHandle handle)
+{
+	shared_ptr<OpenParser> parser;
+
+	Sy2HandleListMutexWrapper lock(sy2HandleListMutex);
+
+	parser = handleList[handle];
+
+	return parser;
+}
+
+static Sy2ParserStatus processNode(const Model::Node<> *node, T_Sy2Node *apiNode)
+{
+	Sy2ParserStatus status = SY2_SUCCESS;
+
+	if (node != nullptr)
+	{
+		apiNode->type = (T_Sy2NodeType)node->getType();
+		string value = node->getValue();
+		if (value.length() == 0)
+		{
+			apiNode->value[0] = '\0';
+		}
+		else
+		{
+			strncpy_s(apiNode->value, value.c_str(), sizeof(apiNode->value) - 1);
+			apiNode->value[sizeof(apiNode->value) - 1] = '\0';
+		}
+		apiNode->depth = node->getDepth();
+		apiNode->line = node->getLine();
+		apiNode->column = node->getColumn();
+	}
+	else
+	{
+		status = SY2_EOF;
+	}
+
+	return status;
+}
+
+SY2PARSER_API unsigned int SY2PARSER_API_CALL sy2GetApiVersion(void)
+{
+	return SY2PARSER_API_VERSION;
+}
+
+SY2PARSER_API unsigned int SY2PARSER_API_CALL sy2GetDllVersion(void)
+{
+	return dllVersion;
+}
 
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Open(const char *fileName, Sy2ParserHandle *handle)
 {
@@ -66,6 +141,8 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Open(const char *fileName, S
 	}
 	else
 	{
+		Sy2HandleListMutexWrapper lock(sy2HandleListMutex);
+
 		shared_ptr<OpenParser> parser = make_shared<OpenParser>();
 		parser->sy2Input = new ANTLRInputStream(stream);
 		parser->sy2ErrListener = new Sy2ErrorListener();
@@ -86,27 +163,10 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Open(const char *fileName, S
 	return status;
 }
 
-void ConvertDateTime(const FILETIME * const ft, T_FileDateTime *const fileDateTime)
-{
-	SYSTEMTIME stUTC, stLocal;
-
-	FileTimeToSystemTime(ft, &stUTC);
-	SystemTimeToTzSpecificLocalTime(NULL, &stUTC, &stLocal);
-
-	fileDateTime->year = stLocal.wYear;
-	fileDateTime->month = stLocal.wMonth;
-	fileDateTime->dayOfWeek = stLocal.wDayOfWeek;
-	fileDateTime->day = stLocal.wDay;
-	fileDateTime->hour = stLocal.wHour;
-	fileDateTime->minute = stLocal.wMinute;
-	fileDateTime->second = stLocal.wSecond;
-	fileDateTime->milliseconds = stLocal.wMilliseconds;
-}
-
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2GetFileInfo(Sy2ParserHandle handle, T_Sy2FileInfo *fileInfo)
 {
 	Sy2ParserStatus status = SY2_SUCCESS;
-	shared_ptr<OpenParser> parser = handleList[handle];
+	shared_ptr<OpenParser> parser = GetParser(handle);
 
 	fileInfo->size = 0;
 
@@ -149,7 +209,7 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2GetFileInfo(Sy2ParserHandle 
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Close(Sy2ParserHandle handle)
 {
 	Sy2ParserStatus status = SY2_SUCCESS;
-	shared_ptr<OpenParser> parser = handleList[handle];
+	shared_ptr<OpenParser> parser = GetParser(handle);
 
 	if (parser)
 	{
@@ -175,7 +235,7 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Close(Sy2ParserHandle handle
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2SetParsingErrorCallback(Sy2ParserHandle handle, ParsingErrorCallback *callback, void *callbackContext)
 {
 	Sy2ParserStatus status = SY2_SUCCESS;
-	shared_ptr<OpenParser> parser = handleList[handle];
+	shared_ptr<OpenParser> parser = GetParser(handle);
 
 	if (parser)
 	{
@@ -203,7 +263,7 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2SetParsingErrorCallback(Sy2P
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2SetParsingProgressCallback(Sy2ParserHandle handle, ParsingProgressCallback *callback, void *callbackContext)
 {
 	Sy2ParserStatus status = SY2_SUCCESS;
-	shared_ptr<OpenParser> parser = handleList[handle];
+	shared_ptr<OpenParser> parser = GetParser(handle);
 
 	if (parser)
 	{ 
@@ -231,7 +291,7 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2SetParsingProgressCallback(S
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2AddParsedNodeCallback(Sy2ParserHandle handle, T_Sy2NodeType nodeType, ParsedNodeCallback *callback, void *callbackContext)
 {
 	Sy2ParserStatus status = SY2_SUCCESS;
-	shared_ptr<OpenParser> parser = handleList[handle];
+	shared_ptr<OpenParser> parser = GetParser(handle);
 
 	if (parser)
 	{
@@ -245,7 +305,7 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2AddParsedNodeCallback(Sy2Par
 				//parser->currentNode = node->next();
 				parser->currentNode = node;
 				T_Sy2Node apiNode = { (T_Sy2NodeType)node->getType(),  "\0", node->getDepth(), node->getLine(), node->getColumn() };
-				strncpy_s(apiNode.value, node->getValue().c_str(), sizeof(apiNode.value));	// copy at most N, zero-padding if shorter
+				strncpy_s(apiNode.value, node->getValue().c_str(), sizeof(apiNode.value) - 1);	// copy at most N, zero-padding if shorter
 				apiNode.value[sizeof(apiNode.value) - 1] = '\0';							// ensure NUL terminated
 				callback(handle, &apiNode, callbackContext);
 				if (node->parent())
@@ -266,7 +326,7 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2AddParsedNodeCallback(Sy2Par
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2RemoveParsedNodeCallback(Sy2ParserHandle handle, T_Sy2NodeType nodeType, ParsedNodeCallback *callback)
 {
 	Sy2ParserStatus status = SY2_SUCCESS;
-	shared_ptr<OpenParser> parser = handleList[handle];
+	shared_ptr<OpenParser> parser = GetParser(handle);
 
 	if (parser)
 	{
@@ -282,7 +342,7 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2RemoveParsedNodeCallback(Sy2
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Parse(Sy2ParserHandle handle)
 {
 	Sy2ParserStatus status = SY2_SUCCESS;
-	shared_ptr<OpenParser> parser = handleList[handle];
+	shared_ptr<OpenParser> parser = GetParser(handle);
 
 	if (parser)
 	{
@@ -304,39 +364,10 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Parse(Sy2ParserHandle handle
 	return status;
 }
 
-static Sy2ParserStatus processNode(const Model::Node<> *node, T_Sy2Node *apiNode)
-{
-	Sy2ParserStatus status = SY2_SUCCESS;
-
-	if (node != nullptr)
-	{
-		apiNode->type = (T_Sy2NodeType)node->getType();
-		string value = node->getValue();
-		if (value.length() == 0)
-		{
-			apiNode->value[0] = '\0';
-		}
-		else
-		{
-			strncpy_s(apiNode->value, value.c_str(), sizeof(apiNode->value) - 1);
-			apiNode->value[sizeof(apiNode->value) - 1] = '\0';
-		}
-		apiNode->depth = node->getDepth();
-		apiNode->line = node->getLine();
-		apiNode->column = node->getColumn();
-	}
-	else
-	{
-		status = SY2_EOF;
-	}
-
-	return status;
-}
-
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2ReadNext(const Sy2ParserHandle handle, T_Sy2Node *node)
 {
 	Sy2ParserStatus status = SY2_SUCCESS;
-	shared_ptr<OpenParser> parser = handleList[handle];
+	shared_ptr<OpenParser> parser = GetParser(handle);
 
 	if (parser)
 	{
@@ -364,12 +395,11 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2ReadNext(const Sy2ParserHand
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2AbortParsing(const Sy2ParserHandle handle)
 {
 	Sy2ParserStatus status = SY2_SUCCESS;
-	shared_ptr<OpenParser> parser = handleList[handle];
+	shared_ptr<OpenParser> parser = GetParser(handle);
 
 	if (parser)
 	{
-		size_t size = parser->sy2Input->size();
-		parser->sy2Parser->getInputStream()->seek(size);
+		parser->sy2Parser->abortParsing();
 	}
 	else
 	{

@@ -405,7 +405,7 @@ It can use udaGetApiVersion() to retrieve the API version implemented by the DLL
 //! Major version number of the programming interface.
 #define SY2PARSER_API_MAJOR_VERSION   1U
 //! Minor version number of the programming interface.
-#define SY2PARSER_API_MINOR_VERSION   2U
+#define SY2PARSER_API_MINOR_VERSION   3U
 
 //! Version number of the programming interface as DWORD.
 #define SY2PARSER_API_VERSION ( (SY2PARSER_API_MAJOR_VERSION << 16) | SY2PARSER_API_MINOR_VERSION ) 
@@ -506,7 +506,7 @@ const char *sy2NodeName[SY2_NODE_COUNT] = {
 typedef struct Sy2Node
 {
 	T_Sy2NodeType type;		//!< The type of a node see #Sy2NodeType.
-	char value[256];		//!< The value of a node.
+	char value[512];		//!< The value of a node.
 	unsigned int depth;		//!< The length of the path from root to the end.
 	unsigned int line;		//!< The number of line.
 	unsigned int column;	//!< The column of character.
@@ -614,6 +614,25 @@ typedef void SY2PARSER_API_CALL ParsingProgressCallback(Sy2ParserHandle handle, 
 	The pointer value that was passed when the callback was registered.
 */
 typedef void SY2PARSER_API_CALL ParsedNodeCallback(Sy2ParserHandle handle, const T_Sy2Node *node, void *callbackContext);
+
+/*!
+  \brief Returns the API version implemented by the DLL.
+
+  \return
+	This function returns the version number of the programming interface (API) implemented by the DLL.
+	The number returned is the #SY2PARSER_API_VERSION constant the DLL has been compiled with. For example 1.2 = 0x00010002.
+*/
+SY2PARSER_API unsigned int SY2PARSER_API_CALL sy2GetApiVersion(void);
+
+/*!
+  \brief Returns the DLL build version.
+
+  Note that the version of the programming interface supported by the DLL is returned by udaGetApiVersion().
+
+  \return
+	This function returns the version number of the DLL build. For example 1.0.4.29 = 0x0100041D.
+*/
+SY2PARSER_API unsigned int SY2PARSER_API_CALL sy2GetDllVersion(void);
 
 /*!
 \brief Open a Sy2 Parser by using a file name.
@@ -793,6 +812,8 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2AbortParsing(Sy2ParserHandle
 \brief API function signatures for run-time dynamic linking.
 */
 
+typedef unsigned int(SY2PARSER_API_CALL *T_sy2GetApiVersion)(void);
+typedef unsigned int(SY2PARSER_API_CALL *T_sy2GetDllVersion)(void);
 typedef Sy2ParserStatus(SY2PARSER_API_CALL *T_sy2Open)(const char *fileName, Sy2ParserHandle *handle);
 typedef Sy2ParserStatus(SY2PARSER_API_CALL *T_sy2Close)(Sy2ParserHandle handle);
 typedef Sy2ParserStatus(SY2PARSER_API_CALL *T_sy2GetFileInfo)(Sy2ParserHandle handle, T_Sy2FileInfo *fileInfo);

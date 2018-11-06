@@ -5,7 +5,7 @@
 
 
 #include "antlr4-runtime.h"
-
+#include <atomic>
 
 
 
@@ -280,6 +280,10 @@ public:
 
   SignatureContext* signature();
 
+  void abortParsing()
+  {
+	  _isAborted = true;
+  }
 
 private:
   static std::vector<antlr4::dfa::DFA> _decisionToDFA;
@@ -292,7 +296,7 @@ private:
   static antlr4::dfa::Vocabulary _vocabulary;
   static antlr4::atn::ATN _atn;
   static std::vector<uint16_t> _serializedATN;
-
+  std::atomic<bool> _isAborted;
 
   struct Initializer {
     Initializer();

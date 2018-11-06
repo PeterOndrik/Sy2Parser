@@ -87,6 +87,7 @@ Sy2Parser::FileContext* Sy2Parser::file() {
   FileContext *_localctx = _tracker.createInstance<FileContext>(_ctx, getState());
   enterRule(_localctx, 0, Sy2Parser::RuleFile);
   size_t _la = 0;
+  _isAborted = false;
 
   auto onExit = finally([=] {
     exitRule();
@@ -122,6 +123,10 @@ Sy2Parser::FileContext* Sy2Parser::file() {
       setState(28); 
       _errHandler->sync(this);
       _la = _input->LA(1);
+	  if (_isAborted)
+	  {
+		  throw ParseCancellationException("Parsing aborted.");
+	  }
     } while ((((_la & ~ 0x3fULL) == 0) &&
       ((1ULL << _la) & ((1ULL << Sy2Parser::ENCODING)
       | (1ULL << Sy2Parser::SIGNATURE_VERSION)
@@ -136,6 +141,10 @@ Sy2Parser::FileContext* Sy2Parser::file() {
     _errHandler->reportError(this, e);
     _localctx->exception = std::current_exception();
     _errHandler->recover(this, _localctx->exception);
+  }
+  catch (ParseCancellationException &e)
+  {
+	  this->notifyErrorListeners(this->getCurrentToken(), e.what(), std::current_exception());
   }
 
   return _localctx;

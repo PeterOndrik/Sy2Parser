@@ -1,5 +1,7 @@
 LIBRARY sy2parser
 EXPORTS
+	sy2GetApiVersion
+	sy2GetDllVersion
 	sy2Open
 	sy2Close
 	sy2GetFileInfo
