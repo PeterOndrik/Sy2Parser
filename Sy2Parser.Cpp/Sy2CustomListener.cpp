@@ -90,7 +90,7 @@ void Sy2CustomListener::exitCommand(Sy2Parser::CommandContext *ctx)
 	}
 	else if (ctx->signValue() != nullptr)
 	{
-		command->setValue(ctx->SIGN_VERSION()->getText());
+		command->setValue(ctx->SIGNATURE_VERSION()->getText());
 
 		auto sy2SignValueCtx = ctx->signValue();
 
@@ -106,7 +106,7 @@ void Sy2CustomListener::exitCommand(Sy2Parser::CommandContext *ctx)
 		auto sy2TypeDefinitionCtx = ctx->typeDefinition();
 		typeDefinition = new Model::TypeDefinition(sy2TypeDefinitionCtx->start->getLine(), sy2TypeDefinitionCtx->start->getCharPositionInLine());
 		command->add(typeDefinition);
-		typeDefinition->setValue("UnknowTypeName");
+		typeDefinition->setValue("<missing TYPE>");
 
 		TerminalNode *typedefType = nullptr;
 		if (sy2TypeDefinitionCtx->BIT())
@@ -173,7 +173,7 @@ void Sy2CustomListener::exitCommand(Sy2Parser::CommandContext *ctx)
 		auto sy2SymbolCtx = ctx->symbol();
 		symbol = new Model::Symbol(sy2SymbolCtx->start->getLine(), sy2SymbolCtx->start->getCharPositionInLine());
 		command->add(symbol);
-		symbol->setValue("UnknowSymbolName");
+		symbol->setValue("<missing TYPE>");
 
 		TerminalNode *symbolType = nullptr;
 		if (sy2SymbolCtx->PROC())
@@ -208,7 +208,7 @@ void Sy2CustomListener::exitCommand(Sy2Parser::CommandContext *ctx)
 		}
 	}
 
-	if (signature != nullptr)
+	if (signature != nullptr && signature->getValue() != "<missing SIGNATURE>")
 	{
 		ANTLRInputStream sign2016Input(signature->getValue());
 

@@ -353,3 +353,280 @@ Progress: 99%
 
 Progress: 100%
 ```
+## Error Handling
+The following source code is used:
+```
+void SY2PARSER_API_CALL errorCallback(Sy2ParserHandle handle, unsigned int line, unsigned int column, const char *message, void *callbackContext)
+{
+  printf("Error: line %u, column %u, message %s\n", line, column, message);
+}
+
+int main()
+{
+  Sy2ParserHandle handle = SY2PARSER_INVALID_HANDLE;
+  T_Sy2Node node = { 0 };
+
+  Sy2ParserStatus status = sy2Open("test.sy2", &handle);
+  status = sy2SetParsingErrorCallback(handle, errorCallback, NULL);
+
+  status = sy2Parse(handle);
+
+  status = sy2ReadNext(handle, &node);
+  while (status == SY2_SUCCESS)
+  {
+    printf("%s: %s\n", sy2NodeName[node.type], node.value);
+  
+    status = sy2ReadNext(handle, &node);
+  }
+
+  status = sy2Close(handle);
+  
+  return 0;
+}
+```
+### Example 1: An error in the first COMMAND
+```
+errRegCmd DATA var1 00400000 I32
+RegCmd DATA var2 00400004 I32
+RegCmd DATA var3 00400008 I32
+```
+Output:
+```
+Error: line 1, column 1, message mismatched input 'errRegCmd' expecting {'Encoding', 'TEngSetSignVersion', 'RegVar', 'RegCmd', NL}
+
+FILE: ..\Test\In\test.sy2
+```
+### Example 2: An error in another COMMAND (not first)
+```
+RegCmd DATA var1 00400000 I32
+errRegCmd DATA var2 00400004 I32
+RegCmd DATA var3 00400008 I32
+```
+Output:
+```
+Error: line 2, column 1, message extraneous input 'errRegCmd' expecting {<EOF>, 'Encoding', 'TEngSetSignVersion', 'RegVar', 'RegCmd', NL}
+
+FILE: ..\Test\In\test.sy2
+ COMMAND: RegCmd
+  SYMBOL: var1
+   TYPE: DATA
+   NAME: var1
+   ADDRESS: 00400000
+   SIGNATURE: I32
+    INT: I
+     SIZE: 32
+ COMMAND: RegCmd
+  SYMBOL: var3
+   TYPE: DATA
+   NAME: var3
+   ADDRESS: 00400008
+   SIGNATURE: I32
+    INT: I
+     SIZE: 32
+```
+### Example 3: An error in a type of SYMBOL or TYPEDEF
+```
+RegCmd errDATA var1 00400000 I32
+RegCmd DATA var2 00400004 I32
+RegCmd DATA var3 00400008 I32
+```
+Output:
+```
+Error: line 1, column 8, message mismatched input 'errDATA' expecting {PROC, DATA}
+
+FILE: ..\Test\In\test.sy2
+ COMMAND: RegCmd
+  SYMBOL: <missing TYPE>
+ COMMAND: RegCmd
+  SYMBOL: var2
+   TYPE: DATA
+   NAME: var2
+   ADDRESS: 00400004
+   SIGNATURE: I32
+    INT: I
+     SIZE: 32
+ COMMAND: RegCmd
+  SYMBOL: var3
+   TYPE: DATA
+   NAME: var3
+   ADDRESS: 00400008
+   SIGNATURE: I32
+    INT: I
+     SIZE: 32
+```
+### Example 4: An error in an ADDRESS
+```
+RegCmd DATA var1 err00400000 I32
+RegCmd DATA var2 00400004 I32
+RegCmd DATA var3 00400008 I32
+```
+Output:
+```
+Error: line 1, column 18, message mismatched input 'err00400000' expecting ADDRESS
+
+
+FILE: ..\Test\In\test.sy2
+ COMMAND: RegCmd
+  SYMBOL: var1
+   TYPE: DATA
+   NAME: var1
+   ADDRESS: err00400000
+   SIGNATURE: I32
+    INT: I
+     SIZE: 32
+ COMMAND: RegCmd
+  SYMBOL: var2
+   TYPE: DATA
+   NAME: var2
+   ADDRESS: 00400004
+   SIGNATURE: I32
+    INT: I
+     SIZE: 32
+ COMMAND: RegCmd
+  SYMBOL: var3
+   TYPE: DATA
+   NAME: var3
+   ADDRESS: 00400008
+   SIGNATURE: I32
+    INT: I
+     SIZE: 32
+```
+### Example 5: An error in a SIGNATURE
+```
+RegCmd DATA var1 00400000 errI32
+RegCmd DATA var2 00400004 I32
+RegCmd DATA var3 00400008 I32
+```
+Output:
+```
+Error: line 1, column 27, message token recognition error at: 'errI32'
+Error: line 1, column 33, message mismatched input '<EOF>' expecting {'C', 'B', 'I', 'UI', 'F', 'S', 'PTR', 'FB'}
+
+FILE: ..\Test\In\test.sy2
+ COMMAND: RegCmd
+  SYMBOL: var1
+   TYPE: DATA
+   NAME: var1
+   ADDRESS: 00400000
+   SIGNATURE: errI32
+ COMMAND: RegCmd
+  SYMBOL: var2
+   TYPE: DATA
+   NAME: var2
+   ADDRESS: 00400004
+   SIGNATURE: I32
+    INT: I
+     SIZE: 32
+ COMMAND: RegCmd
+  SYMBOL: var3
+   TYPE: DATA
+   NAME: var3
+   ADDRESS: 00400008
+   SIGNATURE: I32
+    INT: I
+     SIZE: 32
+```
+### Example 6: Missing SIGNATURE
+```
+RegCmd DATA var1 00400000
+RegCmd DATA var2 00400004 I32
+RegCmd DATA var3 00400008 I32
+```
+Output:
+```
+Error: line 1, column 26, message missing SIGNATURE at '\n'
+
+FILE: ..\Test\In\test.sy2
+ COMMAND: RegCmd
+  SYMBOL: var1
+   TYPE: DATA
+   NAME: var1
+   ADDRESS: 00400000
+   SIGNATURE: <missing SIGNATURE>
+ COMMAND: RegCmd
+  SYMBOL: var2
+   TYPE: DATA
+   NAME: var2
+   ADDRESS: 00400004
+   SIGNATURE: I32
+    INT: I
+     SIZE: 32
+ COMMAND: RegCmd
+  SYMBOL: var3
+   TYPE: DATA
+   NAME: var3
+   ADDRESS: 00400008
+   SIGNATURE: I32
+    INT: I
+     SIZE: 32
+```
+### Example 7: Missing a structure name in a Signature
+```
+RegCmd DATA point1 0040DD24 S128-
+```
+Output:
+```
+Error: line 1, column 34, message no viable alternative at input '-'
+
+FILE: ..\Test\In\test.sy2
+ COMMAND: RegCmd
+  SYMBOL: point1
+   TYPE: DATA
+   NAME: point1
+   ADDRESS: 0040DD24
+   SIGNATURE: S128-
+    STRUCT: <missing NAME>
+     SIZE: 128
+```
+### Example 8: Missing a BITMASK
+```
+RegVar BIT BitFieldTag 0 S64-BitFieldTag
+RegVar BIT BitFieldTag_a 0 UI32
+RegVar BIT BitFieldTag_b 0 UI32
+RegVar BIT BitFieldTag_c 1 UI32
+```
+Output:
+```
+Error: line: 1, column: 16, message: missing BITMASK at 'S64-BitFieldTag'
+Error: line: 2, column: 28, message: missing BITMASK at 'UI32'
+Error: line: 3, column: 28, message: missing BITMASK at 'UI32'
+Error: line: 4, column: 28, message: missing BITMASK at 'UI32'
+
+FILE: test-02.sy2
+ COMMAND: RegVar
+  TYPEDEF: BitFieldTag
+   TYPE: BIT
+   NAME: BitFieldTag
+   OFFSET: 0
+   BITMASK: <missing BITMASK>
+   SIGNATURE: S64-BitFieldTag
+    STRUCT: BitFieldTag
+     SIZE: 64
+ COMMAND: RegVar
+  TYPEDEF: BitFieldTag_a
+   TYPE: BIT
+   NAME: BitFieldTag_a
+   OFFSET: 1
+   BITMASK: <missing BITMASK>
+   SIGNATURE: UI32
+    UINT: UI
+     SIZE: 32
+ COMMAND: RegVar
+  TYPEDEF: BitFieldTag_b
+   TYPE: BIT
+   NAME: BitFieldTag_b
+   OFFSET: 2
+   BITMASK: <missing BITMASK>
+   SIGNATURE: UI32
+    UINT: UI
+     SIZE: 32
+ COMMAND: RegVar
+  TYPEDEF: BitFieldTag_c
+   TYPE: BIT
+   NAME: BitFieldTag_c
+   OFFSET: 12
+   BITMASK: <missing BITMASK>
+   SIGNATURE: UI32
+    UINT: UI
+     SIZE: 32
+```

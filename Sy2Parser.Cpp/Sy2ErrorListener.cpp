@@ -9,8 +9,7 @@ void Sy2ErrorListener::syntaxError(antlr4::Recognizer * /*recognizer*/, antlr4::
 {
 	if (_errorCb != nullptr)
 	{
-		//(*_errorCb)(line + _line, charPositionInLine + _column, msg);
-		(*_errorCb)(line, charPositionInLine, msg);
+		(*_errorCb)(line, charPositionInLine + 1, msg);
 	}
 }
 

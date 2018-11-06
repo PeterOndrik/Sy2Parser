@@ -5,11 +5,11 @@
 using namespace std;
 using namespace antlr4;
 
-void Sign2016ErrorListener::syntaxError(antlr4::Recognizer * /*recognizer*/, antlr4::Token * /*offendingSymbol*/, size_t line, size_t charPositionInLine, const std::string &msg, std::exception_ptr /*e*/)
+void Sign2016ErrorListener::syntaxError(antlr4::Recognizer * /*recognizer*/, antlr4::Token * /*offendingSymbol*/, size_t /* line */, size_t charPositionInLine, const std::string &msg, std::exception_ptr /*e*/)
 {
 	if (_errorCb != nullptr)
 	{
-		(*_errorCb)(line + _line, charPositionInLine + _column, msg);
+		(*_errorCb)(_line, charPositionInLine + _column + 1, msg);
 	}
 }
 
