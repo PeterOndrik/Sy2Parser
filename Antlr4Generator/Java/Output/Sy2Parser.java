@@ -16,10 +16,10 @@ public class Sy2Parser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		ENCODING=1, LITTLE_ENDIAN=2, BIG_ENDIAN=3, SIGN_VERSION=4, V2016=5, REG_VAR=6, 
-		REG_CMD=7, BIT=8, STRUCT=9, UNION=10, ENUM=11, PROC=12, DATA=13, OFFSET=14, 
-		BITMASK=15, ENUM_VALUE=16, ADDRESS=17, ID=18, SIGN=19, LINE_COMMENT=20, 
-		WS=21, NL=22, ANY=23;
+		ENCODING=1, LITTLE_ENDIAN=2, BIG_ENDIAN=3, SIGNATURE_VERSION=4, V2016=5, 
+		REG_VAR=6, REG_CMD=7, BIT=8, STRUCT=9, UNION=10, ENUM=11, PROC=12, DATA=13, 
+		OFFSET=14, BITMASK=15, ENUM_VALUE=16, ADDRESS=17, SIGNATURE=18, ID=19, 
+		LINE_COMMENT=20, WS=21, NL=22;
 	public static final int
 		RULE_file = 0, RULE_command = 1, RULE_encodingValue = 2, RULE_signValue = 3, 
 		RULE_typeDefinition = 4, RULE_symbol = 5, RULE_name = 6, RULE_offset = 7, 
@@ -34,10 +34,10 @@ public class Sy2Parser extends Parser {
 		"'2016'", "'RegVar'", "'RegCmd'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
-		null, "ENCODING", "LITTLE_ENDIAN", "BIG_ENDIAN", "SIGN_VERSION", "V2016", 
-		"REG_VAR", "REG_CMD", "BIT", "STRUCT", "UNION", "ENUM", "PROC", "DATA", 
-		"OFFSET", "BITMASK", "ENUM_VALUE", "ADDRESS", "ID", "SIGN", "LINE_COMMENT", 
-		"WS", "NL", "ANY"
+		null, "ENCODING", "LITTLE_ENDIAN", "BIG_ENDIAN", "SIGNATURE_VERSION", 
+		"V2016", "REG_VAR", "REG_CMD", "BIT", "STRUCT", "UNION", "ENUM", "PROC", 
+		"DATA", "OFFSET", "BITMASK", "ENUM_VALUE", "ADDRESS", "SIGNATURE", "ID", 
+		"LINE_COMMENT", "WS", "NL"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -164,7 +164,7 @@ public class Sy2Parser extends Parser {
 					}
 					break;
 				case ENCODING:
-				case SIGN_VERSION:
+				case SIGNATURE_VERSION:
 				case REG_VAR:
 				case REG_CMD:
 					{
@@ -180,7 +180,7 @@ public class Sy2Parser extends Parser {
 				setState(28); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << ENCODING) | (1L << SIGN_VERSION) | (1L << REG_VAR) | (1L << REG_CMD) | (1L << NL))) != 0) );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << ENCODING) | (1L << SIGNATURE_VERSION) | (1L << REG_VAR) | (1L << REG_CMD) | (1L << NL))) != 0) );
 			setState(30);
 			match(EOF);
 			}
@@ -202,7 +202,7 @@ public class Sy2Parser extends Parser {
 			return getRuleContext(EncodingValueContext.class,0);
 		}
 		public TerminalNode NL() { return getToken(Sy2Parser.NL, 0); }
-		public TerminalNode SIGN_VERSION() { return getToken(Sy2Parser.SIGN_VERSION, 0); }
+		public TerminalNode SIGNATURE_VERSION() { return getToken(Sy2Parser.SIGNATURE_VERSION, 0); }
 		public SignValueContext signValue() {
 			return getRuleContext(SignValueContext.class,0);
 		}
@@ -246,11 +246,11 @@ public class Sy2Parser extends Parser {
 				match(NL);
 				}
 				break;
-			case SIGN_VERSION:
+			case SIGNATURE_VERSION:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(36);
-				match(SIGN_VERSION);
+				match(SIGNATURE_VERSION);
 				setState(37);
 				signValue();
 				setState(38);
@@ -748,7 +748,7 @@ public class Sy2Parser extends Parser {
 	}
 
 	public static class SignatureContext extends ParserRuleContext {
-		public TerminalNode SIGN() { return getToken(Sy2Parser.SIGN, 0); }
+		public TerminalNode SIGNATURE() { return getToken(Sy2Parser.SIGNATURE, 0); }
 		public SignatureContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -770,7 +770,7 @@ public class Sy2Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(99);
-			match(SIGN);
+			match(SIGNATURE);
 			}
 		}
 		catch (RecognitionException re) {
@@ -785,7 +785,7 @@ public class Sy2Parser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\31h\4\2\t\2\4\3\t"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\30h\4\2\t\2\4\3\t"+
 		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4"+
 		"\f\t\f\4\r\t\r\3\2\3\2\6\2\35\n\2\r\2\16\2\36\3\2\3\2\3\3\3\3\3\3\3\3"+
 		"\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\5\3\63\n\3\3\4\3\4\3"+
@@ -806,9 +806,9 @@ public class Sy2Parser extends Parser {
 		"\t\2FG\5\30\r\2GN\3\2\2\2HI\7\r\2\2IJ\5\16\b\2JK\5\26\f\2KL\5\30\r\2L"+
 		"N\3\2\2\2M8\3\2\2\2M>\3\2\2\2MC\3\2\2\2MH\3\2\2\2N\13\3\2\2\2OP\7\16\2"+
 		"\2PQ\5\16\b\2QR\5\24\13\2RS\5\30\r\2SZ\3\2\2\2TU\7\17\2\2UV\5\16\b\2V"+
-		"W\5\24\13\2WX\5\30\r\2XZ\3\2\2\2YO\3\2\2\2YT\3\2\2\2Z\r\3\2\2\2[\\\7\24"+
+		"W\5\24\13\2WX\5\30\r\2XZ\3\2\2\2YO\3\2\2\2YT\3\2\2\2Z\r\3\2\2\2[\\\7\25"+
 		"\2\2\\\17\3\2\2\2]^\7\20\2\2^\21\3\2\2\2_`\7\21\2\2`\23\3\2\2\2ab\7\23"+
-		"\2\2b\25\3\2\2\2cd\7\22\2\2d\27\3\2\2\2ef\7\25\2\2f\31\3\2\2\2\7\34\36"+
+		"\2\2b\25\3\2\2\2cd\7\22\2\2d\27\3\2\2\2ef\7\24\2\2f\31\3\2\2\2\7\34\36"+
 		"\62MY";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());

@@ -87,6 +87,7 @@ Sy2Parser::FileContext* Sy2Parser::file() {
   FileContext *_localctx = _tracker.createInstance<FileContext>(_ctx, getState());
   enterRule(_localctx, 0, Sy2Parser::RuleFile);
   size_t _la = 0;
+  _isAborted = false;
 
   auto onExit = finally([=] {
     exitRule();
@@ -107,7 +108,7 @@ Sy2Parser::FileContext* Sy2Parser::file() {
         }
 
         case Sy2Parser::ENCODING:
-        case Sy2Parser::SIGN_VERSION:
+        case Sy2Parser::SIGNATURE_VERSION:
         case Sy2Parser::REG_VAR:
         case Sy2Parser::REG_CMD: {
           setState(25);
@@ -122,9 +123,13 @@ Sy2Parser::FileContext* Sy2Parser::file() {
       setState(28); 
       _errHandler->sync(this);
       _la = _input->LA(1);
+	  if (_isAborted)
+	  {
+		  throw ParseCancellationException("Parsing aborted.");
+	  }
     } while ((((_la & ~ 0x3fULL) == 0) &&
       ((1ULL << _la) & ((1ULL << Sy2Parser::ENCODING)
-      | (1ULL << Sy2Parser::SIGN_VERSION)
+      | (1ULL << Sy2Parser::SIGNATURE_VERSION)
       | (1ULL << Sy2Parser::REG_VAR)
       | (1ULL << Sy2Parser::REG_CMD)
       | (1ULL << Sy2Parser::NL))) != 0));
@@ -136,6 +141,11 @@ Sy2Parser::FileContext* Sy2Parser::file() {
     _errHandler->reportError(this, e);
     _localctx->exception = std::current_exception();
     _errHandler->recover(this, _localctx->exception);
+  }
+  catch (ParseCancellationException &e)
+  {
+	  _localctx->exception = std::current_exception();
+	  this->notifyErrorListeners(this->getCurrentToken(), e.what(), std::current_exception());
   }
 
   return _localctx;
@@ -159,8 +169,8 @@ tree::TerminalNode* Sy2Parser::CommandContext::NL() {
   return getToken(Sy2Parser::NL, 0);
 }
 
-tree::TerminalNode* Sy2Parser::CommandContext::SIGN_VERSION() {
-  return getToken(Sy2Parser::SIGN_VERSION, 0);
+tree::TerminalNode* Sy2Parser::CommandContext::SIGNATURE_VERSION() {
+  return getToken(Sy2Parser::SIGNATURE_VERSION, 0);
 }
 
 Sy2Parser::SignValueContext* Sy2Parser::CommandContext::signValue() {
@@ -230,10 +240,10 @@ Sy2Parser::CommandContext* Sy2Parser::command() {
         break;
       }
 
-      case Sy2Parser::SIGN_VERSION: {
+      case Sy2Parser::SIGNATURE_VERSION: {
         enterOuterAlt(_localctx, 2);
         setState(36);
-        match(Sy2Parser::SIGN_VERSION);
+        match(Sy2Parser::SIGNATURE_VERSION);
         setState(37);
         signValue();
         setState(38);
@@ -944,8 +954,8 @@ Sy2Parser::SignatureContext::SignatureContext(ParserRuleContext *parent, size_t 
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* Sy2Parser::SignatureContext::SIGN() {
-  return getToken(Sy2Parser::SIGN, 0);
+tree::TerminalNode* Sy2Parser::SignatureContext::SIGNATURE() {
+  return getToken(Sy2Parser::SIGNATURE, 0);
 }
 
 
@@ -983,7 +993,7 @@ Sy2Parser::SignatureContext* Sy2Parser::signature() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(99);
-    match(Sy2Parser::SIGN);
+    match(Sy2Parser::SIGNATURE);
    
   }
   catch (RecognitionException &e) {
@@ -1014,10 +1024,10 @@ std::vector<std::string> Sy2Parser::_literalNames = {
 };
 
 std::vector<std::string> Sy2Parser::_symbolicNames = {
-  "", "ENCODING", "LITTLE_ENDIAN", "BIG_ENDIAN", "SIGN_VERSION", "V2016", 
+  "", "ENCODING", "LITTLE_ENDIAN", "BIG_ENDIAN", "SIGNATURE_VERSION", "V2016", 
   "REG_VAR", "REG_CMD", "BIT", "STRUCT", "UNION", "ENUM", "PROC", "DATA", 
-  "OFFSET", "BITMASK", "ENUM_VALUE", "ADDRESS", "ID", "SIGN", "LINE_COMMENT", 
-  "WS", "NL", "ANY"
+  "OFFSET", "BITMASK", "ENUM_VALUE", "ADDRESS", "SIGNATURE", "ID", "LINE_COMMENT", 
+  "WS", "NL"
 };
 
 dfa::Vocabulary Sy2Parser::_vocabulary(_literalNames, _symbolicNames);
@@ -1040,7 +1050,7 @@ Sy2Parser::Initializer::Initializer() {
 
   _serializedATN = {
     0x3, 0x608b, 0xa72a, 0x8133, 0xb9ed, 0x417c, 0x3be7, 0x7786, 0x5964, 
-    0x3, 0x19, 0x68, 0x4, 0x2, 0x9, 0x2, 0x4, 0x3, 0x9, 0x3, 0x4, 0x4, 0x9, 
+    0x3, 0x18, 0x68, 0x4, 0x2, 0x9, 0x2, 0x4, 0x3, 0x9, 0x3, 0x4, 0x4, 0x9, 
     0x4, 0x4, 0x5, 0x9, 0x5, 0x4, 0x6, 0x9, 0x6, 0x4, 0x7, 0x9, 0x7, 0x4, 
     0x8, 0x9, 0x8, 0x4, 0x9, 0x9, 0x9, 0x4, 0xa, 0x9, 0xa, 0x4, 0xb, 0x9, 
     0xb, 0x4, 0xc, 0x9, 0xc, 0x4, 0xd, 0x9, 0xd, 0x3, 0x2, 0x3, 0x2, 0x6, 
@@ -1096,12 +1106,12 @@ Sy2Parser::Initializer::Initializer() {
     0x2, 0x2, 0x55, 0x56, 0x5, 0xe, 0x8, 0x2, 0x56, 0x57, 0x5, 0x14, 0xb, 
     0x2, 0x57, 0x58, 0x5, 0x18, 0xd, 0x2, 0x58, 0x5a, 0x3, 0x2, 0x2, 0x2, 
     0x59, 0x4f, 0x3, 0x2, 0x2, 0x2, 0x59, 0x54, 0x3, 0x2, 0x2, 0x2, 0x5a, 
-    0xd, 0x3, 0x2, 0x2, 0x2, 0x5b, 0x5c, 0x7, 0x14, 0x2, 0x2, 0x5c, 0xf, 
+    0xd, 0x3, 0x2, 0x2, 0x2, 0x5b, 0x5c, 0x7, 0x15, 0x2, 0x2, 0x5c, 0xf, 
     0x3, 0x2, 0x2, 0x2, 0x5d, 0x5e, 0x7, 0x10, 0x2, 0x2, 0x5e, 0x11, 0x3, 
     0x2, 0x2, 0x2, 0x5f, 0x60, 0x7, 0x11, 0x2, 0x2, 0x60, 0x13, 0x3, 0x2, 
     0x2, 0x2, 0x61, 0x62, 0x7, 0x13, 0x2, 0x2, 0x62, 0x15, 0x3, 0x2, 0x2, 
     0x2, 0x63, 0x64, 0x7, 0x12, 0x2, 0x2, 0x64, 0x17, 0x3, 0x2, 0x2, 0x2, 
-    0x65, 0x66, 0x7, 0x15, 0x2, 0x2, 0x66, 0x19, 0x3, 0x2, 0x2, 0x2, 0x7, 
+    0x65, 0x66, 0x7, 0x14, 0x2, 0x2, 0x66, 0x19, 0x3, 0x2, 0x2, 0x2, 0x7, 
     0x1c, 0x1e, 0x32, 0x4d, 0x59, 
   };
 
