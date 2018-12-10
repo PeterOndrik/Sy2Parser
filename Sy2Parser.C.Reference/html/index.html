@@ -82,6 +82,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <ul><li class="level1"><a href="#sec_introduction">Introduction</a></li>
 <li class="level1"><a href="#sec_open_parse_view_example">Read AST after parsing</a></li>
 <li class="level1"><a href="#sec_open_parse_callback_example">Read AST during parsing</a></li>
+<li class="level1"><a href="#sec_error_handling">Error Handling</a><ul><li class="level2"><a href="#sec_example_1">Example 1: Error Code SY2_INPUT_MISMATCHED</a></li>
+<li class="level2"><a href="#sec_example_2">Example 2: Error Code SY2_EXTRAENOUS_INPUT</a></li>
+<li class="level2"><a href="#sec_example_3">Example 3: Error code SY2_INPUT_MISMATCHED in a type of SYMBOL or TYPEDEF</a></li>
+<li class="level2"><a href="#sec_example_4">Example 4: Error code SY2_INPUT_MISMATCHED in an ADDRESS</a></li>
+<li class="level2"><a href="#sec_example_5">Example 5: Error code SY2_INPUT_MISMATCHED in a SIGNATURE</a></li>
+<li class="level2"><a href="#sec_example_6">Example 6: Error Code SY2_MISSING_TOKEN - missing a SIGNATURE</a></li>
+<li class="level2"><a href="#sec_example_7">Example 7: Error Code SY2_NO_VIABLE_ALTERNATIVE - missing a structure name in a SIGNATURE</a></li>
+<li class="level2"><a href="#sec_example_8">Example 8: Error Code SY2_MISSING_TOKEN - missing a BITMASK</a></li>
+<li class="level2"><a href="#sec_example_9">Example 9: Error Code SY2_EXTRAENOUS_INPUT and SY2_NO_VIABLE_ALTERNATIVE inside node</a></li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="textblock"><h1><a class="anchor" id="sec_introduction"></a>
@@ -169,10 +180,10 @@ Read AST after parsing</h1>
 <div class="line"></div>
 <div class="line">  <span class="comment">// printing AST</span></div>
 <div class="line">  status = <a class="code" href="group__sy2parser__api__functions.html#ga5301f0d7a51e2d3467db66a0e498bed3">sy2ReadNext</a>(handle, &amp;node);</div>
-<div class="line">  <span class="keywordflow">while</span> (status == <a class="code" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba0c523e2a0e55d51471f7f0179bd74a32">SY2_SUCCESS</a>)</div>
+<div class="line">  <span class="keywordflow">while</span> (status != <a class="code" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba184dce72acff92f77299f48deedffd95">SY2_EOF</a>)</div>
 <div class="line">  {</div>
 <div class="line">    setIndent(indent, node.<a class="code" href="struct_sy2_node.html#a44e75bf670e4ae02b3a1e3a6f2d82904">depth</a>);</div>
-<div class="line">    printf(<span class="stringliteral">&quot;%s%s: %s\n&quot;</span>, indent, <a class="code" href="group__uda__device__constants__types.html#ga3852ce8af18e9e47389c12172f7baf90">sy2NodeName</a>[node.<a class="code" href="struct_sy2_node.html#a4a808900b6a4dfad757f019fb50eac18">type</a>], node.<a class="code" href="struct_sy2_node.html#a78f6166f06f17913ae32b56ee86d441c">value</a>);</div>
+<div class="line">    printf(<span class="stringliteral">&quot;%s%s: %s\n&quot;</span>, indent, <a class="code" href="group__uda__device__constants__types.html#ga3852ce8af18e9e47389c12172f7baf90">sy2NodeName</a>[node.<a class="code" href="struct_sy2_node.html#a4a808900b6a4dfad757f019fb50eac18">type</a>], node.<a class="code" href="struct_sy2_node.html#ad35e7448ed7b3200fb03f3b56651d705">value</a>);</div>
 <div class="line">    resetIndent(indent);</div>
 <div class="line"></div>
 <div class="line">    status = <a class="code" href="group__sy2parser__api__functions.html#ga5301f0d7a51e2d3467db66a0e498bed3">sy2ReadNext</a>(handle, &amp;node);</div>
@@ -258,14 +269,14 @@ Read AST during parsing</h1>
 <div class="line">  <span class="keywordtype">char</span> indent[INDENT_SIZE] = { 0 };</div>
 <div class="line"></div>
 <div class="line">  setIndent(indent, node-&gt;<a class="code" href="struct_sy2_node.html#a44e75bf670e4ae02b3a1e3a6f2d82904">depth</a>);</div>
-<div class="line">  printf(<span class="stringliteral">&quot;%s%s: %s\n&quot;</span>, indent, <a class="code" href="group__uda__device__constants__types.html#ga3852ce8af18e9e47389c12172f7baf90">sy2NodeName</a>[node-&gt;<a class="code" href="struct_sy2_node.html#a4a808900b6a4dfad757f019fb50eac18">type</a>], node-&gt;<a class="code" href="struct_sy2_node.html#a78f6166f06f17913ae32b56ee86d441c">value</a>);</div>
+<div class="line">  printf(<span class="stringliteral">&quot;%s%s (0x%04X): %s\n&quot;</span>, indent, <a class="code" href="group__uda__device__constants__types.html#ga3852ce8af18e9e47389c12172f7baf90">sy2NodeName</a>[node-&gt;<a class="code" href="struct_sy2_node.html#a4a808900b6a4dfad757f019fb50eac18">type</a>], node-&gt;<a class="code" href="struct_sy2_node.html#af487ae48a39febf4c8dfc84655ac3296">status</a>, node-&gt;<a class="code" href="struct_sy2_node.html#ad35e7448ed7b3200fb03f3b56651d705">value</a>);</div>
 <div class="line"></div>
 <div class="line">  <a class="code" href="struct_sy2_node.html">T_Sy2Node</a> newNode = { 0 };</div>
 <div class="line">  <a class="code" href="group__uda__device__constants__types.html#ga2a6b7a98923516eba7750a06b43fc577">Sy2ParserStatus</a> status = <a class="code" href="group__sy2parser__api__functions.html#ga5301f0d7a51e2d3467db66a0e498bed3">sy2ReadNext</a>(handle, &amp;newNode);</div>
-<div class="line">  <span class="keywordflow">while</span> (status == <a class="code" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba0c523e2a0e55d51471f7f0179bd74a32">SY2_SUCCESS</a> &amp;&amp; newNode.<a class="code" href="struct_sy2_node.html#a44e75bf670e4ae02b3a1e3a6f2d82904">depth</a> &gt; node-&gt;<a class="code" href="struct_sy2_node.html#a44e75bf670e4ae02b3a1e3a6f2d82904">depth</a>)</div>
+<div class="line">  <span class="keywordflow">while</span> (newNode.<a class="code" href="struct_sy2_node.html#a44e75bf670e4ae02b3a1e3a6f2d82904">depth</a> &gt; node-&gt;<a class="code" href="struct_sy2_node.html#a44e75bf670e4ae02b3a1e3a6f2d82904">depth</a>)</div>
 <div class="line">  {</div>
 <div class="line">    setIndent(indent, newNode.<a class="code" href="struct_sy2_node.html#a44e75bf670e4ae02b3a1e3a6f2d82904">depth</a>);</div>
-<div class="line">    printf(<span class="stringliteral">&quot;%s%s: %s\n&quot;</span>, indent, <a class="code" href="group__uda__device__constants__types.html#ga3852ce8af18e9e47389c12172f7baf90">sy2NodeName</a>[newNode.<a class="code" href="struct_sy2_node.html#a4a808900b6a4dfad757f019fb50eac18">type</a>], newNode.<a class="code" href="struct_sy2_node.html#a78f6166f06f17913ae32b56ee86d441c">value</a>);</div>
+<div class="line">    printf(<span class="stringliteral">&quot;%s%s (0x%04X): %s\n&quot;</span>, indent, <a class="code" href="group__uda__device__constants__types.html#ga3852ce8af18e9e47389c12172f7baf90">sy2NodeName</a>[newNode.<a class="code" href="struct_sy2_node.html#a4a808900b6a4dfad757f019fb50eac18">type</a>], status, newNode.<a class="code" href="struct_sy2_node.html#ad35e7448ed7b3200fb03f3b56651d705">value</a>);</div>
 <div class="line">    resetIndent(indent);</div>
 <div class="line"></div>
 <div class="line">    status = <a class="code" href="group__sy2parser__api__functions.html#ga5301f0d7a51e2d3467db66a0e498bed3">sy2ReadNext</a>(handle, &amp;newNode);</div>
@@ -298,117 +309,455 @@ Read AST during parsing</h1>
 <div class="line">TEngSetSignVersion 2016</div>
 <div class="line"></div>
 <div class="line"><span class="preprocessor"># Structure TAG PointTag, sizeof(PointTag) is 16 Byte(s):</span></div>
-<div class="line"><span class="preprocessor"># Command Type   Name              Offset      Signature</span></div>
-<div class="line"><span class="preprocessor"># ----------------------------------------------------------</span></div>
-<div class="line">RegVar    STRUCT PointTag          0           S128-PointTag                                             </div>
-<div class="line">RegVar    STRUCT PointTag_x        0           F32                                                       </div>
-<div class="line">RegVar    STRUCT PointTag_y        4           F96 </div>
+<div class="line"><span class="preprocessor"># Command Type   Name            Offset      Signature</span></div>
+<div class="line"><span class="preprocessor"># ----------------------------------------------------------------------------</span></div>
+<div class="line">RegVar    STRUCT PointTag        0           S128-PointTag</div>
+<div class="line">RegVar    STRUCT PointTag_x      0           F32</div>
+<div class="line">RegVar    STRUCT PointTag_y      4           F96</div>
 <div class="line"></div>
 <div class="line"><span class="preprocessor"># Command Type   Name            Address     Signature</span></div>
-<div class="line"><span class="preprocessor"># --------------------------------------------------------</span></div>
+<div class="line"><span class="preprocessor"># ----------------------------------------------------------------------------</span></div>
+<div class="line">RegCmd    DATA   var1            0040DC20    UI32</div>
 <div class="line">RegCmd    DATA   var2            0040DD0C    C-UI8</div>
 <div class="line">RegCmd    DATA   var3            0040DE20    C-PTR32-C-I32</div>
-<div class="line">RegCmd    DATA   point1          0040DF20    S128-PointTag                                             </div>
-<div class="line">RegCmd    DATA   point1_x        0040DF20    F32                                                       </div>
+<div class="line">RegCmd    DATA   point1          0040DF20    S128-PointTag</div>
+<div class="line">RegCmd    DATA   point1_x        0040DF20    F32</div>
 <div class="line">RegCmd    DATA   point1_y        0040DF24    F96</div>
-</div><!-- fragment --><p>Output: </p><div class="fragment"><div class="line">Progress: 2%</div>
-<div class="line"> COMMAND: Encoding</div>
-<div class="line">  CMD_VALUE: little_endian  </div>
 <div class="line"></div>
-<div class="line">Progress: 5%</div>
-<div class="line"> COMMAND: TEngSetSignVersion</div>
-<div class="line">  CMD_VALUE: 2016</div>
+<div class="line"><span class="preprocessor"># Command Type   Name            Address     Signature</span></div>
+<div class="line"><span class="preprocessor"># -----------------------------------------------------------------------------</span></div>
+<div class="line"><span class="preprocessor">RegCmd    PROC   func1           080020C5    FB-V-PTR32-C-S128-PointTag-UI32-FE</span></div>
+</div><!-- fragment --><p>Output: </p><div class="fragment"><div class="line">Progress: 2%</div>
+<div class="line"> COMMAND (0x0000): Encoding</div>
+<div class="line">  CMD_VALUE (0x0000): little_endian</div>
+<div class="line"></div>
+<div class="line">Progress: 4%</div>
+<div class="line"> COMMAND (0x0000): TEngSetSignVersion</div>
+<div class="line">  CMD_VALUE (0x0000): 2016</div>
+<div class="line"></div>
+<div class="line">Progress: 27%</div>
+<div class="line"> COMMAND (0x0000): RegVar</div>
+<div class="line">  TYPEDEF (0x0000): PointTag</div>
+<div class="line">   TYPE (0x0000): STRUCT</div>
+<div class="line">   NAME (0x0000): PointTag</div>
+<div class="line">   OFFSET (0x0000): 0</div>
+<div class="line">   SIGNATURE (0x0000): S128-PointTag</div>
+<div class="line">        STRUCT (0x0000): PointTag</div>
+<div class="line">         SIZE (0x0000): 128</div>
 <div class="line"></div>
 <div class="line">Progress: 35%</div>
-<div class="line"> COMMAND: RegVar</div>
-<div class="line">  TYPEDEF: PointTag</div>
-<div class="line">   TYPE: STRUCT</div>
-<div class="line">   NAME: PointTag</div>
-<div class="line">   OFFSET: 0</div>
-<div class="line">   SIGNATURE: S128_PointTag</div>
-<div class="line">    STRUCT: PointTag</div>
-<div class="line">     SIZE: 128</div>
+<div class="line"> COMMAND (0x0000): RegVar</div>
+<div class="line">  TYPEDEF (0x0000): PointTag_x</div>
+<div class="line">   TYPE (0x0000): STRUCT</div>
+<div class="line">   NAME (0x0000): PointTag_x</div>
+<div class="line">   OFFSET (0x0000): 0</div>
+<div class="line">   SIGNATURE (0x0000): F32</div>
+<div class="line">        FLOAT (0x0000): F</div>
+<div class="line">         SIZE (0x0000): 32</div>
 <div class="line"></div>
-<div class="line">Progress: 46%</div>
-<div class="line"> COMMAND: RegVar</div>
-<div class="line">  TYPEDEF: PointTag_x</div>
-<div class="line">   TYPE: STRUCT</div>
-<div class="line">   NAME: PointTag_x</div>
-<div class="line">   OFFSET: 0</div>
-<div class="line">   SIGNATURE: F32</div>
-<div class="line">    FLOAT: F</div>
-<div class="line">     SIZE: 32</div>
+<div class="line">Progress: 39%</div>
+<div class="line"> COMMAND (0x0000): RegVar</div>
+<div class="line">  TYPEDEF (0x0000): PointTag_y</div>
+<div class="line">   TYPE (0x0000): STRUCT</div>
+<div class="line">   NAME (0x0000): PointTag_y</div>
+<div class="line">   OFFSET (0x0000): 4</div>
+<div class="line">   SIGNATURE (0x0000): F96</div>
+<div class="line">        FLOAT (0x0000): F</div>
+<div class="line">         SIZE (0x0000): 96</div>
 <div class="line"></div>
-<div class="line">Progress: 51%</div>
-<div class="line"> COMMAND: RegVar</div>
-<div class="line">  TYPEDEF: PointTag_y</div>
-<div class="line">   TYPE: STRUCT</div>
-<div class="line">   NAME: PointTag_y</div>
-<div class="line">   OFFSET: 4</div>
-<div class="line">   SIGNATURE: F96</div>
-<div class="line">    FLOAT: F</div>
-<div class="line">     SIZE: 96</div>
+<div class="line">Progress: 54%</div>
+<div class="line"> COMMAND (0x0000): RegCmd</div>
+<div class="line">  SYMBOL (0x0000): var1</div>
+<div class="line">   TYPE (0x0000): DATA</div>
+<div class="line">   NAME (0x0000): var1</div>
+<div class="line">   ADDRESS (0x0000): 0040DC20</div>
+<div class="line">   SIGNATURE (0x0000): UI32</div>
+<div class="line">        UINT (0x0000): UI</div>
+<div class="line">         SIZE (0x0000): 32</div>
 <div class="line"></div>
-<div class="line">Progress: 67%</div>
-<div class="line"> COMMAND: RegCmd</div>
-<div class="line">  SYMBOL: var2</div>
-<div class="line">   TYPE: DATA</div>
-<div class="line">   NAME: var2</div>
-<div class="line">   ADDRESS: 0040DD0C</div>
-<div class="line">   SIGNATURE: C_UI8</div>
-<div class="line">    UINT: UI</div>
-<div class="line">     TYPE_QUALIFIER: C</div>
-<div class="line">      SIZE: 8</div>
+<div class="line">Progress: 58%</div>
+<div class="line"> COMMAND (0x0000): RegCmd</div>
+<div class="line">  SYMBOL (0x0000): var2</div>
+<div class="line">   TYPE (0x0000): DATA</div>
+<div class="line">   NAME (0x0000): var2</div>
+<div class="line">   ADDRESS (0x0000): 0040DD0C</div>
+<div class="line">   SIGNATURE (0x0000): C-UI8</div>
+<div class="line">        UINT (0x0000): UI</div>
+<div class="line">         TYPE_QUALIFIER (0x0000): C</div>
+<div class="line">         SIZE (0x0000): 8</div>
 <div class="line"></div>
-<div class="line">Progress: 73%</div>
-<div class="line"> COMMAND: RegCmd</div>
-<div class="line">  SYMBOL: var3</div>
-<div class="line">   TYPE: DATA</div>
-<div class="line">   NAME: var3</div>
-<div class="line">   ADDRESS: 0040DE20</div>
-<div class="line">   SIGNATURE: C_PTR32_C_I32</div>
-<div class="line">    POINTER: PTR</div>
-<div class="line">     TYPE_QUALIFIER: C</div>
-<div class="line">     SIZE: 32</div>
-<div class="line">     INT: I</div>
-<div class="line">      TYPE_QUALIFIER: C</div>
-<div class="line">      SIZE: 32</div>
+<div class="line">Progress: 62%</div>
+<div class="line"> COMMAND (0x0000): RegCmd</div>
+<div class="line">  SYMBOL (0x0000): var3</div>
+<div class="line">   TYPE (0x0000): DATA</div>
+<div class="line">   NAME (0x0000): var3</div>
+<div class="line">   ADDRESS (0x0000): 0040DE20</div>
+<div class="line">   SIGNATURE (0x0000): C-PTR32-C-I32</div>
+<div class="line">        POINTER (0x0000): PTR</div>
+<div class="line">         TYPE_QUALIFIER (0x0000): C</div>
+<div class="line">         SIZE (0x0000): 32</div>
+<div class="line">         INT (0x0000): I</div>
+<div class="line">          TYPE_QUALIFIER (0x0000): C</div>
+<div class="line">          SIZE (0x0000): 32</div>
 <div class="line"></div>
-<div class="line">Progress: 84%</div>
-<div class="line"> COMMAND: RegCmd</div>
-<div class="line">  SYMBOL: point1</div>
-<div class="line">   TYPE: DATA</div>
-<div class="line">   NAME: point1</div>
-<div class="line">   ADDRESS: 0040DF20</div>
-<div class="line">   SIGNATURE: S128_PointTag</div>
-<div class="line">    STRUCT: PointTag</div>
-<div class="line">     SIZE: 128</div>
+<div class="line">Progress: 71%</div>
+<div class="line"> COMMAND (0x0000): RegCmd</div>
+<div class="line">  SYMBOL (0x0000): point1</div>
+<div class="line">   TYPE (0x0000): DATA</div>
+<div class="line">   NAME (0x0000): point1</div>
+<div class="line">   ADDRESS (0x0000): 0040DF20</div>
+<div class="line">   SIGNATURE (0x0000): S128-PointTag</div>
+<div class="line">        STRUCT (0x0000): PointTag</div>
+<div class="line">         SIZE (0x0000): 128</div>
 <div class="line"></div>
-<div class="line">Progress: 94%</div>
-<div class="line"> COMMAND: RegCmd</div>
-<div class="line">  SYMBOL: point1_x</div>
-<div class="line">   TYPE: DATA</div>
-<div class="line">   NAME: point1_x</div>
-<div class="line">   ADDRESS: 0040DF20</div>
-<div class="line">   SIGNATURE: F32</div>
-<div class="line">    FLOAT: F</div>
-<div class="line">     SIZE: 32</div>
+<div class="line">Progress: 79%</div>
+<div class="line"> COMMAND (0x0000): RegCmd</div>
+<div class="line">  SYMBOL (0x0000): point1_x</div>
+<div class="line">   TYPE (0x0000): DATA</div>
+<div class="line">   NAME (0x0000): point1_x</div>
+<div class="line">   ADDRESS (0x0000): 0040DF20</div>
+<div class="line">   SIGNATURE (0x0000): F32</div>
+<div class="line">        FLOAT (0x0000): F</div>
+<div class="line">         SIZE (0x0000): 32</div>
+<div class="line"></div>
+<div class="line">Progress: 83%</div>
+<div class="line"> COMMAND (0x0000): RegCmd</div>
+<div class="line">  SYMBOL (0x0000): point1_y</div>
+<div class="line">   TYPE (0x0000): DATA</div>
+<div class="line">   NAME (0x0000): point1_y</div>
+<div class="line">   ADDRESS (0x0000): 0040DF24</div>
+<div class="line">   SIGNATURE (0x0000): F96</div>
+<div class="line">        FLOAT (0x0000): F</div>
+<div class="line">         SIZE (0x0000): 96</div>
 <div class="line"></div>
 <div class="line">Progress: 99%</div>
-<div class="line"> COMMAND: RegCmd</div>
-<div class="line">  SYMBOL: point1_y</div>
-<div class="line">   TYPE: DATA</div>
-<div class="line">   NAME: point1_y</div>
-<div class="line">   ADDRESS: 0040DF24</div>
-<div class="line">   SIGNATURE: F96</div>
-<div class="line">    FLOAT: F</div>
-<div class="line">     SIZE: 96</div>
+<div class="line"> COMMAND (0x0000): RegCmd</div>
+<div class="line">  SYMBOL (0x0000): func1</div>
+<div class="line">   TYPE (0x0000): PROC</div>
+<div class="line">   NAME (0x0000): func1</div>
+<div class="line">   ADDRESS (0x0000): 080020C5</div>
+<div class="line">   SIGNATURE (0x0000): FB-V-PTR32-C-S128-PointTag-UI32-FE</div>
+<div class="line">        FUNCTION (0x0000): FB-V-PTR32-C-S128-PointTag-UI32-FE</div>
+<div class="line">         RETURN (0x0000): V</div>
+<div class="line">          VOID (0x0000): V</div>
+<div class="line">         PARAMETER (0x0000): PTR32-C-S128-PointTag</div>
+<div class="line">          POINTER (0x0000): PTR</div>
+<div class="line">           SIZE (0x0000): 32</div>
+<div class="line">           STRUCT (0x0000): PointTag</div>
+<div class="line">                TYPE_QUALIFIER (0x0000): C</div>
+<div class="line">                SIZE (0x0000): 128</div>
+<div class="line">         PARAMETER (0x0000): UI32</div>
+<div class="line">          UINT (0x0000): UI</div>
+<div class="line">           SIZE (0x0000): 32</div>
 <div class="line"></div>
 <div class="line">Progress: 100%</div>
+</div><!-- fragment --><h1><a class="anchor" id="sec_error_handling"></a>
+Error Handling</h1>
+<p>There are four parsing errors which a user can handle:</p>
+<ul>
+<li>SY2_INPUT_MISMATCHED 0x1000 - This signifies any kind of mismatched input error such as when the current input does not match the expected token.</li>
+<li>SY2_EXTRAENOUS_INPUT 0x1001 - Requires the removal of a token from the input stream.</li>
+<li>SY2_NO_VIABLE_ALTERNATIVE 0x1002 - Indicates that the parser could not decide which of two or more paths to take based upon the remaining input.</li>
+<li>SY2_MISSING_TOKEN 0x1003 - Requires the insertion of a missing token into the input stream.</li>
+</ul>
+<p>If some node is not recognized will be tagged as UNSPECIFIED.</p>
+<p>The examples below display nodes following way: </p><pre class="fragment">    &lt;node-type&gt; (&lt;error-code&gt;): &lt;node-value&gt;
+
+    UNSPECIFIED (0x0000): errRegCmd - the UNSPECIFIED node has always error code 0x0000
+    ADDRESS (0x1000): err00400000 - the ADDRESS node with error code 0x1000
+</pre><p>The following source code is used: </p><div class="fragment"><div class="line"><span class="keywordtype">void</span> SY2PARSER_API_CALL errorCallback(<a class="code" href="group__uda__device__constants__types.html#gab56874616dcf613944f4d01ca95478c5">Sy2ParserHandle</a> handle, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> line, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> column, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> code, <span class="keyword">const</span> <span class="keywordtype">char</span> *message, <span class="keywordtype">void</span> *callbackContext)</div>
+<div class="line">{</div>
+<div class="line">  printf(<span class="stringliteral">&quot;Error: line %u, column %u, code 0x%04X, message %s\n&quot;</span>, line, column, code, message);</div>
+<div class="line">}</div>
+<div class="line"></div>
+<div class="line"><span class="keywordtype">int</span> main()</div>
+<div class="line">{</div>
+<div class="line">  <a class="code" href="group__uda__device__constants__types.html#gab56874616dcf613944f4d01ca95478c5">Sy2ParserHandle</a> handle = <a class="code" href="group__uda__device__constants__types.html#ga78c3c87878b5493344d349a39b4b77cf">SY2PARSER_INVALID_HANDLE</a>;</div>
+<div class="line">  <a class="code" href="struct_sy2_node.html">T_Sy2Node</a> node = { 0 };</div>
+<div class="line"></div>
+<div class="line">  <a class="code" href="group__uda__device__constants__types.html#ga2a6b7a98923516eba7750a06b43fc577">Sy2ParserStatus</a> status = <a class="code" href="group__sy2parser__api__functions.html#ga7c423115821a7c105f803d021b4fc07d">sy2Open</a>(<span class="stringliteral">&quot;test.sy2&quot;</span>, &amp;handle);</div>
+<div class="line">  status = <a class="code" href="group__sy2parser__api__functions.html#ga142672bd5409aa5acc6f9c535a2807c5">sy2SetParsingErrorCallback</a>(handle, errorCallback, NULL);</div>
+<div class="line"></div>
+<div class="line">  status = <a class="code" href="group__sy2parser__api__functions.html#ga2b15567a938a0b33f1c9aba5fc9cf2fe">sy2Parse</a>(handle);</div>
+<div class="line"></div>
+<div class="line">  status = <a class="code" href="group__sy2parser__api__functions.html#ga5301f0d7a51e2d3467db66a0e498bed3">sy2ReadNext</a>(handle, &amp;node);</div>
+<div class="line">  <span class="keywordflow">while</span> (status != <a class="code" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba184dce72acff92f77299f48deedffd95">SY2_EOF</a>)</div>
+<div class="line">  {</div>
+<div class="line">    printf(<span class="stringliteral">&quot;%s (0x%04X): %s\n&quot;</span>, <a class="code" href="group__uda__device__constants__types.html#ga3852ce8af18e9e47389c12172f7baf90">sy2NodeName</a>[node.<a class="code" href="struct_sy2_node.html#a4a808900b6a4dfad757f019fb50eac18">type</a>], status, node.<a class="code" href="struct_sy2_node.html#ad35e7448ed7b3200fb03f3b56651d705">value</a>);</div>
+<div class="line"></div>
+<div class="line">    status = <a class="code" href="group__sy2parser__api__functions.html#ga5301f0d7a51e2d3467db66a0e498bed3">sy2ReadNext</a>(handle, &amp;node);</div>
+<div class="line">  }</div>
+<div class="line"></div>
+<div class="line">  status = <a class="code" href="group__sy2parser__api__functions.html#ga25319be6008b7670a07f289a775de185">sy2Close</a>(handle);</div>
+<div class="line"></div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+</div><!-- fragment --><h2><a class="anchor" id="sec_example_1"></a>
+Example 1: Error Code SY2_INPUT_MISMATCHED</h2>
+<div class="fragment"><div class="line">errRegCmd DATA var1 00400000 I32</div>
+<div class="line">RegCmd DATA var2 00400004 I32</div>
+<div class="line">RegCmd DATA var3 00400008 I32</div>
+</div><!-- fragment --><p> Output: </p><div class="fragment"><div class="line">Error: line 1, column 1, code 0x1000, message mismatched input <span class="stringliteral">&#39;errRegCmd&#39;</span> expecting {<span class="stringliteral">&#39;Encoding&#39;</span>, <span class="stringliteral">&#39;TEngSetSignVersion&#39;</span>, <span class="stringliteral">&#39;RegVar&#39;</span>, <span class="stringliteral">&#39;RegCmd&#39;</span>, NL}</div>
+<div class="line"></div>
+<div class="line">FILE (0x1000): ..\Test\In\test.sy2</div>
+<div class="line"> UNSPECIFIED (0x0000): errRegCmd</div>
+<div class="line"> UNSPECIFIED (0x0000): DATA</div>
+<div class="line"> UNSPECIFIED (0x0000): var1</div>
+<div class="line"> UNSPECIFIED (0x0000): 00400000</div>
+<div class="line"> UNSPECIFIED (0x0000): I32</div>
+<div class="line"> UNSPECIFIED (0x0000):</div>
+<div class="line"></div>
+<div class="line"> UNSPECIFIED (0x0000): RegCmd</div>
+<div class="line"> UNSPECIFIED (0x0000): DATA</div>
+<div class="line"> UNSPECIFIED (0x0000): var2</div>
+<div class="line"> UNSPECIFIED (0x0000): 00400004</div>
+<div class="line"> UNSPECIFIED (0x0000): I32</div>
+<div class="line"> UNSPECIFIED (0x0000):</div>
+<div class="line"></div>
+<div class="line"> UNSPECIFIED (0x0000): RegCmd</div>
+<div class="line"> UNSPECIFIED (0x0000): DATA</div>
+<div class="line"> UNSPECIFIED (0x0000): var3</div>
+<div class="line"> UNSPECIFIED (0x0000): 00400008</div>
+<div class="line"> UNSPECIFIED (0x0000): I32</div>
+<div class="line"> UNSPECIFIED (0x0000):</div>
+</div><!-- fragment --><h2><a class="anchor" id="sec_example_2"></a>
+Example 2: Error Code SY2_EXTRAENOUS_INPUT</h2>
+<div class="fragment"><div class="line">RegCmd DATA var1 00400000 I32</div>
+<div class="line">errRegCmd DATA var2 00400004 I32</div>
+<div class="line">RegCmd DATA var3 00400008 I32</div>
+</div><!-- fragment --><p> Output: </p><div class="fragment"><div class="line">Error: line 2, column 1, code 0x1001, message extraneous input <span class="stringliteral">&#39;errRegCmd&#39;</span> expecting {&lt;EOF&gt;, <span class="stringliteral">&#39;Encoding&#39;</span>, <span class="stringliteral">&#39;TEngSetSignVersion&#39;</span>, <span class="stringliteral">&#39;RegVar&#39;</span>, <span class="stringliteral">&#39;RegCmd&#39;</span>, NL}</div>
+<div class="line"></div>
+<div class="line">FILE (0x0000): ..\Test\In\test.sy2</div>
+<div class="line"> COMMAND (0x0000): RegCmd</div>
+<div class="line">  SYMBOL (0x0000): var1</div>
+<div class="line">   TYPE (0x0000): DATA</div>
+<div class="line">   NAME (0x0000): var1</div>
+<div class="line">   ADDRESS (0x0000): 00400000</div>
+<div class="line">   SIGNATURE (0x0000): I32</div>
+<div class="line">        INT (0x0000): I</div>
+<div class="line">         SIZE (0x0000): 32</div>
+<div class="line"> UNSPECIFIED (0x0000): errRegCmd</div>
+<div class="line"> UNSPECIFIED (0x0000): DATA</div>
+<div class="line"> UNSPECIFIED (0x0000): var2</div>
+<div class="line"> UNSPECIFIED (0x0000): 00400004</div>
+<div class="line"> UNSPECIFIED (0x0000): I32</div>
+<div class="line"> COMMAND (0x0000): RegCmd</div>
+<div class="line">  SYMBOL (0x0000): var3</div>
+<div class="line">   TYPE (0x0000): DATA</div>
+<div class="line">   NAME (0x0000): var3</div>
+<div class="line">   ADDRESS (0x0000): 00400008</div>
+<div class="line">   SIGNATURE (0x0000): I32</div>
+<div class="line">        INT (0x0000): I</div>
+<div class="line">         SIZE (0x0000): 32</div>
+</div><!-- fragment --><h2><a class="anchor" id="sec_example_3"></a>
+Example 3: Error code SY2_INPUT_MISMATCHED in a type of SYMBOL or TYPEDEF</h2>
+<div class="fragment"><div class="line">RegCmd errDATA var1 00400000 I32</div>
+<div class="line">RegCmd DATA var2 00400004 I32</div>
+<div class="line">RegCmd DATA var3 00400008 I32</div>
+</div><!-- fragment --><p> Output: </p><div class="fragment"><div class="line">Error: line 1, column 8, code 0x1000, message mismatched input <span class="stringliteral">&#39;errDATA&#39;</span> expecting {PROC, DATA}</div>
+<div class="line"></div>
+<div class="line">FILE (0x0000): ..\Test\In\test.sy2</div>
+<div class="line"> COMMAND (0x0000): RegCmd</div>
+<div class="line">  SYMBOL (0x1000): &lt;missing TYPE&gt;</div>
+<div class="line">   UNSPECIFIED (0x0000): errDATA</div>
+<div class="line">   UNSPECIFIED (0x0000): var1</div>
+<div class="line">   UNSPECIFIED (0x0000): 00400000</div>
+<div class="line">   UNSPECIFIED (0x0000): I32</div>
+<div class="line"> COMMAND (0x0000): RegCmd</div>
+<div class="line">  SYMBOL (0x0000): var2</div>
+<div class="line">   TYPE (0x0000): DATA</div>
+<div class="line">   NAME (0x0000): var2</div>
+<div class="line">   ADDRESS (0x0000): 00400004</div>
+<div class="line">   SIGNATURE (0x0000): I32</div>
+<div class="line">        INT (0x0000): I</div>
+<div class="line">         SIZE (0x0000): 32</div>
+<div class="line"> COMMAND (0x0000): RegCmd</div>
+<div class="line">  SYMBOL (0x0000): var3</div>
+<div class="line">   TYPE (0x0000): DATA</div>
+<div class="line">   NAME (0x0000): var3</div>
+<div class="line">   ADDRESS (0x0000): 00400008</div>
+<div class="line">   SIGNATURE (0x0000): I32</div>
+<div class="line">        INT (0x0000): I</div>
+<div class="line">         SIZE (0x0000): 32</div>
+</div><!-- fragment --><h2><a class="anchor" id="sec_example_4"></a>
+Example 4: Error code SY2_INPUT_MISMATCHED in an ADDRESS</h2>
+<div class="fragment"><div class="line">RegCmd DATA var1 err00400000 I32</div>
+<div class="line">RegCmd DATA var2 00400004 I32</div>
+<div class="line">RegCmd DATA var3 00400008 I32</div>
+</div><!-- fragment --><p> Output: </p><div class="fragment"><div class="line">Error: line 1, column 18, code 0x1000, message mismatched input <span class="stringliteral">&#39;err00400000&#39;</span> expecting ADDRESS</div>
+<div class="line"></div>
+<div class="line">FILE (0x0000): ..\Test\In\test.sy2</div>
+<div class="line"> COMMAND (0x0000): RegCmd</div>
+<div class="line">  SYMBOL (0x0000): var1</div>
+<div class="line">   TYPE (0x0000): DATA</div>
+<div class="line">   NAME (0x0000): var1</div>
+<div class="line">   ADDRESS (0x1000): err00400000</div>
+<div class="line">   SIGNATURE (0x0000): I32</div>
+<div class="line">        INT (0x0000): I</div>
+<div class="line">         SIZE (0x0000): 32</div>
+<div class="line"> COMMAND (0x0000): RegCmd</div>
+<div class="line">  SYMBOL (0x0000): var2</div>
+<div class="line">   TYPE (0x0000): DATA</div>
+<div class="line">   NAME (0x0000): var2</div>
+<div class="line">   ADDRESS (0x0000): 00400004</div>
+<div class="line">   SIGNATURE (0x0000): I32</div>
+<div class="line">        INT (0x0000): I</div>
+<div class="line">         SIZE (0x0000): 32</div>
+<div class="line"> COMMAND (0x0000): RegCmd</div>
+<div class="line">  SYMBOL (0x0000): var3</div>
+<div class="line">   TYPE (0x0000): DATA</div>
+<div class="line">   NAME (0x0000): var3</div>
+<div class="line">   ADDRESS (0x0000): 00400008</div>
+<div class="line">   SIGNATURE (0x0000): I32</div>
+<div class="line">        INT (0x0000): I</div>
+<div class="line">         SIZE (0x0000): 32</div>
+</div><!-- fragment --><h2><a class="anchor" id="sec_example_5"></a>
+Example 5: Error code SY2_INPUT_MISMATCHED in a SIGNATURE</h2>
+<div class="fragment"><div class="line">RegCmd DATA var1 00400000 errI32</div>
+<div class="line">RegCmd DATA var2 00400004 I32</div>
+<div class="line">RegCmd DATA var3 00400008 I32</div>
+</div><!-- fragment --><p> Output: </p><div class="fragment"><div class="line">Error: line 1, column 33, code 0x1000, message mismatched input <span class="stringliteral">&#39;&lt;EOF&gt;&#39;</span> expecting {<span class="charliteral">&#39;C&#39;</span>, <span class="charliteral">&#39;B&#39;</span>, <span class="charliteral">&#39;I&#39;</span>, <span class="stringliteral">&#39;UI&#39;</span>, <span class="charliteral">&#39;F&#39;</span>, <span class="charliteral">&#39;S&#39;</span>, <span class="stringliteral">&#39;PTR&#39;</span>, <span class="stringliteral">&#39;FB&#39;</span>}</div>
+<div class="line"></div>
+<div class="line">FILE (0x0000): ..\Test\In\test.sy2</div>
+<div class="line"> COMMAND (0x0000): RegCmd</div>
+<div class="line">  SYMBOL (0x0000): var1</div>
+<div class="line">   TYPE (0x0000): DATA</div>
+<div class="line">   NAME (0x0000): var1</div>
+<div class="line">   ADDRESS (0x0000): 00400000</div>
+<div class="line">   SIGNATURE (0x1000): errI32</div>
+<div class="line"> COMMAND (0x0000): RegCmd</div>
+<div class="line">  SYMBOL (0x0000): var2</div>
+<div class="line">   TYPE (0x0000): DATA</div>
+<div class="line">   NAME (0x0000): var2</div>
+<div class="line">   ADDRESS (0x0000): 00400004</div>
+<div class="line">   SIGNATURE (0x0000): I32</div>
+<div class="line">        INT (0x0000): I</div>
+<div class="line">         SIZE (0x0000): 32</div>
+<div class="line"> COMMAND (0x0000): RegCmd</div>
+<div class="line">  SYMBOL (0x0000): var3</div>
+<div class="line">   TYPE (0x0000): DATA</div>
+<div class="line">   NAME (0x0000): var3</div>
+<div class="line">   ADDRESS (0x0000): 00400008</div>
+<div class="line">   SIGNATURE (0x0000): I32</div>
+<div class="line">        INT (0x0000): I</div>
+<div class="line">         SIZE (0x0000): 32</div>
+</div><!-- fragment --><h2><a class="anchor" id="sec_example_6"></a>
+Example 6: Error Code SY2_MISSING_TOKEN - missing a SIGNATURE</h2>
+<div class="fragment"><div class="line">RegCmd DATA var1 00400000</div>
+<div class="line">RegCmd DATA var2 00400004 I32</div>
+<div class="line">RegCmd DATA var3 00400008 I32</div>
+</div><!-- fragment --><p> Output: </p><div class="fragment"><div class="line">Error: line 1, column 26, code 0x1003, message missing SIGNATURE at <span class="charliteral">&#39;\n&#39;</span></div>
+<div class="line"></div>
+<div class="line">FILE (0x0000): ..\Test\In\test.sy2</div>
+<div class="line"> COMMAND (0x0000): RegCmd</div>
+<div class="line">  SYMBOL (0x0000): var1</div>
+<div class="line">   TYPE (0x0000): DATA</div>
+<div class="line">   NAME (0x0000): var1</div>
+<div class="line">   ADDRESS (0x0000): 00400000</div>
+<div class="line">   SIGNATURE (0x1003): &lt;missing SIGNATURE&gt;</div>
+<div class="line"> COMMAND (0x0000): RegCmd</div>
+<div class="line">  SYMBOL (0x0000): var2</div>
+<div class="line">   TYPE (0x0000): DATA</div>
+<div class="line">   NAME (0x0000): var2</div>
+<div class="line">   ADDRESS (0x0000): 00400004</div>
+<div class="line">   SIGNATURE (0x0000): I32</div>
+<div class="line">        INT (0x0000): I</div>
+<div class="line">         SIZE (0x0000): 32</div>
+<div class="line"> COMMAND (0x0000): RegCmd</div>
+<div class="line">  SYMBOL (0x0000): var3</div>
+<div class="line">   TYPE (0x0000): DATA</div>
+<div class="line">   NAME (0x0000): var3</div>
+<div class="line">   ADDRESS (0x0000): 00400008</div>
+<div class="line">   SIGNATURE (0x0000): I32</div>
+<div class="line">        INT (0x0000): I</div>
+<div class="line">         SIZE (0x0000): 32</div>
+</div><!-- fragment --><h2><a class="anchor" id="sec_example_7"></a>
+Example 7: Error Code SY2_NO_VIABLE_ALTERNATIVE - missing a structure name in a SIGNATURE</h2>
+<div class="fragment"><div class="line">RegCmd DATA point1 0040DD24 S128-</div>
+</div><!-- fragment --><p> Output: </p><div class="fragment"><div class="line">Error: line 1, column 34, code 0x1002, message no viable alternative at input <span class="charliteral">&#39;-&#39;</span></div>
+<div class="line"></div>
+<div class="line">FILE (0x0000): ..\Test\In\test.sy2</div>
+<div class="line"> COMMAND (0x0000): RegCmd</div>
+<div class="line">  SYMBOL (0x0000): point1</div>
+<div class="line">   TYPE (0x0000): DATA</div>
+<div class="line">   NAME (0x0000): point1</div>
+<div class="line">   ADDRESS (0x0000): 0040DD24</div>
+<div class="line">   SIGNATURE (0x0000): S128-</div>
+<div class="line">        STRUCT (0x1002): &lt;missing NAME&gt;</div>
+<div class="line">         SIZE (0x0000): 128</div>
+</div><!-- fragment --><h2><a class="anchor" id="sec_example_8"></a>
+Example 8: Error Code SY2_MISSING_TOKEN - missing a BITMASK</h2>
+<div class="fragment"><div class="line">RegVar BIT BitFieldTag 0 S64-BitFieldTag</div>
+<div class="line">RegVar BIT BitFieldTag_a 0 UI32</div>
+<div class="line">RegVar BIT BitFieldTag_b 0 0x12 UI32</div>
+<div class="line">RegVar BIT BitFieldTag_c 1 UI32</div>
+</div><!-- fragment --><p> Output: </p><div class="fragment"><div class="line">Error: line 1, column 26, code 0x1003, message missing BITMASK at <span class="stringliteral">&#39;S64-BitFieldTag&#39;</span></div>
+<div class="line">Error: line 2, column 28, code 0x1003, message missing BITMASK at <span class="stringliteral">&#39;UI32&#39;</span></div>
+<div class="line">Error: line 4, column 28, code 0x1003, message missing BITMASK at <span class="stringliteral">&#39;UI32&#39;</span></div>
+<div class="line"></div>
+<div class="line">FILE (0x0000): ..\Test\In\test.sy2</div>
+<div class="line"> COMMAND (0x0000): RegVar</div>
+<div class="line">  TYPEDEF (0x0000): BitFieldTag</div>
+<div class="line">   TYPE (0x0000): BIT</div>
+<div class="line">   NAME (0x0000): BitFieldTag</div>
+<div class="line">   OFFSET (0x0000): 0</div>
+<div class="line">   BITMASK (0x1003): &lt;missing BITMASK&gt;</div>
+<div class="line">   SIGNATURE (0x0000): S64-BitFieldTag</div>
+<div class="line">        STRUCT (0x0000): BitFieldTag</div>
+<div class="line">         SIZE (0x0000): 64</div>
+<div class="line"> COMMAND (0x0000): RegVar</div>
+<div class="line">  TYPEDEF (0x0000): BitFieldTag_a</div>
+<div class="line">   TYPE (0x0000): BIT</div>
+<div class="line">   NAME (0x0000): BitFieldTag_a</div>
+<div class="line">   OFFSET (0x0000): 0</div>
+<div class="line">   BITMASK (0x1003): &lt;missing BITMASK&gt;</div>
+<div class="line">   SIGNATURE (0x0000): UI32</div>
+<div class="line">        UINT (0x0000): UI</div>
+<div class="line">         SIZE (0x0000): 32</div>
+<div class="line"> COMMAND (0x0000): RegVar</div>
+<div class="line">  TYPEDEF (0x0000): BitFieldTag_b</div>
+<div class="line">   TYPE (0x0000): BIT</div>
+<div class="line">   NAME (0x0000): BitFieldTag_b</div>
+<div class="line">   OFFSET (0x0000): 0</div>
+<div class="line">   BITMASK (0x0000): 0x12</div>
+<div class="line">   SIGNATURE (0x0000): UI32</div>
+<div class="line">        UINT (0x0000): UI</div>
+<div class="line">         SIZE (0x0000): 32</div>
+<div class="line"> COMMAND (0x0000): RegVar</div>
+<div class="line">  TYPEDEF (0x0000): BitFieldTag_c</div>
+<div class="line">   TYPE (0x0000): BIT</div>
+<div class="line">   NAME (0x0000): BitFieldTag_c</div>
+<div class="line">   OFFSET (0x0000): 1</div>
+<div class="line">   BITMASK (0x1003): &lt;missing BITMASK&gt;</div>
+<div class="line">   SIGNATURE (0x0000): UI32</div>
+<div class="line">        UINT (0x0000): UI</div>
+<div class="line">         SIZE (0x0000): 32</div>
+</div><!-- fragment --><h2><a class="anchor" id="sec_example_9"></a>
+Example 9: Error Code SY2_EXTRAENOUS_INPUT and SY2_NO_VIABLE_ALTERNATIVE inside node</h2>
+<div class="fragment"><div class="line">RegCmd PROC Func1 2004EAF8 FB-I32-PTR32-S64-Struct1</div>
+</div><!-- fragment --><p> There is missing the end of function, the '-FE' keyword. At first the parser generates error code SY2_EXTRAENOUS_INPUT and tries to use the keyword which could potentially follow. It is '-'. But then the parser could not decide which of two or more paths to take for the remaining input. The same as in example 7. The array size or structure name could be follow.</p>
+<p>Output: </p><div class="fragment"><div class="line">Error: line 1, column 52, code 0x1001, message extraneous input <span class="stringliteral">&#39;&lt;EOF&gt;&#39;</span> expecting <span class="charliteral">&#39;-&#39;</span></div>
+<div class="line"></div>
+<div class="line">FILE (0x0000): ..\Test\In\test.sy2</div>
+<div class="line"> COMMAND (0x0000): RegCmd</div>
+<div class="line">  SYMBOL (0x0000): Func1</div>
+<div class="line">   TYPE (0x0000): PROC</div>
+<div class="line">   NAME (0x0000): Func1</div>
+<div class="line">   ADDRESS (0x0000): 2004EAF8</div>
+<div class="line">   SIGNATURE (0x0000): FB-I32-PTR32-S64-Struct1</div>
+<div class="line">        FUNCTION (0x1002): FB-I32-PTR32-S64-Struct1</div>
+<div class="line">         RETURN (0x0000): I32</div>
+<div class="line">          INT (0x0000): I</div>
+<div class="line">           SIZE (0x0000): 32</div>
+<div class="line">         PARAMETER (0x0000): PTR32-S64-Struct1</div>
+<div class="line">          POINTER (0x0000): PTR</div>
+<div class="line">           SIZE (0x0000): 32</div>
+<div class="line">           STRUCT (0x0000): Struct1</div>
+<div class="line">                SIZE (0x0000): 64</div>
 </div><!-- fragment --> </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Oct 31 2018 17:03:36 for Sy2 Parser API by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Dec 10 2018 13:55:49 for Sy2 Parser API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

@@ -106,6 +106,10 @@ Macros</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uda__device__constants__types.html#ga78c3c87878b5493344d349a39b4b77cf">SY2PARSER_INVALID_HANDLE</a>&#160;&#160;&#160;0U</td></tr>
 <tr class="memdesc:ga78c3c87878b5493344d349a39b4b77cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">The value zero is an invalid handle. <br /></td></tr>
 <tr class="separator:ga78c3c87878b5493344d349a39b4b77cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1f4915fc89deef50ad48560531ecd821"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ga1f4915fc89deef50ad48560531ecd821"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uda__device__constants__types.html#ga1f4915fc89deef50ad48560531ecd821">SY2_VALUE_SIZE</a>&#160;&#160;&#160;512</td></tr>
+<tr class="memdesc:ga1f4915fc89deef50ad48560531ecd821"><td class="mdescLeft">&#160;</td><td class="mdescRight">The size of a node value. <br /></td></tr>
+<tr class="separator:ga1f4915fc89deef50ad48560531ecd821"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -141,13 +145,19 @@ typedef struct <a class="el" href="struct_sy2_file_info.html">Sy2FileInfo</a>&#1
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:ga815bd44e1542872aa2e8edf7e9427f5b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__uda__device__constants__types.html#ga815bd44e1542872aa2e8edf7e9427f5b">Sy2ParserStatusCode</a> { <br />
-&#160;&#160;<a class="el" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba0c523e2a0e55d51471f7f0179bd74a32">SY2_SUCCESS</a> = 0x0, 
-<a class="el" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba0f5974ab25abc0342fcc804fb9402550">SY2_FAILD</a> = 0x1, 
-<a class="el" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba069b9678b5580df4ef3ff0e2e7e8ae41">SY2_FILE_NOT_FOUND</a> = 0x2, 
-<a class="el" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba184dce72acff92f77299f48deedffd95">SY2_EOF</a> = 0x3, 
+&#160;&#160;<a class="el" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba0c523e2a0e55d51471f7f0179bd74a32">SY2_SUCCESS</a> = 0x0000, 
+<a class="el" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba0f5974ab25abc0342fcc804fb9402550">SY2_FAILD</a> = 0x0001, 
+<a class="el" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba069b9678b5580df4ef3ff0e2e7e8ae41">SY2_FILE_NOT_FOUND</a> = 0x0002, 
+<a class="el" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba184dce72acff92f77299f48deedffd95">SY2_EOF</a> = 0x0003, 
 <br />
-&#160;&#160;<a class="el" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5baceffa75c1e074e27372a0a10ecbff3fc">SY2_UNKNOWN_TOKEN</a> = 0x4, 
-<b>SY2_INVALID_HANDLE</b> = 0x5
+&#160;&#160;<a class="el" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5baf3ecd479a70c24ed2a4dfa4efb8d5947">SY2_INVALID_HANDLE</a> = 0x0004, 
+<a class="el" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba5a0cf0f35a418db235680fb90def4804">SY2_INPUT_MISMATCHED</a> = 0x1000, 
+<a class="el" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5bad944f797b622405c6f10ac7f75de70c6">SY2_EXTRAENOUS_INPUT</a> = 0x1001, 
+<a class="el" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba00834ee131e24bd94e3843e0913379c1">SY2_NO_VIABLE_ALTERNATIVE</a> = 0x1002, 
+<br />
+&#160;&#160;<a class="el" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba3c34049c31628ac10d2ed4c50da08172">SY2_MISSING_TOKEN</a> = 0x1003, 
+<a class="el" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5bae23d43cdde2ae99150e9a37425f71d3f">SY2_PARSING_ABORTED</a> = 0x1FFE, 
+<a class="el" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba498cf252dd171b25634e0cc8d0a05520">SY2_UNKNOWN</a> = 0x1FFF
 <br />
  }<tr class="memdesc:ga815bd44e1542872aa2e8edf7e9427f5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sy2 Parser status codes.  <a href="group__uda__device__constants__types.html#ga815bd44e1542872aa2e8edf7e9427f5b">More...</a><br /></td></tr>
 <tr class="separator:ga815bd44e1542872aa2e8edf7e9427f5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -224,8 +234,26 @@ Variables</h2></td></tr>
 <tr><td class="fieldname"><a class="anchor" id="gga815bd44e1542872aa2e8edf7e9427f5ba184dce72acff92f77299f48deedffd95"></a>SY2_EOF&#160;</td><td class="fielddoc">
 <p>End of file. </p>
 </td></tr>
-<tr><td class="fieldname"><a class="anchor" id="gga815bd44e1542872aa2e8edf7e9427f5baceffa75c1e074e27372a0a10ecbff3fc"></a>SY2_UNKNOWN_TOKEN&#160;</td><td class="fielddoc">
-<p>Unknown token. </p>
+<tr><td class="fieldname"><a class="anchor" id="gga815bd44e1542872aa2e8edf7e9427f5baf3ecd479a70c24ed2a4dfa4efb8d5947"></a>SY2_INVALID_HANDLE&#160;</td><td class="fielddoc">
+<p>An invalid parser handle. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="gga815bd44e1542872aa2e8edf7e9427f5ba5a0cf0f35a418db235680fb90def4804"></a>SY2_INPUT_MISMATCHED&#160;</td><td class="fielddoc">
+<p>This signifies any kind of mismatched input error such as when the current input does not match the expected token. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="gga815bd44e1542872aa2e8edf7e9427f5bad944f797b622405c6f10ac7f75de70c6"></a>SY2_EXTRAENOUS_INPUT&#160;</td><td class="fielddoc">
+<p>A syntax error which requires the removal of a token from the input stream. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="gga815bd44e1542872aa2e8edf7e9427f5ba00834ee131e24bd94e3843e0913379c1"></a>SY2_NO_VIABLE_ALTERNATIVE&#160;</td><td class="fielddoc">
+<p>Indicates that the parser could not decide which of two or more paths to take based upon the remaining input. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="gga815bd44e1542872aa2e8edf7e9427f5ba3c34049c31628ac10d2ed4c50da08172"></a>SY2_MISSING_TOKEN&#160;</td><td class="fielddoc">
+<p>This method is called to report a syntax error which requires the insertion of a missing token into the input stream. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="gga815bd44e1542872aa2e8edf7e9427f5bae23d43cdde2ae99150e9a37425f71d3f"></a>SY2_PARSING_ABORTED&#160;</td><td class="fielddoc">
+<p>Occurs when parsing was canceled by user. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="gga815bd44e1542872aa2e8edf7e9427f5ba498cf252dd171b25634e0cc8d0a05520"></a>SY2_UNKNOWN&#160;</td><td class="fielddoc">
+<p>An unknown error. </p>
 </td></tr>
 </table>
 
@@ -277,7 +305,7 @@ Variables</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Oct 31 2018 17:03:35 for Sy2 Parser API by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Dec 10 2018 13:55:49 for Sy2 Parser API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

@@ -11,6 +11,11 @@ namespace Model
 		{
 		}
 
+		Unspecified(SizeType line, SizeType column)
+			: CompositeNode(line, column)
+		{
+		}
+
 		Unspecified(const Unspecified& Unspecified)
 			: CompositeNode(Unspecified)
 		{
@@ -28,7 +33,7 @@ namespace Model
 
 		Unspecified& operator=(Unspecified&& Unspecified)
 		{
-			CompositeNode::operator=(std::move(Unspecified));
+			//CompositeNode::operator=(std::move(Unspecified));
 
 			return *this;
 		}

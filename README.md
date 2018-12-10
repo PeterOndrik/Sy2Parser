@@ -20,6 +20,7 @@ uint8_t * const var2;
 # ------------------------------------------------------
 RegCmd    DATA   var1            0040DD0C    I32
 RegCmd    DATA   var2            0040DE20    C-PTR32-UI8
+
 ```
 
 A line started by the '#' sign is a comment. Columns "Type", "Name", "Address" and "Signature" are symbol attributes, where "Signature" describes data type. The Sy2 format is used to describe data type signature version 2016.
@@ -113,7 +114,7 @@ int main()
 
   // printing AST
   status = sy2ReadNext(handle, &node);
-  while (status == SY2_SUCCESS)
+  while (status != SY2_EOF)
   {
     setIndent(indent, node.depth);
     printf("%s%s: %s\n", indent, sy2NodeName[node.type], node.value);
@@ -203,14 +204,14 @@ void SY2PARSER_API_CALL parsedNodeCallback(Sy2ParserHandle handle, const T_Sy2No
   char indent[INDENT_SIZE] = { 0 };
 
   setIndent(indent, node->depth);
-  printf("%s%s: %s\n", indent, sy2NodeName[node->type], node->value);
+  printf("%s%s (0x%04X): %s\n", indent, sy2NodeName[node->type], node->status, node->value);
 
   T_Sy2Node newNode = { 0 };
   Sy2ParserStatus status = sy2ReadNext(handle, &newNode);
-  while (status == SY2_SUCCESS && newNode.depth > node->depth)
+  while (newNode.depth > node->depth)
   {
     setIndent(indent, newNode.depth);
-    printf("%s%s: %s\n", indent, sy2NodeName[newNode.type], newNode.value);
+    printf("%s%s (0x%04X): %s\n", indent, sy2NodeName[newNode.type], status, newNode.value);
     resetIndent(indent);
 
     status = sy2ReadNext(handle, &newNode);
@@ -246,119 +247,174 @@ Encoding little_endian
 TEngSetSignVersion 2016
 
 # Structure TAG PointTag, sizeof(PointTag) is 16 Byte(s):
-# Command Type   Name              Offset      Signature
-# ----------------------------------------------------------
-RegVar    STRUCT PointTag          0           S128-PointTag                                             
-RegVar    STRUCT PointTag_x        0           F32                                                       
-RegVar    STRUCT PointTag_y        4           F96 
+# Command Type   Name            Offset      Signature
+# ----------------------------------------------------------------------------
+RegVar    STRUCT PointTag        0           S128-PointTag                                             
+RegVar    STRUCT PointTag_x      0           F32                                                       
+RegVar    STRUCT PointTag_y      4           F96 
 
 # Command Type   Name            Address     Signature
-# ----------------------------------------------------
+# ----------------------------------------------------------------------------
+RegCmd    DATA   var1            0040DC20    UI32
 RegCmd    DATA   var2            0040DD0C    C-UI8
 RegCmd    DATA   var3            0040DE20    C-PTR32-C-I32
 RegCmd    DATA   point1          0040DF20    S128-PointTag                                             
 RegCmd    DATA   point1_x        0040DF20    F32                                                       
 RegCmd    DATA   point1_y        0040DF24    F96
+
+# Command Type   Name            Address     Signature
+# -----------------------------------------------------------------------------
+RegCmd    PROC   func1           080020C5    FB-V-PTR32-C-S128-PointTag-UI32-FE
 ```
 Output:
 ```
 Progress: 2%
- COMMAND: TEngSetSignVersion
-  CMD_VALUE: 2016
+ COMMAND (0x0000): Encoding
+  CMD_VALUE (0x0000): little_endian
+
+Progress: 4%
+ COMMAND (0x0000): TEngSetSignVersion
+  CMD_VALUE (0x0000): 2016
+
+Progress: 27%
+ COMMAND (0x0000): RegVar
+  TYPEDEF (0x0000): PointTag
+   TYPE (0x0000): STRUCT
+   NAME (0x0000): PointTag
+   OFFSET (0x0000): 0
+   SIGNATURE (0x0000): S128-PointTag
+    STRUCT (0x0000): PointTag
+     SIZE (0x0000): 128
 
 Progress: 35%
- COMMAND: RegVar
-  TYPEDEF: PointTag
-   TYPE: STRUCT
-   NAME: PointTag
-   OFFSET: 0
-   SIGNATURE: S128_PointTag
-    STRUCT: PointTag
-     SIZE: 128
+ COMMAND (0x0000): RegVar
+  TYPEDEF (0x0000): PointTag_x
+   TYPE (0x0000): STRUCT
+   NAME (0x0000): PointTag_x
+   OFFSET (0x0000): 0
+   SIGNATURE (0x0000): F32
+    FLOAT (0x0000): F
+     SIZE (0x0000): 32
 
-Progress: 46%
- COMMAND: RegVar
-  TYPEDEF: PointTag_x
-   TYPE: STRUCT
-   NAME: PointTag_x
-   OFFSET: 0
-   SIGNATURE: F32
-    FLOAT: F
-     SIZE: 32
+Progress: 39%
+ COMMAND (0x0000): RegVar
+  TYPEDEF (0x0000): PointTag_y
+   TYPE (0x0000): STRUCT
+   NAME (0x0000): PointTag_y
+   OFFSET (0x0000): 4
+   SIGNATURE (0x0000): F96
+    FLOAT (0x0000): F
+     SIZE (0x0000): 96
 
-Progress: 51%
- COMMAND: RegVar
-  TYPEDEF: PointTag_y
-   TYPE: STRUCT
-   NAME: PointTag_y
-   OFFSET: 4
-   SIGNATURE: F96
-    FLOAT: F
-     SIZE: 96
+Progress: 54%
+ COMMAND (0x0000): RegCmd
+  SYMBOL (0x0000): var1
+   TYPE (0x0000): DATA
+   NAME (0x0000): var1
+   ADDRESS (0x0000): 0040DC20
+   SIGNATURE (0x0000): UI32
+    UINT (0x0000): UI
+     SIZE (0x0000): 32
 
-Progress: 67%
- COMMAND: RegCmd
-  SYMBOL: var2
-   TYPE: DATA
-   NAME: var2
-   ADDRESS: 0040DD0C
-   SIGNATURE: C_UI8
-    UINT: UI
-     TYPE_QUALIFIER: C
-      SIZE: 8
+Progress: 58%
+ COMMAND (0x0000): RegCmd
+  SYMBOL (0x0000): var2
+   TYPE (0x0000): DATA
+   NAME (0x0000): var2
+   ADDRESS (0x0000): 0040DD0C
+   SIGNATURE (0x0000): C-UI8
+    UINT (0x0000): UI
+     TYPE_QUALIFIER (0x0000): C
+     SIZE (0x0000): 8
 
-Progress: 73%
- COMMAND: RegCmd
-  SYMBOL: var3
-   TYPE: DATA
-   NAME: var3
-   ADDRESS: 0040DE20
-   SIGNATURE: C_PTR32_C_I32
-    POINTER: PTR
-     TYPE_QUALIFIER: C
-     SIZE: 32
-     INT: I
-      TYPE_QUALIFIER: C
-      SIZE: 32
+Progress: 62%
+ COMMAND (0x0000): RegCmd
+  SYMBOL (0x0000): var3
+   TYPE (0x0000): DATA
+   NAME (0x0000): var3
+   ADDRESS (0x0000): 0040DE20
+   SIGNATURE (0x0000): C-PTR32-C-I32
+    POINTER (0x0000): PTR
+     TYPE_QUALIFIER (0x0000): C
+     SIZE (0x0000): 32
+     INT (0x0000): I
+      TYPE_QUALIFIER (0x0000): C
+      SIZE (0x0000): 32
 
-Progress: 84%
- COMMAND: RegCmd
-  SYMBOL: point1
-   TYPE: DATA
-   NAME: point1
-   ADDRESS: 0040DF20
-   SIGNATURE: S128_PointTag
-    STRUCT: PointTag
-     SIZE: 128
+Progress: 71%
+ COMMAND (0x0000): RegCmd
+  SYMBOL (0x0000): point1
+   TYPE (0x0000): DATA
+   NAME (0x0000): point1
+   ADDRESS (0x0000): 0040DF20
+   SIGNATURE (0x0000): S128-PointTag
+    STRUCT (0x0000): PointTag
+     SIZE (0x0000): 128
 
-Progress: 94%
- COMMAND: RegCmd
-  SYMBOL: point1_x
-   TYPE: DATA
-   NAME: point1_x
-   ADDRESS: 0040DF20
-   SIGNATURE: F32
-    FLOAT: F
-     SIZE: 32
+Progress: 79%
+ COMMAND (0x0000): RegCmd
+  SYMBOL (0x0000): point1_x
+   TYPE (0x0000): DATA
+   NAME (0x0000): point1_x
+   ADDRESS (0x0000): 0040DF20
+   SIGNATURE (0x0000): F32
+    FLOAT (0x0000): F
+     SIZE (0x0000): 32
+
+Progress: 83%
+ COMMAND (0x0000): RegCmd
+  SYMBOL (0x0000): point1_y
+   TYPE (0x0000): DATA
+   NAME (0x0000): point1_y
+   ADDRESS (0x0000): 0040DF24
+   SIGNATURE (0x0000): F96
+    FLOAT (0x0000): F
+     SIZE (0x0000): 96
 
 Progress: 99%
- COMMAND: RegCmd
-  SYMBOL: point1_y
-   TYPE: DATA
-   NAME: point1_y
-   ADDRESS: 0040DF24
-   SIGNATURE: F96
-    FLOAT: F
-     SIZE: 96
+ COMMAND (0x0000): RegCmd
+  SYMBOL (0x0000): func1
+   TYPE (0x0000): PROC
+   NAME (0x0000): func1
+   ADDRESS (0x0000): 080020C5
+   SIGNATURE (0x0000): FB-V-PTR32-C-S128-PointTag-UI32-FE
+    FUNCTION (0x0000): FB-V-PTR32-C-S128-PointTag-UI32-FE
+     RETURN (0x0000): V
+      VOID (0x0000): V
+     PARAMETER (0x0000): PTR32-C-S128-PointTag
+      POINTER (0x0000): PTR
+       SIZE (0x0000): 32
+       STRUCT (0x0000): PointTag
+        TYPE_QUALIFIER (0x0000): C
+        SIZE (0x0000): 128
+     PARAMETER (0x0000): UI32
+      UINT (0x0000): UI
+       SIZE (0x0000): 32
 
 Progress: 100%
 ```
 ## Error Handling
+There are four parsing errors which a user can handle:
+
+	SY2_INPUT_MISMATCHED 0x1000 - This signifies any kind of mismatched input error such as when the current input does not match the expected token.
+	SY2_EXTRAENOUS_INPUT 0x1001 - Requires the removal of a token from the input stream.
+	SY2_NO_VIABLE_ALTERNATIVE 0x1002 - Indicates that the parser could not decide which of two or more paths to take based upon the remaining input.
+	SY2_MISSING_TOKEN 0x1003 - Requires the insertion of a missing token into the input stream.
+	
+If some node is not recognized will be tagged as UNSPECIFIED.
+
+The examples below display nodes following way:
+
+	<node-type> (<error-code>): <node-value>
+
+	UNSPECIFIED (0x0000): errRegCmd - the UNSPECIFIED node has always error code 0x0000
+	ADDRESS (0x1000): err00400000 - the ADDRESS node with error code 0x1000
+
 The following source code is used:
 ```
-void SY2PARSER_API_CALL errorCallback(Sy2ParserHandle handle, unsigned int line, unsigned int column, const char *message, void *callbackContext)
+void SY2PARSER_API_CALL errorCallback(Sy2ParserHandle handle, unsigned int line, unsigned int column, unsigned int code, const char *message, void *callbackContext)
 {
-  printf("Error: line %u, column %u, message %s\n", line, column, message);
+  printf("Error: line %u, column %u, code 0x%04X, message %s\n", line, column, code, message);
 }
 
 int main()
@@ -372,9 +428,9 @@ int main()
   status = sy2Parse(handle);
 
   status = sy2ReadNext(handle, &node);
-  while (status == SY2_SUCCESS)
+  while (status != SY2_EOF)
   {
-    printf("%s: %s\n", sy2NodeName[node.type], node.value);
+    printf("%s (0x%04X): %s\n", sy2NodeName[node.type], status, node.value);
   
     status = sy2ReadNext(handle, &node);
   }
@@ -384,7 +440,7 @@ int main()
   return 0;
 }
 ```
-### Example 1: An error in the first COMMAND
+### Example 1: Error Code SY2_INPUT_MISMATCHED
 ```
 errRegCmd DATA var1 00400000 I32
 RegCmd DATA var2 00400004 I32
@@ -392,11 +448,31 @@ RegCmd DATA var3 00400008 I32
 ```
 Output:
 ```
-Error: line 1, column 1, message mismatched input 'errRegCmd' expecting {'Encoding', 'TEngSetSignVersion', 'RegVar', 'RegCmd', NL}
+Error: line 1, column 1, code 0x1000, message mismatched input 'errRegCmd' expecting {'Encoding', 'TEngSetSignVersion', 'RegVar', 'RegCmd', NL}
 
-FILE: ..\Test\In\test.sy2
+FILE (0x1000): ..\Test\In\test.sy2
+ UNSPECIFIED (0x0000): errRegCmd
+ UNSPECIFIED (0x0000): DATA
+ UNSPECIFIED (0x0000): var1
+ UNSPECIFIED (0x0000): 00400000
+ UNSPECIFIED (0x0000): I32
+ UNSPECIFIED (0x0000):
+
+ UNSPECIFIED (0x0000): RegCmd
+ UNSPECIFIED (0x0000): DATA
+ UNSPECIFIED (0x0000): var2
+ UNSPECIFIED (0x0000): 00400004
+ UNSPECIFIED (0x0000): I32
+ UNSPECIFIED (0x0000):
+
+ UNSPECIFIED (0x0000): RegCmd
+ UNSPECIFIED (0x0000): DATA
+ UNSPECIFIED (0x0000): var3
+ UNSPECIFIED (0x0000): 00400008
+ UNSPECIFIED (0x0000): I32
+ UNSPECIFIED (0x0000):
 ```
-### Example 2: An error in another COMMAND (not first)
+### Example 2: Error Code SY2_EXTRAENOUS_INPUT
 ```
 RegCmd DATA var1 00400000 I32
 errRegCmd DATA var2 00400004 I32
@@ -404,27 +480,32 @@ RegCmd DATA var3 00400008 I32
 ```
 Output:
 ```
-Error: line 2, column 1, message extraneous input 'errRegCmd' expecting {<EOF>, 'Encoding', 'TEngSetSignVersion', 'RegVar', 'RegCmd', NL}
+Error: line 2, column 1, code 0x1001, message extraneous input 'errRegCmd' expecting {<EOF>, 'Encoding', 'TEngSetSignVersion', 'RegVar', 'RegCmd', NL}
 
-FILE: ..\Test\In\test.sy2
- COMMAND: RegCmd
-  SYMBOL: var1
-   TYPE: DATA
-   NAME: var1
-   ADDRESS: 00400000
-   SIGNATURE: I32
-    INT: I
-     SIZE: 32
- COMMAND: RegCmd
-  SYMBOL: var3
-   TYPE: DATA
-   NAME: var3
-   ADDRESS: 00400008
-   SIGNATURE: I32
-    INT: I
-     SIZE: 32
+FILE (0x0000): ..\Test\In\test.sy2
+ COMMAND (0x0000): RegCmd
+  SYMBOL (0x0000): var1
+   TYPE (0x0000): DATA
+   NAME (0x0000): var1
+   ADDRESS (0x0000): 00400000
+   SIGNATURE (0x0000): I32
+    INT (0x0000): I
+     SIZE (0x0000): 32
+ UNSPECIFIED (0x0000): errRegCmd
+ UNSPECIFIED (0x0000): DATA
+ UNSPECIFIED (0x0000): var2
+ UNSPECIFIED (0x0000): 00400004
+ UNSPECIFIED (0x0000): I32
+ COMMAND (0x0000): RegCmd
+  SYMBOL (0x0000): var3
+   TYPE (0x0000): DATA
+   NAME (0x0000): var3
+   ADDRESS (0x0000): 00400008
+   SIGNATURE (0x0000): I32
+    INT (0x0000): I
+     SIZE (0x0000): 32
 ```
-### Example 3: An error in a type of SYMBOL or TYPEDEF
+### Example 3: Error code SY2_INPUT_MISMATCHED in a type of SYMBOL or TYPEDEF
 ```
 RegCmd errDATA var1 00400000 I32
 RegCmd DATA var2 00400004 I32
@@ -432,29 +513,33 @@ RegCmd DATA var3 00400008 I32
 ```
 Output:
 ```
-Error: line 1, column 8, message mismatched input 'errDATA' expecting {PROC, DATA}
+Error: line 1, column 8, code 0x1000, message mismatched input 'errDATA' expecting {PROC, DATA}
 
-FILE: ..\Test\In\test.sy2
- COMMAND: RegCmd
-  SYMBOL: <missing TYPE>
- COMMAND: RegCmd
-  SYMBOL: var2
-   TYPE: DATA
-   NAME: var2
-   ADDRESS: 00400004
-   SIGNATURE: I32
-    INT: I
-     SIZE: 32
- COMMAND: RegCmd
-  SYMBOL: var3
-   TYPE: DATA
-   NAME: var3
-   ADDRESS: 00400008
-   SIGNATURE: I32
-    INT: I
-     SIZE: 32
+FILE (0x0000): ..\Test\In\test.sy2
+ COMMAND (0x0000): RegCmd
+  SYMBOL (0x1000): <missing TYPE>
+   UNSPECIFIED (0x0000): errDATA
+   UNSPECIFIED (0x0000): var1
+   UNSPECIFIED (0x0000): 00400000
+   UNSPECIFIED (0x0000): I32
+ COMMAND (0x0000): RegCmd
+  SYMBOL (0x0000): var2
+   TYPE (0x0000): DATA
+   NAME (0x0000): var2
+   ADDRESS (0x0000): 00400004
+   SIGNATURE (0x0000): I32
+    INT (0x0000): I
+     SIZE (0x0000): 32
+ COMMAND (0x0000): RegCmd
+  SYMBOL (0x0000): var3
+   TYPE (0x0000): DATA
+   NAME (0x0000): var3
+   ADDRESS (0x0000): 00400008
+   SIGNATURE (0x0000): I32
+    INT (0x0000): I
+     SIZE (0x0000): 32
 ```
-### Example 4: An error in an ADDRESS
+### Example 4: Error code SY2_INPUT_MISMATCHED in an ADDRESS
 ```
 RegCmd DATA var1 err00400000 I32
 RegCmd DATA var2 00400004 I32
@@ -462,36 +547,35 @@ RegCmd DATA var3 00400008 I32
 ```
 Output:
 ```
-Error: line 1, column 18, message mismatched input 'err00400000' expecting ADDRESS
+Error: line 1, column 18, code 0x1000, message mismatched input 'err00400000' expecting ADDRESS
 
-
-FILE: ..\Test\In\test.sy2
- COMMAND: RegCmd
-  SYMBOL: var1
-   TYPE: DATA
-   NAME: var1
-   ADDRESS: err00400000
-   SIGNATURE: I32
-    INT: I
-     SIZE: 32
- COMMAND: RegCmd
-  SYMBOL: var2
-   TYPE: DATA
-   NAME: var2
-   ADDRESS: 00400004
-   SIGNATURE: I32
-    INT: I
-     SIZE: 32
- COMMAND: RegCmd
-  SYMBOL: var3
-   TYPE: DATA
-   NAME: var3
-   ADDRESS: 00400008
-   SIGNATURE: I32
-    INT: I
-     SIZE: 32
+FILE (0x0000): ..\Test\In\test.sy2
+ COMMAND (0x0000): RegCmd
+  SYMBOL (0x0000): var1
+   TYPE (0x0000): DATA
+   NAME (0x0000): var1
+   ADDRESS (0x1000): err00400000
+   SIGNATURE (0x0000): I32
+    INT (0x0000): I
+     SIZE (0x0000): 32
+ COMMAND (0x0000): RegCmd
+  SYMBOL (0x0000): var2
+   TYPE (0x0000): DATA
+   NAME (0x0000): var2
+   ADDRESS (0x0000): 00400004
+   SIGNATURE (0x0000): I32
+    INT (0x0000): I
+     SIZE (0x0000): 32
+ COMMAND (0x0000): RegCmd
+  SYMBOL (0x0000): var3
+   TYPE (0x0000): DATA
+   NAME (0x0000): var3
+   ADDRESS (0x0000): 00400008
+   SIGNATURE (0x0000): I32
+    INT (0x0000): I
+     SIZE (0x0000): 32
 ```
-### Example 5: An error in a SIGNATURE
+### Example 5: Error code SY2_INPUT_MISMATCHED in a SIGNATURE
 ```
 RegCmd DATA var1 00400000 errI32
 RegCmd DATA var2 00400004 I32
@@ -499,34 +583,33 @@ RegCmd DATA var3 00400008 I32
 ```
 Output:
 ```
-Error: line 1, column 27, message token recognition error at: 'errI32'
-Error: line 1, column 33, message mismatched input '<EOF>' expecting {'C', 'B', 'I', 'UI', 'F', 'S', 'PTR', 'FB'}
+Error: line 1, column 33, code 0x1000, message mismatched input '<EOF>' expecting {'C', 'B', 'I', 'UI', 'F', 'S', 'PTR', 'FB'}
 
-FILE: ..\Test\In\test.sy2
- COMMAND: RegCmd
-  SYMBOL: var1
-   TYPE: DATA
-   NAME: var1
-   ADDRESS: 00400000
-   SIGNATURE: errI32
- COMMAND: RegCmd
-  SYMBOL: var2
-   TYPE: DATA
-   NAME: var2
-   ADDRESS: 00400004
-   SIGNATURE: I32
-    INT: I
-     SIZE: 32
- COMMAND: RegCmd
-  SYMBOL: var3
-   TYPE: DATA
-   NAME: var3
-   ADDRESS: 00400008
-   SIGNATURE: I32
-    INT: I
-     SIZE: 32
+FILE (0x0000): ..\Test\In\test.sy2
+ COMMAND (0x0000): RegCmd
+  SYMBOL (0x0000): var1
+   TYPE (0x0000): DATA
+   NAME (0x0000): var1
+   ADDRESS (0x0000): 00400000
+   SIGNATURE (0x1000): errI32
+ COMMAND (0x0000): RegCmd
+  SYMBOL (0x0000): var2
+   TYPE (0x0000): DATA
+   NAME (0x0000): var2
+   ADDRESS (0x0000): 00400004
+   SIGNATURE (0x0000): I32
+    INT (0x0000): I
+     SIZE (0x0000): 32
+ COMMAND (0x0000): RegCmd
+  SYMBOL (0x0000): var3
+   TYPE (0x0000): DATA
+   NAME (0x0000): var3
+   ADDRESS (0x0000): 00400008
+   SIGNATURE (0x0000): I32
+    INT (0x0000): I
+     SIZE (0x0000): 32
 ```
-### Example 6: Missing SIGNATURE
+### Example 6: Error Code SY2_MISSING_TOKEN - missing a SIGNATURE
 ```
 RegCmd DATA var1 00400000
 RegCmd DATA var2 00400004 I32
@@ -534,99 +617,129 @@ RegCmd DATA var3 00400008 I32
 ```
 Output:
 ```
-Error: line 1, column 26, message missing SIGNATURE at '\n'
+Error: line 1, column 26, code 0x1003, message missing SIGNATURE at '\n'
 
-FILE: ..\Test\In\test.sy2
- COMMAND: RegCmd
-  SYMBOL: var1
-   TYPE: DATA
-   NAME: var1
-   ADDRESS: 00400000
-   SIGNATURE: <missing SIGNATURE>
- COMMAND: RegCmd
-  SYMBOL: var2
-   TYPE: DATA
-   NAME: var2
-   ADDRESS: 00400004
-   SIGNATURE: I32
-    INT: I
-     SIZE: 32
- COMMAND: RegCmd
-  SYMBOL: var3
-   TYPE: DATA
-   NAME: var3
-   ADDRESS: 00400008
-   SIGNATURE: I32
-    INT: I
-     SIZE: 32
+FILE (0x0000): ..\Test\In\test.sy2
+ COMMAND (0x0000): RegCmd
+  SYMBOL (0x0000): var1
+   TYPE (0x0000): DATA
+   NAME (0x0000): var1
+   ADDRESS (0x0000): 00400000
+   SIGNATURE (0x1003): <missing SIGNATURE>
+ COMMAND (0x0000): RegCmd
+  SYMBOL (0x0000): var2
+   TYPE (0x0000): DATA
+   NAME (0x0000): var2
+   ADDRESS (0x0000): 00400004
+   SIGNATURE (0x0000): I32
+    INT (0x0000): I
+     SIZE (0x0000): 32
+ COMMAND (0x0000): RegCmd
+  SYMBOL (0x0000): var3
+   TYPE (0x0000): DATA
+   NAME (0x0000): var3
+   ADDRESS (0x0000): 00400008
+   SIGNATURE (0x0000): I32
+    INT (0x0000): I
+     SIZE (0x0000): 32
 ```
-### Example 7: Missing a structure name in a Signature
+### Example 7: Error Code SY2_NO_VIABLE_ALTERNATIVE - missing a structure name in a SIGNATURE
 ```
 RegCmd DATA point1 0040DD24 S128-
 ```
+The array size or structure name could be follow.
+
 Output:
 ```
-Error: line 1, column 34, message no viable alternative at input '-'
+Error: line 1, column 34, code 0x1002, message no viable alternative at input '-'
 
-FILE: ..\Test\In\test.sy2
- COMMAND: RegCmd
-  SYMBOL: point1
-   TYPE: DATA
-   NAME: point1
-   ADDRESS: 0040DD24
-   SIGNATURE: S128-
-    STRUCT: <missing NAME>
-     SIZE: 128
+FILE (0x0000): ..\Test\In\test.sy2
+ COMMAND (0x0000): RegCmd
+  SYMBOL (0x0000): point1
+   TYPE (0x0000): DATA
+   NAME (0x0000): point1
+   ADDRESS (0x0000): 0040DD24
+   SIGNATURE (0x0000): S128-
+    STRUCT (0x1002): <missing NAME>
+     SIZE (0x0000): 128
 ```
-### Example 8: Missing a BITMASK
+### Example 8: Error Code SY2_MISSING_TOKEN - missing a BITMASK
 ```
 RegVar BIT BitFieldTag 0 S64-BitFieldTag
 RegVar BIT BitFieldTag_a 0 UI32
-RegVar BIT BitFieldTag_b 0 UI32
+RegVar BIT BitFieldTag_b 0 0x12 UI32
 RegVar BIT BitFieldTag_c 1 UI32
 ```
 Output:
 ```
-Error: line: 1, column: 16, message: missing BITMASK at 'S64-BitFieldTag'
-Error: line: 2, column: 28, message: missing BITMASK at 'UI32'
-Error: line: 3, column: 28, message: missing BITMASK at 'UI32'
-Error: line: 4, column: 28, message: missing BITMASK at 'UI32'
+Error: line 1, column 26, code 0x1003, message missing BITMASK at 'S64-BitFieldTag'
+Error: line 2, column 28, code 0x1003, message missing BITMASK at 'UI32'
+Error: line 4, column 28, code 0x1003, message missing BITMASK at 'UI32'
 
-FILE: test-02.sy2
- COMMAND: RegVar
-  TYPEDEF: BitFieldTag
-   TYPE: BIT
-   NAME: BitFieldTag
-   OFFSET: 0
-   BITMASK: <missing BITMASK>
-   SIGNATURE: S64-BitFieldTag
-    STRUCT: BitFieldTag
-     SIZE: 64
- COMMAND: RegVar
-  TYPEDEF: BitFieldTag_a
-   TYPE: BIT
-   NAME: BitFieldTag_a
-   OFFSET: 1
-   BITMASK: <missing BITMASK>
-   SIGNATURE: UI32
-    UINT: UI
-     SIZE: 32
- COMMAND: RegVar
-  TYPEDEF: BitFieldTag_b
-   TYPE: BIT
-   NAME: BitFieldTag_b
-   OFFSET: 2
-   BITMASK: <missing BITMASK>
-   SIGNATURE: UI32
-    UINT: UI
-     SIZE: 32
- COMMAND: RegVar
-  TYPEDEF: BitFieldTag_c
-   TYPE: BIT
-   NAME: BitFieldTag_c
-   OFFSET: 12
-   BITMASK: <missing BITMASK>
-   SIGNATURE: UI32
-    UINT: UI
-     SIZE: 32
+FILE (0x0000): ..\Test\In\test.sy2
+ COMMAND (0x0000): RegVar
+  TYPEDEF (0x0000): BitFieldTag
+   TYPE (0x0000): BIT
+   NAME (0x0000): BitFieldTag
+   OFFSET (0x0000): 0
+   BITMASK (0x1003): <missing BITMASK>
+   SIGNATURE (0x0000): S64-BitFieldTag
+    STRUCT (0x0000): BitFieldTag
+     SIZE (0x0000): 64
+ COMMAND (0x0000): RegVar
+  TYPEDEF (0x0000): BitFieldTag_a
+   TYPE (0x0000): BIT
+   NAME (0x0000): BitFieldTag_a
+   OFFSET (0x0000): 0
+   BITMASK (0x1003): <missing BITMASK>
+   SIGNATURE (0x0000): UI32
+    UINT (0x0000): UI
+     SIZE (0x0000): 32
+ COMMAND (0x0000): RegVar
+  TYPEDEF (0x0000): BitFieldTag_b
+   TYPE (0x0000): BIT
+   NAME (0x0000): BitFieldTag_b
+   OFFSET (0x0000): 0
+   BITMASK (0x0000): 0x12
+   SIGNATURE (0x0000): UI32
+    UINT (0x0000): UI
+     SIZE (0x0000): 32
+ COMMAND (0x0000): RegVar
+  TYPEDEF (0x0000): BitFieldTag_c
+   TYPE (0x0000): BIT
+   NAME (0x0000): BitFieldTag_c
+   OFFSET (0x0000): 1
+   BITMASK (0x1003): <missing BITMASK>
+   SIGNATURE (0x0000): UI32
+    UINT (0x0000): UI
+     SIZE (0x0000): 32
+```
+### Example 9: Error Code SY2_EXTRAENOUS_INPUT and SY2_NO_VIABLE_ALTERNATIVE inside node
+```
+RegCmd PROC Func1 2004EAF8 FB-I32-PTR32-S64-Struct1
+```
+There is missing the end of function, the '-FE' keyword. At first the parser generates error code SY2_EXTRAENOUS_INPUT 
+and tries to use the keyword which could potentially follow. It is '-'. But then the parser could not decide which of 
+two or more paths to take for the remaining input. The same as in example 7. The array size or structure name could be follow.
+
+Output:
+```
+Error: line 1, column 52, code 0x1001, message extraneous input '<EOF>' expecting '-'
+
+FILE (0x0000): ..\Test\In\test.sy2
+ COMMAND (0x0000): RegCmd
+  SYMBOL (0x0000): Func1
+   TYPE (0x0000): PROC
+   NAME (0x0000): Func1
+   ADDRESS (0x0000): 2004EAF8
+   SIGNATURE (0x0000): FB-I32-PTR32-S64-Struct1
+    FUNCTION (0x1002): FB-I32-PTR32-S64-Struct1
+     RETURN (0x0000): I32
+      INT (0x0000): I
+       SIZE (0x0000): 32
+     PARAMETER (0x0000): PTR32-S64-Struct1
+      POINTER (0x0000): PTR
+       SIZE (0x0000): 32
+       STRUCT (0x0000): Struct1
+        SIZE (0x0000): 64
 ```

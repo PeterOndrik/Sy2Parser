@@ -86,6 +86,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
+<tr class="memitem:gac9fba71a62384c6c76334eade5ad999e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="gac9fba71a62384c6c76334eade5ad999e"></a>
+typedef unsigned int(SY2PARSER_API_CALL *&#160;</td><td class="memItemRight" valign="bottom"><b>T_sy2GetApiVersion</b>) (void)</td></tr>
+<tr class="separator:gac9fba71a62384c6c76334eade5ad999e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga88128d946e8597dc4c93287ce21f08a9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ga88128d946e8597dc4c93287ce21f08a9"></a>
+typedef unsigned int(SY2PARSER_API_CALL *&#160;</td><td class="memItemRight" valign="bottom"><b>T_sy2GetDllVersion</b>) (void)</td></tr>
+<tr class="separator:ga88128d946e8597dc4c93287ce21f08a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga58d246d976f9df45423ccf4478183c75"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ga58d246d976f9df45423ccf4478183c75"></a>
 typedef <a class="el" href="group__uda__device__constants__types.html#ga2a6b7a98923516eba7750a06b43fc577">Sy2ParserStatus</a>(SY2PARSER_API_CALL *&#160;</td><td class="memItemRight" valign="bottom"><b>T_sy2Open</b>) (const char *fileName, <a class="el" href="group__uda__device__constants__types.html#gab56874616dcf613944f4d01ca95478c5">Sy2ParserHandle</a> *handle)</td></tr>
 <tr class="separator:ga58d246d976f9df45423ccf4478183c75"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -96,7 +102,7 @@ typedef <a class="el" href="group__uda__device__constants__types.html#ga2a6b7a98
 typedef <a class="el" href="group__uda__device__constants__types.html#ga2a6b7a98923516eba7750a06b43fc577">Sy2ParserStatus</a>(SY2PARSER_API_CALL *&#160;</td><td class="memItemRight" valign="bottom"><b>T_sy2GetFileInfo</b>) (<a class="el" href="group__uda__device__constants__types.html#gab56874616dcf613944f4d01ca95478c5">Sy2ParserHandle</a> handle, <a class="el" href="group__uda__device__constants__types.html#gac1c9ed8c6f14a642dd0934a536f6f285">T_Sy2FileInfo</a> *fileInfo)</td></tr>
 <tr class="separator:ga7f7f9f80f77fc8912c42854e7f56db12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga41a234dffa207dca84dacbd96f45f8a3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ga41a234dffa207dca84dacbd96f45f8a3"></a>
-typedef <a class="el" href="group__uda__device__constants__types.html#ga2a6b7a98923516eba7750a06b43fc577">Sy2ParserStatus</a>(SY2PARSER_API_CALL *&#160;</td><td class="memItemRight" valign="bottom"><b>T_sy2SetParsingErrorCallback</b>) (<a class="el" href="group__uda__device__constants__types.html#gab56874616dcf613944f4d01ca95478c5">Sy2ParserHandle</a> handle, <a class="el" href="group__sy2parser__api__functions.html#ga5f665f3883277589a9c26c32b114baf8">ParsingErrorCallback</a> *callback, void *callbackContext)</td></tr>
+typedef <a class="el" href="group__uda__device__constants__types.html#ga2a6b7a98923516eba7750a06b43fc577">Sy2ParserStatus</a>(SY2PARSER_API_CALL *&#160;</td><td class="memItemRight" valign="bottom"><b>T_sy2SetParsingErrorCallback</b>) (<a class="el" href="group__uda__device__constants__types.html#gab56874616dcf613944f4d01ca95478c5">Sy2ParserHandle</a> handle, <a class="el" href="group__sy2parser__api__functions.html#ga4e1c4aa6ad761dffd3fce7d4c424bc22">ParsingErrorCallback</a> *callback, void *callbackContext)</td></tr>
 <tr class="separator:ga41a234dffa207dca84dacbd96f45f8a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gad975e93f2b2bb5a4b5483fcf1e1d9118"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="gad975e93f2b2bb5a4b5483fcf1e1d9118"></a>
 typedef <a class="el" href="group__uda__device__constants__types.html#ga2a6b7a98923516eba7750a06b43fc577">Sy2ParserStatus</a>(SY2PARSER_API_CALL *&#160;</td><td class="memItemRight" valign="bottom"><b>T_sy2SetParsingProgressCallback</b>) (<a class="el" href="group__uda__device__constants__types.html#gab56874616dcf613944f4d01ca95478c5">Sy2ParserHandle</a> handle, <a class="el" href="group__sy2parser__api__functions.html#ga37fc032ca29e487e3c07183ea0306af3">ParsingProgressCallback</a> *callback, void *callbackContext)</td></tr>
@@ -122,7 +128,7 @@ typedef <a class="el" href="group__uda__device__constants__types.html#ga2a6b7a98
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Oct 31 2018 17:03:35 for Sy2 Parser API by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Dec 10 2018 13:55:49 for Sy2 Parser API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

@@ -87,9 +87,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:ga5f665f3883277589a9c26c32b114baf8"><td class="memItemLeft" align="right" valign="top">typedef void SY2PARSER_API_CALL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sy2parser__api__functions.html#ga5f665f3883277589a9c26c32b114baf8">ParsingErrorCallback</a>(<a class="el" href="group__uda__device__constants__types.html#gab56874616dcf613944f4d01ca95478c5">Sy2ParserHandle</a> handle, unsigned int line, unsigned int column, const char *message, void *callbackContext)</td></tr>
-<tr class="memdesc:ga5f665f3883277589a9c26c32b114baf8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback function which is called when an error occurs.  <a href="#ga5f665f3883277589a9c26c32b114baf8">More...</a><br /></td></tr>
-<tr class="separator:ga5f665f3883277589a9c26c32b114baf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4e1c4aa6ad761dffd3fce7d4c424bc22"><td class="memItemLeft" align="right" valign="top">typedef void SY2PARSER_API_CALL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sy2parser__api__functions.html#ga4e1c4aa6ad761dffd3fce7d4c424bc22">ParsingErrorCallback</a>(<a class="el" href="group__uda__device__constants__types.html#gab56874616dcf613944f4d01ca95478c5">Sy2ParserHandle</a> handle, unsigned int line, unsigned int column, unsigned int status, const char *message, void *callbackContext)</td></tr>
+<tr class="memdesc:ga4e1c4aa6ad761dffd3fce7d4c424bc22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback function which is called when an error occurs.  <a href="#ga4e1c4aa6ad761dffd3fce7d4c424bc22">More...</a><br /></td></tr>
+<tr class="separator:ga4e1c4aa6ad761dffd3fce7d4c424bc22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga37fc032ca29e487e3c07183ea0306af3"><td class="memItemLeft" align="right" valign="top">typedef void SY2PARSER_API_CALL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sy2parser__api__functions.html#ga37fc032ca29e487e3c07183ea0306af3">ParsingProgressCallback</a>(<a class="el" href="group__uda__device__constants__types.html#gab56874616dcf613944f4d01ca95478c5">Sy2ParserHandle</a> handle, unsigned int progress, void *callbackContext)</td></tr>
 <tr class="memdesc:ga37fc032ca29e487e3c07183ea0306af3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback function which is called when parsing progress is changed.  <a href="#ga37fc032ca29e487e3c07183ea0306af3">More...</a><br /></td></tr>
 <tr class="separator:ga37fc032ca29e487e3c07183ea0306af3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -99,6 +99,12 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:ga38e42d676155dba3847dd9bb60425f8f"><td class="memItemLeft" align="right" valign="top">SY2PARSER_API unsigned int SY2PARSER_API_CALL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sy2parser__api__functions.html#ga38e42d676155dba3847dd9bb60425f8f">sy2GetApiVersion</a> (void)</td></tr>
+<tr class="memdesc:ga38e42d676155dba3847dd9bb60425f8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the API version implemented by the DLL.  <a href="#ga38e42d676155dba3847dd9bb60425f8f">More...</a><br /></td></tr>
+<tr class="separator:ga38e42d676155dba3847dd9bb60425f8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8c090af51873e92d01e8bd0edcdba704"><td class="memItemLeft" align="right" valign="top">SY2PARSER_API unsigned int SY2PARSER_API_CALL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sy2parser__api__functions.html#ga8c090af51873e92d01e8bd0edcdba704">sy2GetDllVersion</a> (void)</td></tr>
+<tr class="memdesc:ga8c090af51873e92d01e8bd0edcdba704"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the DLL build version.  <a href="#ga8c090af51873e92d01e8bd0edcdba704">More...</a><br /></td></tr>
+<tr class="separator:ga8c090af51873e92d01e8bd0edcdba704"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga7c423115821a7c105f803d021b4fc07d"><td class="memItemLeft" align="right" valign="top">SY2PARSER_API <a class="el" href="group__uda__device__constants__types.html#ga2a6b7a98923516eba7750a06b43fc577">Sy2ParserStatus</a> SY2PARSER_API_CALL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sy2parser__api__functions.html#ga7c423115821a7c105f803d021b4fc07d">sy2Open</a> (const char *fileName, <a class="el" href="group__uda__device__constants__types.html#gab56874616dcf613944f4d01ca95478c5">Sy2ParserHandle</a> *handle)</td></tr>
 <tr class="memdesc:ga7c423115821a7c105f803d021b4fc07d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Open a Sy2 Parser by using a file name.  <a href="#ga7c423115821a7c105f803d021b4fc07d">More...</a><br /></td></tr>
 <tr class="separator:ga7c423115821a7c105f803d021b4fc07d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -108,7 +114,7 @@ Functions</h2></td></tr>
 <tr class="memitem:ga5f61204ed5f09e897281fb7d0f54a144"><td class="memItemLeft" align="right" valign="top">SY2PARSER_API <a class="el" href="group__uda__device__constants__types.html#ga2a6b7a98923516eba7750a06b43fc577">Sy2ParserStatus</a> SY2PARSER_API_CALL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sy2parser__api__functions.html#ga5f61204ed5f09e897281fb7d0f54a144">sy2GetFileInfo</a> (<a class="el" href="group__uda__device__constants__types.html#gab56874616dcf613944f4d01ca95478c5">Sy2ParserHandle</a> handle, <a class="el" href="group__uda__device__constants__types.html#gac1c9ed8c6f14a642dd0934a536f6f285">T_Sy2FileInfo</a> *fileInfo)</td></tr>
 <tr class="memdesc:ga5f61204ed5f09e897281fb7d0f54a144"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get information abut a parsed file.  <a href="#ga5f61204ed5f09e897281fb7d0f54a144">More...</a><br /></td></tr>
 <tr class="separator:ga5f61204ed5f09e897281fb7d0f54a144"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga142672bd5409aa5acc6f9c535a2807c5"><td class="memItemLeft" align="right" valign="top">SY2PARSER_API <a class="el" href="group__uda__device__constants__types.html#ga2a6b7a98923516eba7750a06b43fc577">Sy2ParserStatus</a> SY2PARSER_API_CALL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sy2parser__api__functions.html#ga142672bd5409aa5acc6f9c535a2807c5">sy2SetParsingErrorCallback</a> (<a class="el" href="group__uda__device__constants__types.html#gab56874616dcf613944f4d01ca95478c5">Sy2ParserHandle</a> handle, <a class="el" href="group__sy2parser__api__functions.html#ga5f665f3883277589a9c26c32b114baf8">ParsingErrorCallback</a> *callback, void *callbackContext)</td></tr>
+<tr class="memitem:ga142672bd5409aa5acc6f9c535a2807c5"><td class="memItemLeft" align="right" valign="top">SY2PARSER_API <a class="el" href="group__uda__device__constants__types.html#ga2a6b7a98923516eba7750a06b43fc577">Sy2ParserStatus</a> SY2PARSER_API_CALL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sy2parser__api__functions.html#ga142672bd5409aa5acc6f9c535a2807c5">sy2SetParsingErrorCallback</a> (<a class="el" href="group__uda__device__constants__types.html#gab56874616dcf613944f4d01ca95478c5">Sy2ParserHandle</a> handle, <a class="el" href="group__sy2parser__api__functions.html#ga4e1c4aa6ad761dffd3fce7d4c424bc22">ParsingErrorCallback</a> *callback, void *callbackContext)</td></tr>
 <tr class="memdesc:ga142672bd5409aa5acc6f9c535a2807c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a callback to receive a parsing error.  <a href="#ga142672bd5409aa5acc6f9c535a2807c5">More...</a><br /></td></tr>
 <tr class="separator:ga142672bd5409aa5acc6f9c535a2807c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga6d028cc4c6c6fdef064b9b0964334ced"><td class="memItemLeft" align="right" valign="top">SY2PARSER_API <a class="el" href="group__uda__device__constants__types.html#ga2a6b7a98923516eba7750a06b43fc577">Sy2ParserStatus</a> SY2PARSER_API_CALL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__sy2parser__api__functions.html#ga6d028cc4c6c6fdef064b9b0964334ced">sy2SetParsingProgressCallback</a> (<a class="el" href="group__uda__device__constants__types.html#gab56874616dcf613944f4d01ca95478c5">Sy2ParserHandle</a> handle, <a class="el" href="group__sy2parser__api__functions.html#ga37fc032ca29e487e3c07183ea0306af3">ParsingProgressCallback</a> *callback, void *callbackContext)</td></tr>
@@ -133,12 +139,12 @@ Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Functions exported from the DLL and called by the application. </p>
 <h2 class="groupheader">Typedef Documentation</h2>
-<a class="anchor" id="ga5f665f3883277589a9c26c32b114baf8"></a>
+<a class="anchor" id="ga4e1c4aa6ad761dffd3fce7d4c424bc22"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef void SY2PARSER_API_CALL ParsingErrorCallback(<a class="el" href="group__uda__device__constants__types.html#gab56874616dcf613944f4d01ca95478c5">Sy2ParserHandle</a> handle, unsigned int line, unsigned int column, const char *message, void *callbackContext)</td>
+          <td class="memname">typedef void SY2PARSER_API_CALL ParsingErrorCallback(<a class="el" href="group__uda__device__constants__types.html#gab56874616dcf613944f4d01ca95478c5">Sy2ParserHandle</a> handle, unsigned int line, unsigned int column, unsigned int status, const char *message, void *callbackContext)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -149,6 +155,7 @@ Functions</h2></td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">handle</td><td>A descriptor identifying an open Sy2 parser.</td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">line</td><td>The number of line.</td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">column</td><td>The number of column.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">status</td><td>The status.</td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">message</td><td>The error message.</td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">callbackContext</td><td>The pointer value that was passed when the callback was registered. </td></tr>
   </table>
@@ -219,6 +226,45 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="ga38e42d676155dba3847dd9bb60425f8f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SY2PARSER_API unsigned int SY2PARSER_API_CALL sy2GetApiVersion </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the API version implemented by the DLL. </p>
+<dl class="section return"><dt>Returns</dt><dd>This function returns the version number of the programming interface (API) implemented by the DLL. The number returned is the <a class="el" href="group__sy2parser__api__version__constants.html#gaca690d4ca81963835e34e2c6fe148e68" title="Version number of the programming interface as DWORD. ">SY2PARSER_API_VERSION</a> constant the DLL has been compiled with. For example 1.2 = 0x00010002. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ga8c090af51873e92d01e8bd0edcdba704"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SY2PARSER_API unsigned int SY2PARSER_API_CALL sy2GetDllVersion </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the DLL build version. </p>
+<p>Note that the version of the programming interface supported by the DLL is returned by udaGetApiVersion().</p>
+<dl class="section return"><dt>Returns</dt><dd>This function returns the version number of the DLL build. For example 1.0.4.29 = 0x0100041D. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="ga7c423115821a7c105f803d021b4fc07d"></a>
 <div class="memitem">
 <div class="memproto">
@@ -336,7 +382,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="group__sy2parser__api__functions.html#ga5f665f3883277589a9c26c32b114baf8">ParsingErrorCallback</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="group__sy2parser__api__functions.html#ga4e1c4aa6ad761dffd3fce7d4c424bc22">ParsingErrorCallback</a> *&#160;</td>
           <td class="paramname"><em>callback</em>, </td>
         </tr>
         <tr>
@@ -527,7 +573,13 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The function returns <a class="el" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba0c523e2a0e55d51471f7f0179bd74a32" title="The operation completed successfully. ">SY2_SUCCESS</a> if successful, an error code otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The function returns <a class="el" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba0c523e2a0e55d51471f7f0179bd74a32" title="The operation completed successfully. ">SY2_SUCCESS</a> if successful, an error code otherwise.</dd></dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname"><a class="el" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5bae23d43cdde2ae99150e9a37425f71d3f" title="Occurs when parsing was canceled by user. ">SY2_PARSING_ABORTED</a></td><td>The parsing has been canceled. The AST may be incomplete. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -563,7 +615,13 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The function returns <a class="el" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba0c523e2a0e55d51471f7f0179bd74a32" title="The operation completed successfully. ">SY2_SUCCESS</a> if successful, an error code otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The function returns <a class="el" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba0c523e2a0e55d51471f7f0179bd74a32" title="The operation completed successfully. ">SY2_SUCCESS</a> if successful, an error code otherwise.</dd></dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname"><a class="el" href="group__uda__device__constants__types.html#gga815bd44e1542872aa2e8edf7e9427f5ba184dce72acff92f77299f48deedffd95" title="End of file. ">SY2_EOF</a></td><td>End of file. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -595,7 +653,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Oct 31 2018 17:03:35 for Sy2 Parser API by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Dec 10 2018 13:55:49 for Sy2 Parser API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

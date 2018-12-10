@@ -1,11 +1,14 @@
 #include "sy2parser_api.h"
 #include <fstream>
 #include "antlr4-runtime.h"
-#include "Sy2ErrorListener.h"
+#include "Sy2CustomErrorListener.h"
+#include "Sy2CustomErrorStrategy.h"
 #include "Sy2Lexer.h"
 #include "Sy2Parser.h"
 #include "Sy2CustomListener.h"
 #include "Unspecified.h"
+#include "UnwantedTokenException.h"
+#include "MissingTokenException.h"
 
 #include <Windows.h>
 
@@ -42,7 +45,7 @@ struct OpenParser
 	}
 
 	ANTLRInputStream *sy2Input;
-	Sy2ErrorListener *sy2ErrListener;
+	Sy2CustomErrorListener *sy2ErrListener;
 	Sy2Lexer *sy2Lexer;
 	CommonTokenStream *sy2Tokens;
 	Sy2Parser *sy2Parser;
@@ -50,7 +53,7 @@ struct OpenParser
 	Sy2CustomListener::NodeType sy2File;
 	string fileName;
 	const Model::Node<> *currentNode;
-	Sy2ErrorListener::ErrorCallbackPtr errorCb;
+	Sy2CustomErrorListener::ErrorCallbackPtr errorCb;
 	Sy2CustomListener::ProgressCallbackPtr progressCb;
 	vector<ParsedNodeCallbackStorage> parsedNodeCbList;
 };
@@ -91,6 +94,53 @@ static shared_ptr<OpenParser> GetParser(Sy2ParserHandle handle)
 	return parser;
 }
 
+static unsigned int getStatus(exception_ptr exception)
+{
+	unsigned int code = SY2_SUCCESS;
+
+	if (exception != nullptr)
+	{
+		try
+		{
+			rethrow_exception(exception);
+		}
+		catch (const NoViableAltException &)
+		{
+			code = SY2_NO_VIABLE_ALTERNATIVE;
+		}
+		catch (const LexerNoViableAltException &)
+		{
+			code = SY2_NO_VIABLE_ALTERNATIVE;
+		}
+		catch (const InputMismatchException &)
+		{
+			code = SY2_INPUT_MISMATCHED;
+		}
+		catch (const FailedPredicateException &)
+		{
+			code = SY2_UNKNOWN;
+		}
+		catch (const UnwantedTokenException &)
+		{
+			code = SY2_EXTRAENOUS_INPUT;
+		}
+		catch (const MissingTokenException &)
+		{
+			code = SY2_MISSING_TOKEN;
+		}
+		catch (const ParseCancellationException &)
+		{
+			code = SY2_PARSING_ABORTED;
+		}
+		catch (...)
+		{
+			code = SY2_UNKNOWN;
+		}
+	}
+
+	return code;
+}
+
 static Sy2ParserStatus processNode(const Model::Node<> *node, T_Sy2Node *apiNode)
 {
 	Sy2ParserStatus status = SY2_SUCCESS;
@@ -111,6 +161,8 @@ static Sy2ParserStatus processNode(const Model::Node<> *node, T_Sy2Node *apiNode
 		apiNode->depth = node->getDepth();
 		apiNode->line = node->getLine();
 		apiNode->column = node->getColumn();
+
+		status = getStatus(node->getException());
 	}
 	else
 	{
@@ -145,10 +197,10 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Open(const char *fileName, S
 
 		shared_ptr<OpenParser> parser = make_shared<OpenParser>();
 		parser->sy2Input = new ANTLRInputStream(stream);
-		parser->sy2ErrListener = new Sy2ErrorListener();
+		parser->sy2ErrListener = new Sy2CustomErrorListener();
 		parser->sy2Lexer = new Sy2Lexer(parser->sy2Input);
 		parser->sy2Lexer->removeErrorListeners();
-		parser->sy2Lexer->addErrorListener(parser->sy2ErrListener);
+		//parser->sy2Lexer->addErrorListener(parser->sy2ErrListener);	// don't care lexer errors on errors from a parser
 		parser->sy2Tokens = new CommonTokenStream(parser->sy2Lexer);
 		parser->sy2Parser = new Sy2Parser(parser->sy2Tokens);
 		parser->sy2Parser->removeErrorListeners();
@@ -241,10 +293,11 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2SetParsingErrorCallback(Sy2P
 	{
 		if (callback != nullptr)
 		{
-			parser->errorCb = make_shared<Sy2ErrorListener::ErrorCallbackType>(
-				[handle, callback, callbackContext](size_t line, size_t column, const string &message)
+			parser->errorCb = make_shared<Sy2CustomErrorListener::ErrorCallbackType>(
+				[handle, callback, callbackContext](size_t line, size_t column, const string &message, exception_ptr e)
 				{
-					callback(handle, line, column, message.c_str(), callbackContext);
+					unsigned int status = getStatus(e);
+					callback(handle, line, column, status, message.c_str(), callbackContext);
 				});
 		}
 		else
@@ -302,9 +355,8 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2AddParsedNodeCallback(Sy2Par
 			callbackStorage.parsedNodeCallback = make_shared<Sy2CustomListener::ParsedNodeCallbackType>(
 				[parser, handle, nodeType, callback, callbackContext](const Model::Node<> *node)
 			{
-				//parser->currentNode = node->next();
 				parser->currentNode = node;
-				T_Sy2Node apiNode = { (T_Sy2NodeType)node->getType(),  "\0", node->getDepth(), node->getLine(), node->getColumn() };
+				T_Sy2Node apiNode = { (T_Sy2NodeType)node->getType(),  "\0", node->getDepth(), node->getLine(), node->getColumn(), getStatus(node->getException()) };
 				strncpy_s(apiNode.value, node->getValue().c_str(), sizeof(apiNode.value) - 1);	// copy at most N, zero-padding if shorter
 				apiNode.value[sizeof(apiNode.value) - 1] = '\0';							// ensure NUL terminated
 				callback(handle, &apiNode, callbackContext);
@@ -350,14 +402,21 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Parse(Sy2ParserHandle handle
 		Sy2CustomListener listener(parser->fileName);
 		listener.setErrorCallback(parser->errorCb);
 		listener.setProgressCallback(parser->progressCb);
+		listener.setParser(parser->sy2Parser);
 		for (auto iCallback : parser->parsedNodeCbList)
 		{
 			listener.addParsedNodeCallback(iCallback.parsedNodeCallback, iCallback.nodeType);
 		}
 		parser->sy2Parser->addParseListener(&listener);
+		parser->sy2Parser->setErrorHandler(make_shared<Sy2CustomErrorStrategy>());
+
 		parser->sy2Tree = parser->sy2Parser->file();
+
+		// the context exception is filled if the last parsed node was problematic
+		status = getStatus(parser->sy2Tree->exception);
+
 		parser->sy2File = listener.getNode();
-		parser->currentNode = new Model::Unspecified;
+		parser->currentNode = nullptr;
 		parser->sy2Parser->removeParseListener(&listener);
 	}
 
@@ -371,11 +430,18 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2ReadNext(const Sy2ParserHand
 
 	if (parser)
 	{
-		if (parser->currentNode->getType() == T_Sy2NodeType::SY2_UNSPECIFIED)
+		if (parser->currentNode == nullptr)
 		{
-			const Model::Node<> *currentNode = parser->sy2File.get();
-			status = processNode(currentNode, node);
-			parser->currentNode = currentNode;
+			if (parser->sy2File != nullptr)
+			{
+				const Model::Node<> *currentNode = parser->sy2File.get();
+				status = processNode(currentNode, node);
+				parser->currentNode = currentNode;
+			}
+			else
+			{
+				status = SY2_FAILD;
+			}
 		}
 		else
 		{
