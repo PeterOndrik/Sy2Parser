@@ -179,7 +179,7 @@ atn::ATN Sign2016Lexer::_atn;
 std::vector<uint16_t> Sign2016Lexer::_serializedATN;
 
 std::vector<std::string> Sign2016Lexer::_ruleNames = {
-  u8"TYPE_QUALIFIER", u8"VOID_TYPE", u8"BOOL_TYPE", u8"INT_TYPE", u8"UINT_TYPE", 
+  u8"CONST_TYPE", u8"VOID_TYPE", u8"BOOL_TYPE", u8"INT_TYPE", u8"UINT_TYPE", 
   u8"FLOAT_TYPE", u8"STRUCT_TYPE", u8"PTR_TYPE", u8"FB", u8"FE", u8"ARRAY_SIZE", 
   u8"SIZE", u8"SEP", u8"ID", u8"CHAR"
 };
@@ -198,7 +198,7 @@ std::vector<std::string> Sign2016Lexer::_literalNames = {
 };
 
 std::vector<std::string> Sign2016Lexer::_symbolicNames = {
-  "", u8"TYPE_QUALIFIER", u8"VOID_TYPE", u8"BOOL_TYPE", u8"INT_TYPE", u8"UINT_TYPE", 
+  "", u8"CONST_TYPE", u8"VOID_TYPE", u8"BOOL_TYPE", u8"INT_TYPE", u8"UINT_TYPE", 
   u8"FLOAT_TYPE", u8"STRUCT_TYPE", u8"PTR_TYPE", u8"FB", u8"FE", u8"ARRAY_SIZE", 
   u8"SIZE", u8"SEP", u8"ID"
 };

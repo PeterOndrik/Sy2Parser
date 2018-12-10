@@ -37,7 +37,7 @@ ptrType : typeQualifier? PTR_TYPE size (arraySizes += arraySize)* SEP (typeQuali
 function : FB SEP returnType (SEP paramType)+ SEP FE ;
 returnType : (voidType | boolType | intType | uintType | floatType | structType | ptrType) ;
 paramType : (voidType | boolType | intType | uintType | floatType | structType | ptrType) ;
-typeQualifier : TYPE_QUALIFIER SEP ;
+typeQualifier : CONST_TYPE SEP ;
 size : SIZE ;
 arraySize : SEP ARRAY_SIZE ;
 name : ID ;
@@ -46,7 +46,7 @@ name : ID ;
  * Lexer Rules
  */
 
-TYPE_QUALIFIER : 'C' ;
+CONST_TYPE : 'C' ;
 VOID_TYPE : 'V' ;
 BOOL_TYPE : 'B' { afterSize++;} ; // doesn't have token SIZE but may be array e.g. B-5
 INT_TYPE : 'I' { afterSize = 0; };

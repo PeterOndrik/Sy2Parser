@@ -144,6 +144,7 @@ Sy2Parser::FileContext* Sy2Parser::file() {
   }
   catch (ParseCancellationException &e)
   {
+	  _localctx->exception = std::current_exception();
 	  this->notifyErrorListeners(this->getCurrentToken(), e.what(), std::current_exception());
   }
 

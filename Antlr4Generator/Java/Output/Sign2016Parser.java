@@ -16,7 +16,7 @@ public class Sign2016Parser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		TYPE_QUALIFIER=1, VOID_TYPE=2, BOOL_TYPE=3, INT_TYPE=4, UINT_TYPE=5, FLOAT_TYPE=6, 
+		CONST_TYPE=1, VOID_TYPE=2, BOOL_TYPE=3, INT_TYPE=4, UINT_TYPE=5, FLOAT_TYPE=6, 
 		STRUCT_TYPE=7, PTR_TYPE=8, FB=9, FE=10, ARRAY_SIZE=11, SIZE=12, SEP=13, 
 		ID=14;
 	public static final int
@@ -35,7 +35,7 @@ public class Sign2016Parser extends Parser {
 		"'FE'", null, null, "'-'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
-		null, "TYPE_QUALIFIER", "VOID_TYPE", "BOOL_TYPE", "INT_TYPE", "UINT_TYPE", 
+		null, "CONST_TYPE", "VOID_TYPE", "BOOL_TYPE", "INT_TYPE", "UINT_TYPE", 
 		"FLOAT_TYPE", "STRUCT_TYPE", "PTR_TYPE", "FB", "FE", "ARRAY_SIZE", "SIZE", 
 		"SEP", "ID"
 	};
@@ -271,7 +271,7 @@ public class Sign2016Parser extends Parser {
 			setState(44);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (_la==TYPE_QUALIFIER) {
+			if (_la==CONST_TYPE) {
 				{
 				setState(43);
 				typeQualifier();
@@ -351,7 +351,7 @@ public class Sign2016Parser extends Parser {
 			setState(54);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (_la==TYPE_QUALIFIER) {
+			if (_la==CONST_TYPE) {
 				{
 				setState(53);
 				typeQualifier();
@@ -433,7 +433,7 @@ public class Sign2016Parser extends Parser {
 			setState(65);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (_la==TYPE_QUALIFIER) {
+			if (_la==CONST_TYPE) {
 				{
 				setState(64);
 				typeQualifier();
@@ -515,7 +515,7 @@ public class Sign2016Parser extends Parser {
 			setState(76);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (_la==TYPE_QUALIFIER) {
+			if (_la==CONST_TYPE) {
 				{
 				setState(75);
 				typeQualifier();
@@ -601,7 +601,7 @@ public class Sign2016Parser extends Parser {
 			setState(87);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (_la==TYPE_QUALIFIER) {
+			if (_la==CONST_TYPE) {
 				{
 				setState(86);
 				typeQualifier();
@@ -715,7 +715,7 @@ public class Sign2016Parser extends Parser {
 			setState(101);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (_la==TYPE_QUALIFIER) {
+			if (_la==CONST_TYPE) {
 				{
 				setState(100);
 				typeQualifier();
@@ -753,7 +753,7 @@ public class Sign2016Parser extends Parser {
 				setState(113);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				if (_la==TYPE_QUALIFIER) {
+				if (_la==CONST_TYPE) {
 					{
 					setState(112);
 					typeQualifier();
@@ -1105,7 +1105,7 @@ public class Sign2016Parser extends Parser {
 	}
 
 	public static class TypeQualifierContext extends ParserRuleContext {
-		public TerminalNode TYPE_QUALIFIER() { return getToken(Sign2016Parser.TYPE_QUALIFIER, 0); }
+		public TerminalNode CONST_TYPE() { return getToken(Sign2016Parser.CONST_TYPE, 0); }
 		public TerminalNode SEP() { return getToken(Sign2016Parser.SEP, 0); }
 		public TypeQualifierContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1128,7 +1128,7 @@ public class Sign2016Parser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(155);
-			match(TYPE_QUALIFIER);
+			match(CONST_TYPE);
 			setState(156);
 			match(SEP);
 			}

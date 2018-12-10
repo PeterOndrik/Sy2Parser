@@ -12,7 +12,7 @@
 class  Sign2016Parser : public antlr4::Parser {
 public:
   enum {
-    TYPE_QUALIFIER = 1, VOID_TYPE = 2, BOOL_TYPE = 3, INT_TYPE = 4, UINT_TYPE = 5, 
+    CONST_TYPE = 1, VOID_TYPE = 2, BOOL_TYPE = 3, INT_TYPE = 4, UINT_TYPE = 5, 
     FLOAT_TYPE = 6, STRUCT_TYPE = 7, PTR_TYPE = 8, FB = 9, FE = 10, ARRAY_SIZE = 11, 
     SIZE = 12, SEP = 13, ID = 14
   };
@@ -295,7 +295,7 @@ public:
   public:
     TypeQualifierContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *TYPE_QUALIFIER();
+    antlr4::tree::TerminalNode *CONST_TYPE();
     antlr4::tree::TerminalNode *SEP();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;

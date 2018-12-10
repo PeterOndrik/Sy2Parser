@@ -17,7 +17,7 @@ null
 
 token symbolic names:
 null
-TYPE_QUALIFIER
+CONST_TYPE
 VOID_TYPE
 BOOL_TYPE
 INT_TYPE
@@ -33,7 +33,7 @@ SEP
 ID
 
 rule names:
-TYPE_QUALIFIER
+CONST_TYPE
 VOID_TYPE
 BOOL_TYPE
 INT_TYPE

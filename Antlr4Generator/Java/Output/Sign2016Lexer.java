@@ -16,7 +16,7 @@ public class Sign2016Lexer extends Lexer {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		TYPE_QUALIFIER=1, VOID_TYPE=2, BOOL_TYPE=3, INT_TYPE=4, UINT_TYPE=5, FLOAT_TYPE=6, 
+		CONST_TYPE=1, VOID_TYPE=2, BOOL_TYPE=3, INT_TYPE=4, UINT_TYPE=5, FLOAT_TYPE=6, 
 		STRUCT_TYPE=7, PTR_TYPE=8, FB=9, FE=10, ARRAY_SIZE=11, SIZE=12, SEP=13, 
 		ID=14;
 	public static String[] channelNames = {
@@ -28,7 +28,7 @@ public class Sign2016Lexer extends Lexer {
 	};
 
 	public static final String[] ruleNames = {
-		"TYPE_QUALIFIER", "VOID_TYPE", "BOOL_TYPE", "INT_TYPE", "UINT_TYPE", "FLOAT_TYPE", 
+		"CONST_TYPE", "VOID_TYPE", "BOOL_TYPE", "INT_TYPE", "UINT_TYPE", "FLOAT_TYPE", 
 		"STRUCT_TYPE", "PTR_TYPE", "FB", "FE", "ARRAY_SIZE", "SIZE", "SEP", "ID", 
 		"CHAR"
 	};
@@ -38,7 +38,7 @@ public class Sign2016Lexer extends Lexer {
 		"'FE'", null, null, "'-'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
-		null, "TYPE_QUALIFIER", "VOID_TYPE", "BOOL_TYPE", "INT_TYPE", "UINT_TYPE", 
+		null, "CONST_TYPE", "VOID_TYPE", "BOOL_TYPE", "INT_TYPE", "UINT_TYPE", 
 		"FLOAT_TYPE", "STRUCT_TYPE", "PTR_TYPE", "FB", "FE", "ARRAY_SIZE", "SIZE", 
 		"SEP", "ID"
 	};

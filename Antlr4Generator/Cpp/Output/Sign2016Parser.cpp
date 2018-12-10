@@ -282,7 +282,7 @@ Sign2016Parser::BoolTypeContext* Sign2016Parser::boolType() {
     _errHandler->sync(this);
 
     _la = _input->LA(1);
-    if (_la == Sign2016Parser::TYPE_QUALIFIER) {
+    if (_la == Sign2016Parser::CONST_TYPE) {
       setState(43);
       typeQualifier();
     }
@@ -378,7 +378,7 @@ Sign2016Parser::IntTypeContext* Sign2016Parser::intType() {
     _errHandler->sync(this);
 
     _la = _input->LA(1);
-    if (_la == Sign2016Parser::TYPE_QUALIFIER) {
+    if (_la == Sign2016Parser::CONST_TYPE) {
       setState(53);
       typeQualifier();
     }
@@ -476,7 +476,7 @@ Sign2016Parser::UintTypeContext* Sign2016Parser::uintType() {
     _errHandler->sync(this);
 
     _la = _input->LA(1);
-    if (_la == Sign2016Parser::TYPE_QUALIFIER) {
+    if (_la == Sign2016Parser::CONST_TYPE) {
       setState(64);
       typeQualifier();
     }
@@ -574,7 +574,7 @@ Sign2016Parser::FloatTypeContext* Sign2016Parser::floatType() {
     _errHandler->sync(this);
 
     _la = _input->LA(1);
-    if (_la == Sign2016Parser::TYPE_QUALIFIER) {
+    if (_la == Sign2016Parser::CONST_TYPE) {
       setState(75);
       typeQualifier();
     }
@@ -680,7 +680,7 @@ Sign2016Parser::StructTypeContext* Sign2016Parser::structType() {
     _errHandler->sync(this);
 
     _la = _input->LA(1);
-    if (_la == Sign2016Parser::TYPE_QUALIFIER) {
+    if (_la == Sign2016Parser::CONST_TYPE) {
       setState(86);
       typeQualifier();
     }
@@ -822,7 +822,7 @@ Sign2016Parser::PtrTypeContext* Sign2016Parser::ptrType() {
     _errHandler->sync(this);
 
     _la = _input->LA(1);
-    if (_la == Sign2016Parser::TYPE_QUALIFIER) {
+    if (_la == Sign2016Parser::CONST_TYPE) {
       setState(100);
       typeQualifier();
     }
@@ -853,7 +853,7 @@ Sign2016Parser::PtrTypeContext* Sign2016Parser::ptrType() {
       _errHandler->sync(this);
 
       _la = _input->LA(1);
-      if (_la == Sign2016Parser::TYPE_QUALIFIER) {
+      if (_la == Sign2016Parser::CONST_TYPE) {
         setState(112);
         typeQualifier();
       }
@@ -1282,8 +1282,8 @@ Sign2016Parser::TypeQualifierContext::TypeQualifierContext(ParserRuleContext *pa
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* Sign2016Parser::TypeQualifierContext::TYPE_QUALIFIER() {
-  return getToken(Sign2016Parser::TYPE_QUALIFIER, 0);
+tree::TerminalNode* Sign2016Parser::TypeQualifierContext::CONST_TYPE() {
+  return getToken(Sign2016Parser::CONST_TYPE, 0);
 }
 
 tree::TerminalNode* Sign2016Parser::TypeQualifierContext::SEP() {
@@ -1325,7 +1325,7 @@ Sign2016Parser::TypeQualifierContext* Sign2016Parser::typeQualifier() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(155);
-    match(Sign2016Parser::TYPE_QUALIFIER);
+    match(Sign2016Parser::CONST_TYPE);
     setState(156);
     match(Sign2016Parser::SEP);
    
@@ -1536,9 +1536,8 @@ std::vector<std::string> Sign2016Parser::_literalNames = {
 };
 
 std::vector<std::string> Sign2016Parser::_symbolicNames = {
-  "", "TYPE_QUALIFIER", "VOID_TYPE", "BOOL_TYPE", "INT_TYPE", "UINT_TYPE", 
-  "FLOAT_TYPE", "STRUCT_TYPE", "PTR_TYPE", "FB", "FE", "ARRAY_SIZE", "SIZE", 
-  "SEP", "ID"
+  "", "CONST_TYPE", "VOID_TYPE", "BOOL_TYPE", "INT_TYPE", "UINT_TYPE", "FLOAT_TYPE", 
+  "STRUCT_TYPE", "PTR_TYPE", "FB", "FE", "ARRAY_SIZE", "SIZE", "SEP", "ID"
 };
 
 dfa::Vocabulary Sign2016Parser::_vocabulary(_literalNames, _symbolicNames);
