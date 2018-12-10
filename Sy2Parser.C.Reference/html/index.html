@@ -735,7 +735,7 @@ Example 8: Error Code SY2_MISSING_TOKEN - missing a BITMASK</h2>
 </div><!-- fragment --><h2><a class="anchor" id="sec_example_9"></a>
 Example 9: Error Code SY2_EXTRAENOUS_INPUT and SY2_NO_VIABLE_ALTERNATIVE inside node</h2>
 <div class="fragment"><div class="line">RegCmd PROC Func1 2004EAF8 FB-I32-PTR32-S64-Struct1</div>
-</div><!-- fragment --><p> There is missing the end of function, the '-FE' keyword. At first the parser generates error code SY2_EXTRAENOUS_INPUT and tries to use the keyword which could potentially follow. It is '-'. But then the parser could not decide which of two or more paths to take for the remaining input. The same as in example 7. The array size or structure name could be follow.</p>
+</div><!-- fragment --><p> There is missing the end of function, the '-FE' keyword. At first the parser generates error code SY2_EXTRAENOUS_INPUT and tries to use the keyword which could potentially follow. It is '-'. But then the parser could not decide which of two or more paths to take for the remaining input. The same as in example 7. The array size or structure name could follow.</p>
 <p>Output: </p><div class="fragment"><div class="line">Error: line 1, column 52, code 0x1001, message extraneous input <span class="stringliteral">&#39;&lt;EOF&gt;&#39;</span> expecting <span class="charliteral">&#39;-&#39;</span></div>
 <div class="line"></div>
 <div class="line">FILE (0x0000): ..\Test\In\test.sy2</div>
@@ -757,7 +757,7 @@ Example 9: Error Code SY2_EXTRAENOUS_INPUT and SY2_NO_VIABLE_ALTERNATIVE inside 
 </div><!-- fragment --> </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 10 2018 13:55:49 for Sy2 Parser API by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Dec 10 2018 16:01:59 for Sy2 Parser API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

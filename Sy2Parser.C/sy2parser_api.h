@@ -736,7 +736,7 @@ RegCmd PROC Func1 2004EAF8 FB-I32-PTR32-S64-Struct1
 \endcode
 There is missing the end of function, the '-FE' keyword. At first the parser generates error code SY2_EXTRAENOUS_INPUT
 and tries to use the keyword which could potentially follow. It is '-'. But then the parser could not decide which of
-two or more paths to take for the remaining input. The same as in example 7. The array size or structure name could be follow.
+two or more paths to take for the remaining input. The same as in example 7. The array size or structure name could follow.
 
 Output:
 \code
