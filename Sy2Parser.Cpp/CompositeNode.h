@@ -103,10 +103,13 @@ namespace Model
 			return _data->at(index);
 		}
 
+
+
 		void add(Node *node) override
 		{
 			_data->push_back(node);
 			Node::add(node);
+			updateDepth(node);
 		}
 
 		void remove(Node *node) override
@@ -156,9 +159,28 @@ namespace Model
 		void reset() override
 		{
 			_nextId = 0;
+			std::for_each(_data->begin(), _data->end(),
+				[](Node *node)
+				{
+					node->reset();
+				});
 		}
 
 	protected:
+		void updateDepth(Node *node)
+		{
+			if (CompositeNode *composite = dynamic_cast<CompositeNode*>(node))
+			{
+				std::for_each(composite->_data->begin(), composite->_data->end(),
+					[this](Node *node)
+				{
+					SizeType parentDepth = node->parent()->getDepth();
+					node->setDepth(parentDepth + 1);
+					updateDepth(node);
+				});
+			}
+		}
+
 		ContainerType *_data;
 		mutable SizeType _nextId;
 	};

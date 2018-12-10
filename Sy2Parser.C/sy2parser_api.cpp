@@ -1,17 +1,25 @@
 #include "sy2parser_api.h"
 #include <fstream>
 #include "antlr4-runtime.h"
-#include "Sy2ErrorListener.h"
+#include "Sy2CustomErrorListener.h"
+#include "Sy2CustomErrorStrategy.h"
 #include "Sy2Lexer.h"
 #include "Sy2Parser.h"
 #include "Sy2CustomListener.h"
 #include "Unspecified.h"
+#include "UnwantedTokenException.h"
+#include "MissingTokenException.h"
 
 #include <Windows.h>
 
 using namespace std;
 using namespace antlr4;
 using namespace antlrcpp;
+
+typedef std::mutex Sy2CallbackMutex;
+typedef std::lock_guard<Sy2CallbackMutex> Sy2CallbackMutexWrapper;
+
+extern unsigned int dllVersion;
 
 // Holds info about callback.
 struct ParsedNodeCallbackStorage
@@ -37,7 +45,7 @@ struct OpenParser
 	}
 
 	ANTLRInputStream *sy2Input;
-	Sy2ErrorListener *sy2ErrListener;
+	Sy2CustomErrorListener *sy2ErrListener;
 	Sy2Lexer *sy2Lexer;
 	CommonTokenStream *sy2Tokens;
 	Sy2Parser *sy2Parser;
@@ -45,48 +53,20 @@ struct OpenParser
 	Sy2CustomListener::NodeType sy2File;
 	string fileName;
 	const Model::Node<> *currentNode;
-	Sy2ErrorListener::ErrorCallbackPtr errorCb;
+	Sy2CustomErrorListener::ErrorCallbackPtr errorCb;
 	Sy2CustomListener::ProgressCallbackPtr progressCb;
 	vector<ParsedNodeCallbackStorage> parsedNodeCbList;
 };
 
-// Hold open parser and corresponding handle.
+typedef std::mutex Sy2HandleListMutex;
+typedef std::lock_guard<std::mutex> Sy2HandleListMutexWrapper;
+Sy2HandleListMutex sy2HandleListMutex;
+// Holds open parser and corresponding handle.
 std::map<Sy2ParserHandle, shared_ptr<OpenParser>> handleList;
 // Start handle value.
 Sy2ParserHandle lastHandle = 0x1000;
 
-SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Open(const char *fileName, Sy2ParserHandle *handle)
-{
-	Sy2ParserStatus status = SY2_SUCCESS;
-
-	ifstream stream(fileName);
-	if (!stream.is_open())
-	{
-		status = SY2_FILE_NOT_FOUND;
-	}
-	else
-	{
-		shared_ptr<OpenParser> parser = make_shared<OpenParser>();
-		parser->sy2Input = new ANTLRInputStream(stream);
-		parser->sy2ErrListener = new Sy2ErrorListener();
-		parser->sy2Lexer = new Sy2Lexer(parser->sy2Input);
-		parser->sy2Lexer->removeErrorListeners();
-		parser->sy2Lexer->addErrorListener(parser->sy2ErrListener);
-		parser->sy2Tokens = new CommonTokenStream(parser->sy2Lexer);
-		parser->sy2Parser = new Sy2Parser(parser->sy2Tokens);
-		parser->sy2Parser->removeErrorListeners();
-		parser->sy2Parser->addErrorListener(parser->sy2ErrListener);
-		parser->fileName = fileName;
-
-		handleList[lastHandle] = parser;
-		*handle = lastHandle;
-		lastHandle++;
-	}
-
-	return status;
-}
-
-void ConvertDateTime(const FILETIME * const ft, T_FileDateTime *const fileDateTime)
+static void ConvertDateTime(const FILETIME * const ft, T_FileDateTime *const fileDateTime)
 {
 	SYSTEMTIME stUTC, stLocal;
 
@@ -103,10 +83,142 @@ void ConvertDateTime(const FILETIME * const ft, T_FileDateTime *const fileDateTi
 	fileDateTime->milliseconds = stLocal.wMilliseconds;
 }
 
+static shared_ptr<OpenParser> GetParser(Sy2ParserHandle handle)
+{
+	shared_ptr<OpenParser> parser;
+
+	Sy2HandleListMutexWrapper lock(sy2HandleListMutex);
+
+	parser = handleList[handle];
+
+	return parser;
+}
+
+static unsigned int getStatus(exception_ptr exception)
+{
+	unsigned int code = SY2_SUCCESS;
+
+	if (exception != nullptr)
+	{
+		try
+		{
+			rethrow_exception(exception);
+		}
+		catch (const NoViableAltException &)
+		{
+			code = SY2_NO_VIABLE_ALTERNATIVE;
+		}
+		catch (const LexerNoViableAltException &)
+		{
+			code = SY2_NO_VIABLE_ALTERNATIVE;
+		}
+		catch (const InputMismatchException &)
+		{
+			code = SY2_INPUT_MISMATCHED;
+		}
+		catch (const FailedPredicateException &)
+		{
+			code = SY2_UNKNOWN;
+		}
+		catch (const UnwantedTokenException &)
+		{
+			code = SY2_EXTRAENOUS_INPUT;
+		}
+		catch (const MissingTokenException &)
+		{
+			code = SY2_MISSING_TOKEN;
+		}
+		catch (const ParseCancellationException &)
+		{
+			code = SY2_PARSING_ABORTED;
+		}
+		catch (...)
+		{
+			code = SY2_UNKNOWN;
+		}
+	}
+
+	return code;
+}
+
+static Sy2ParserStatus processNode(const Model::Node<> *node, T_Sy2Node *apiNode)
+{
+	Sy2ParserStatus status = SY2_SUCCESS;
+
+	if (node != nullptr)
+	{
+		apiNode->type = (T_Sy2NodeType)node->getType();
+		string value = node->getValue();
+		if (value.length() == 0)
+		{
+			apiNode->value[0] = '\0';
+		}
+		else
+		{
+			strncpy_s(apiNode->value, value.c_str(), sizeof(apiNode->value) - 1);
+			apiNode->value[sizeof(apiNode->value) - 1] = '\0';
+		}
+		apiNode->depth = node->getDepth();
+		apiNode->line = node->getLine();
+		apiNode->column = node->getColumn();
+
+		status = getStatus(node->getException());
+	}
+	else
+	{
+		status = SY2_EOF;
+	}
+
+	return status;
+}
+
+SY2PARSER_API unsigned int SY2PARSER_API_CALL sy2GetApiVersion(void)
+{
+	return SY2PARSER_API_VERSION;
+}
+
+SY2PARSER_API unsigned int SY2PARSER_API_CALL sy2GetDllVersion(void)
+{
+	return dllVersion;
+}
+
+SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Open(const char *fileName, Sy2ParserHandle *handle)
+{
+	Sy2ParserStatus status = SY2_SUCCESS;
+
+	ifstream stream(fileName);
+	if (!stream.is_open())
+	{
+		status = SY2_FILE_NOT_FOUND;
+	}
+	else
+	{
+		Sy2HandleListMutexWrapper lock(sy2HandleListMutex);
+
+		shared_ptr<OpenParser> parser = make_shared<OpenParser>();
+		parser->sy2Input = new ANTLRInputStream(stream);
+		parser->sy2ErrListener = new Sy2CustomErrorListener();
+		parser->sy2Lexer = new Sy2Lexer(parser->sy2Input);
+		parser->sy2Lexer->removeErrorListeners();
+		//parser->sy2Lexer->addErrorListener(parser->sy2ErrListener);	// don't care lexer errors on errors from a parser
+		parser->sy2Tokens = new CommonTokenStream(parser->sy2Lexer);
+		parser->sy2Parser = new Sy2Parser(parser->sy2Tokens);
+		parser->sy2Parser->removeErrorListeners();
+		parser->sy2Parser->addErrorListener(parser->sy2ErrListener);
+		parser->fileName = fileName;
+
+		handleList[lastHandle] = parser;
+		*handle = lastHandle;
+		lastHandle++;
+	}
+
+	return status;
+}
+
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2GetFileInfo(Sy2ParserHandle handle, T_Sy2FileInfo *fileInfo)
 {
 	Sy2ParserStatus status = SY2_SUCCESS;
-	shared_ptr<OpenParser> parser = handleList[handle];
+	shared_ptr<OpenParser> parser = GetParser(handle);
 
 	fileInfo->size = 0;
 
@@ -149,7 +261,7 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2GetFileInfo(Sy2ParserHandle 
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Close(Sy2ParserHandle handle)
 {
 	Sy2ParserStatus status = SY2_SUCCESS;
-	shared_ptr<OpenParser> parser = handleList[handle];
+	shared_ptr<OpenParser> parser = GetParser(handle);
 
 	if (parser)
 	{
@@ -175,16 +287,17 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Close(Sy2ParserHandle handle
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2SetParsingErrorCallback(Sy2ParserHandle handle, ParsingErrorCallback *callback, void *callbackContext)
 {
 	Sy2ParserStatus status = SY2_SUCCESS;
-	shared_ptr<OpenParser> parser = handleList[handle];
+	shared_ptr<OpenParser> parser = GetParser(handle);
 
 	if (parser)
 	{
 		if (callback != nullptr)
 		{
-			parser->errorCb = make_shared<Sy2ErrorListener::ErrorCallbackType>(
-				[handle, callback, callbackContext](size_t line, size_t column, const string &message)
+			parser->errorCb = make_shared<Sy2CustomErrorListener::ErrorCallbackType>(
+				[handle, callback, callbackContext](size_t line, size_t column, const string &message, exception_ptr e)
 				{
-					callback(handle, line, column, message.c_str(), callbackContext);
+					unsigned int status = getStatus(e);
+					callback(handle, line, column, status, message.c_str(), callbackContext);
 				});
 		}
 		else
@@ -203,7 +316,7 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2SetParsingErrorCallback(Sy2P
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2SetParsingProgressCallback(Sy2ParserHandle handle, ParsingProgressCallback *callback, void *callbackContext)
 {
 	Sy2ParserStatus status = SY2_SUCCESS;
-	shared_ptr<OpenParser> parser = handleList[handle];
+	shared_ptr<OpenParser> parser = GetParser(handle);
 
 	if (parser)
 	{ 
@@ -231,7 +344,7 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2SetParsingProgressCallback(S
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2AddParsedNodeCallback(Sy2ParserHandle handle, T_Sy2NodeType nodeType, ParsedNodeCallback *callback, void *callbackContext)
 {
 	Sy2ParserStatus status = SY2_SUCCESS;
-	shared_ptr<OpenParser> parser = handleList[handle];
+	shared_ptr<OpenParser> parser = GetParser(handle);
 
 	if (parser)
 	{
@@ -242,9 +355,8 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2AddParsedNodeCallback(Sy2Par
 			callbackStorage.parsedNodeCallback = make_shared<Sy2CustomListener::ParsedNodeCallbackType>(
 				[parser, handle, nodeType, callback, callbackContext](const Model::Node<> *node)
 			{
-				//parser->currentNode = node->next();
 				parser->currentNode = node;
-				T_Sy2Node apiNode = { (T_Sy2NodeType)node->getType(),  "\0", node->getDepth(), node->getLine(), node->getColumn() };
+				T_Sy2Node apiNode = { (T_Sy2NodeType)node->getType(),  "\0", node->getDepth(), node->getLine(), node->getColumn(), getStatus(node->getException()) };
 				strncpy_s(apiNode.value, node->getValue().c_str(), sizeof(apiNode.value) - 1);	// copy at most N, zero-padding if shorter
 				apiNode.value[sizeof(apiNode.value) - 1] = '\0';							// ensure NUL terminated
 				callback(handle, &apiNode, callbackContext);
@@ -266,7 +378,7 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2AddParsedNodeCallback(Sy2Par
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2RemoveParsedNodeCallback(Sy2ParserHandle handle, T_Sy2NodeType nodeType, ParsedNodeCallback *callback)
 {
 	Sy2ParserStatus status = SY2_SUCCESS;
-	shared_ptr<OpenParser> parser = handleList[handle];
+	shared_ptr<OpenParser> parser = GetParser(handle);
 
 	if (parser)
 	{
@@ -282,7 +394,7 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2RemoveParsedNodeCallback(Sy2
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Parse(Sy2ParserHandle handle)
 {
 	Sy2ParserStatus status = SY2_SUCCESS;
-	shared_ptr<OpenParser> parser = handleList[handle];
+	shared_ptr<OpenParser> parser = GetParser(handle);
 
 	if (parser)
 	{
@@ -290,44 +402,22 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2Parse(Sy2ParserHandle handle
 		Sy2CustomListener listener(parser->fileName);
 		listener.setErrorCallback(parser->errorCb);
 		listener.setProgressCallback(parser->progressCb);
+		listener.setParser(parser->sy2Parser);
 		for (auto iCallback : parser->parsedNodeCbList)
 		{
 			listener.addParsedNodeCallback(iCallback.parsedNodeCallback, iCallback.nodeType);
 		}
 		parser->sy2Parser->addParseListener(&listener);
+		parser->sy2Parser->setErrorHandler(make_shared<Sy2CustomErrorStrategy>());
+
 		parser->sy2Tree = parser->sy2Parser->file();
+
+		// the context exception is filled if the last parsed node was problematic
+		status = getStatus(parser->sy2Tree->exception);
+
 		parser->sy2File = listener.getNode();
-		parser->currentNode = new Model::Unspecified;
+		parser->currentNode = nullptr;
 		parser->sy2Parser->removeParseListener(&listener);
-	}
-
-	return status;
-}
-
-static Sy2ParserStatus processNode(const Model::Node<> *node, T_Sy2Node *apiNode)
-{
-	Sy2ParserStatus status = SY2_SUCCESS;
-
-	if (node != nullptr)
-	{
-		apiNode->type = (T_Sy2NodeType)node->getType();
-		string value = node->getValue();
-		if (value.length() == 0)
-		{
-			apiNode->value[0] = '\0';
-		}
-		else
-		{
-			strncpy_s(apiNode->value, value.c_str(), sizeof(apiNode->value) - 1);
-			apiNode->value[sizeof(apiNode->value) - 1] = '\0';
-		}
-		apiNode->depth = node->getDepth();
-		apiNode->line = node->getLine();
-		apiNode->column = node->getColumn();
-	}
-	else
-	{
-		status = SY2_EOF;
 	}
 
 	return status;
@@ -336,15 +426,22 @@ static Sy2ParserStatus processNode(const Model::Node<> *node, T_Sy2Node *apiNode
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2ReadNext(const Sy2ParserHandle handle, T_Sy2Node *node)
 {
 	Sy2ParserStatus status = SY2_SUCCESS;
-	shared_ptr<OpenParser> parser = handleList[handle];
+	shared_ptr<OpenParser> parser = GetParser(handle);
 
 	if (parser)
 	{
-		if (parser->currentNode->getType() == T_Sy2NodeType::SY2_UNSPECIFIED)
+		if (parser->currentNode == nullptr)
 		{
-			const Model::Node<> *currentNode = parser->sy2File.get();
-			status = processNode(currentNode, node);
-			parser->currentNode = currentNode;
+			if (parser->sy2File != nullptr)
+			{
+				const Model::Node<> *currentNode = parser->sy2File.get();
+				status = processNode(currentNode, node);
+				parser->currentNode = currentNode;
+			}
+			else
+			{
+				status = SY2_FAILD;
+			}
 		}
 		else
 		{
@@ -364,12 +461,11 @@ SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2ReadNext(const Sy2ParserHand
 SY2PARSER_API Sy2ParserStatus SY2PARSER_API_CALL sy2AbortParsing(const Sy2ParserHandle handle)
 {
 	Sy2ParserStatus status = SY2_SUCCESS;
-	shared_ptr<OpenParser> parser = handleList[handle];
+	shared_ptr<OpenParser> parser = GetParser(handle);
 
 	if (parser)
 	{
-		size_t size = parser->sy2Input->size();
-		parser->sy2Parser->getInputStream()->seek(size);
+		parser->sy2Parser->abortParsing();
 	}
 	else
 	{

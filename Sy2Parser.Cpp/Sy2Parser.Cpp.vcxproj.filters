@@ -168,10 +168,19 @@
     <ClInclude Include="TypeDefinition.h">
       <Filter>Header Files\Model</Filter>
     </ClInclude>
-    <ClInclude Include="Sy2ErrorListener.h">
+    <ClInclude Include="Sy2CustomErrorStrategy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sign2016ErrorListener.h">
+    <ClInclude Include="UnwantedTokenException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MissingTokenException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sy2CustomErrorListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sign2016CustomErrorListener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -233,10 +242,19 @@
     <ClCompile Include="Sy2CustomListener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sy2ErrorListener.cpp">
+    <ClCompile Include="Sy2CustomErrorStrategy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sign2016ErrorListener.cpp">
+    <ClCompile Include="UnwantedTokenException.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MissingTokenException.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sy2CustomErrorListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sign2016CustomErrorListener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

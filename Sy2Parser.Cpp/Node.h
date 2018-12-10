@@ -16,7 +16,7 @@ namespace Model
 		typedef CONT<Node *> ContainerType;
 
 		Node()
-			: _parent{ nullptr }, _value{ "" }, _depth{ 0 }, _line{ 0 }, _column{ 0 }
+			: _parent{ nullptr }, _value{ "" }, _depth{ 0 }, _line{ 0 }, _column{ 0 }, _exception{ nullptr }
 		{
 		}
 
@@ -26,12 +26,12 @@ namespace Model
 		}
 
 		Node(const Node& node)
-			: _parent{ nullptr }, _value{ node._value }, _depth{ node._depth }, _line{ node._line }, _column{ node._column }
+			: _parent{ nullptr }, _value{ node._value }, _depth{ node._depth }, _line{ node._line }, _column{ node._column }, _exception{ node._exception }
 		{
 		}
 
 		Node(Node&& node)
-			: _parent{ nullptr }, _value{ std::move(node._value) }, _depth{ std::move(node._depth) }, _line{ std::move(node._line) }, _column{ std::move(node._column) }
+			: _parent{ nullptr }, _value{ std::move(node._value) }, _depth{ std::move(node._depth) }, _line{ std::move(node._line) }, _column{ std::move(node._column) }, _exception{ std::move(node._exception) }
 		{
 		}
 
@@ -42,6 +42,7 @@ namespace Model
 			_depth = node._depth;
 			_line = node._line;
 			_column = node._column;
+			_exception = node._exception;
 
 			return *this;
 		}
@@ -54,6 +55,10 @@ namespace Model
 			_depth = std::move(node._depth);
 			_line = std::move(node._line);
 			_column = std::move(node._column);
+			if (node._exception != nullptr)
+			{
+				_exception = std::move(node._exception);
+			}
 		}
 
 		// Making base class destructor virtual guarantees that the object of derived class is destructed properly, i.e., both base class and derived class destructors are called.
@@ -109,6 +114,11 @@ namespace Model
 			return _depth;
 		}
 
+		void setDepth(SizeType depth)
+		{
+			_depth = depth;
+		}
+
 		SizeType getLine() const
 		{
 			return _line;
@@ -117,6 +127,16 @@ namespace Model
 		SizeType getColumn() const
 		{
 			return _column;
+		}
+
+		std::exception_ptr getException() const
+		{
+			return _exception;
+		}
+
+		void setException(std::exception_ptr e)
+		{
+			_exception = e;
 		}
 
 		virtual void add(Node *node)
@@ -138,5 +158,7 @@ namespace Model
 		SizeType _depth;
 		SizeType _line;
 		SizeType _column;
+		/// The exception that forced this rule to return. If the rule successfully completed, this is "null exception pointer".
+		std::exception_ptr _exception;
 	};
 }

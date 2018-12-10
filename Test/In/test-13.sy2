@@ -1,0 +1,25 @@
+# Header
+
+Encoding little_endian
+
+TEngSetSignVersion 2016
+
+# Structure TAG PointTag, sizeof(PointTag) is 16 Byte(s):
+# Command Type   Name            Offset      Signature
+# ----------------------------------------------------------------------------
+RegVar    STRUCT PointTag        0           S128-PointTag                                             
+RegVar    STRUCT PointTag_x      0           F32                                                       
+RegVar    STRUCT PointTag_y      4           F96 
+
+# Command Type   Name            Address     Signature
+# ----------------------------------------------------------------------------
+RegCmd    DATA   var1            0040DC20    UI32
+RegCmd    DATA   var2            0040DD0C    C-UI8
+RegCmd    DATA   var3            0040DE20    C-PTR32_C_I32
+RegCmd    DATA   point1          0040DF20    S128-PointTag                                             
+RegCmd    DATA   point1_x        0040DF20    F32                                                       
+RegCmd    DATA   point1_y        0040DF24    F96
+
+# Command Type   Name            Address     Signature
+# -----------------------------------------------------------------------------
+RegCmd    PROC   func1           080020C5    FB-V-PTR32-C-S128-PointTag-UI32-FE

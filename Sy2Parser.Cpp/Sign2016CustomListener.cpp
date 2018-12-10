@@ -28,6 +28,7 @@ static T* initiateNode(ParserRuleContext *ctx, Model::Node<> *node)
 static Model::Node<>* leaveNode(ParserRuleContext *ctx, Model::Node<> *node, const string &value)
 {
 	node->setValue(value);
+	node->setException(ctx->exception);
 	return node->parent();
 }
 
@@ -177,7 +178,7 @@ void Sign2016CustomListener::enterTypeQualifier(Sign2016Parser::TypeQualifierCon
 void Sign2016CustomListener::exitTypeQualifier(Sign2016Parser::TypeQualifierContext *ctx)
 {
 	Model::Node<> *temp = _current;
-	_current = leaveNode(ctx, temp, ctx->TYPE_QUALIFIER()->getText());
+	_current = leaveNode(ctx, temp, ctx->CONST_TYPE()->getText());
 	this->callCallback(temp, Model::Sy2Node::SY2_TYPE_QUALIFIER);
 }
 

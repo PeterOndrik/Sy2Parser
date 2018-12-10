@@ -1,0 +1,22 @@
+RegCmd    PROC   IFXE_GetModule                           2004E5B4    FB-I32-I32-FE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+RegCmd    PROC   IFXE_MapGlobalField                      2004E5BC    FB-I32-PTR32-FB-I32-PTR32-V-PTR32-PTR32-V-PTR32-I32-FE-PTR32-FB-I32-PTR32-V-PTR32-V-PTR32-UI32-FE-PTR32-FB-I32-PTR32-V-PTR32-I32-FE-PTR32-FB-I32-PTR32-V-PTR32-F32-FE-PTR32-FB-I32-PTR32-V-PTR32-I32-FE-PTR32-FB-I32-PTR32-V-PTR32-I32-FE-PTR32-C-S64-IFXI_STRING_MAP-PTR32-C-S96-IFXI_INT_MAP-PTR32-C-S96-IFXI_FLOAT_MAP-PTR32-C-S64-IFXI_BOOL_MAP-I32-PTR32-C-UI32-PTR32-S96-IFXI_STRING-PTR32-V-FE                                                                                                                          
+RegCmd    PROC   IFXE_MapMenuField                        2004E834    FB-I32-PTR32-FB-I32-PTR32-V-PTR32-PTR32-V-PTR32-V-I32-PTR32-I32-FE-PTR32-FB-I32-PTR32-V-PTR32-V-PTR32-UI32-FE-PTR32-FB-I32-PTR32-V-PTR32-V-I32-PTR32-I32-FE-PTR32-FB-I32-PTR32-V-PTR32-V-I32-PTR32-F32-FE-PTR32-FB-I32-PTR32-V-PTR32-V-I32-PTR32-I32-FE-PTR32-FB-I32-PTR32-V-PTR32-V-I32-PTR32-I32-FE-PTR32-C-S64-IFXI_STRING_MAP-PTR32-C-S96-IFXI_INT_MAP-PTR32-C-S96-IFXI_FLOAT_MAP-PTR32-C-S64-IFXI_BOOL_MAP-I32-PTR32-C-UI32-PTR32-S96-IFXI_STRING-PTR32-V-PTR32-S64-IFXI_MODULE_MENU_INFO-I32-FE                          
+RegCmd    PROC   IFXE_MapElementField                     2004EAF8    FB-I32-PTR32-FB-I32-PTR32-V-PTR32-PTR32-V-PTR32-V-PTR32-C-UI32-PTR32-I32-FE-PTR32-FB-I32-PTR32-V-PTR32-V-PTR32-UI32-FE-PTR32-FB-I32-PTR32-V-PTR32-V-PTR32-C-UI32-PTR32-I32-FE-PTR32-FB-I32-PTR32-V-PTR32-V-PTR32-C-UI32-PTR32-F32-FE-PTR32-FB-I32-PTR32-V-PTR32-V-PTR32-C-UI32-PTR32-I32-FE-PTR32-FB-I32-PTR32-V-PTR32-V-PTR32-C-UI32-PTR32-I32-FE-PTR32-C-S64-IFXI_STRING_MAP-PTR32-C-S96-IFXI_INT_MAP-PTR32-C-S96-IFXI_FLOAT_MAP-PTR32-C-S64-IFXI_BOOL_MAP-I32-PTR32-C-UI32-PTR32-S96-IFXI_STRING-PTR32-V-PTR32-S64-IFXI_MODU
+RegCmd    PROC   IFXE_AllocateMemoryUnsafe                2004EE14    FB-PTR32-V-UI32-FE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+RegCmd    PROC   IFXE_FreeMemoryUnsafe                    2004EE18    FB-V-PTR32-V-FE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+
+
+# Number of registered DATA objects in this CU: 0
+# Number of registered PROC objects in this CU: 36
+
+
+# Compilation unit path: C:\GCX8000\Application\Os\nucleus
+#             unit name: os/ui/inflexionui/engine/src/ifxui_uriparser.c
+
+# Structure TAG Param_t, sizeof(Param_t) is 12 Byte(s):
+# Command Type   Name                                  Offset      Signature
+# -----------------------------------------------------------------------------------------------------------------------
+RegVar    STRUCT Param_t                               0           S96-Param_t                                           
+RegVar    STRUCT Param_t_szKey                         0           PTR32-UI32                                            
+RegVar    STRUCT Param_t_szVal                         4           PTR32-UI32                                            
+RegVar    STRUCT Param_t_next                          8           PTR32-S96-Param_t   

@@ -74,7 +74,7 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)\bin\$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)\obj\$(Configuration)\$(Platform)\$(ProjectName)\</IntDir>
-    <TargetName>sy2parser-db</TargetName>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -99,6 +99,7 @@
       <AdditionalIncludeDirectories>..\Antlr4Runtime.Cpp\src;..\Antlr4Generator\Cpp\Output;</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <DisableSpecificWarnings>4251;</DisableSpecificWarnings>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -187,13 +188,15 @@
     <ClInclude Include="FloatType.h" />
     <ClInclude Include="Function.h" />
     <ClInclude Include="IntType.h" />
+    <ClInclude Include="MissingTokenException.h" />
     <ClInclude Include="ParamType.h" />
     <ClInclude Include="PtrType.h" />
     <ClInclude Include="ReturnType.h" />
-    <ClInclude Include="Sign2016ErrorListener.h" />
+    <ClInclude Include="Sign2016CustomErrorListener.h" />
     <ClInclude Include="StorageSize.h" />
     <ClInclude Include="StructType.h" />
-    <ClInclude Include="Sy2ErrorListener.h" />
+    <ClInclude Include="Sy2CustomErrorStrategy.h" />
+    <ClInclude Include="Sy2CustomErrorListener.h" />
     <ClInclude Include="Sy2Node.h" />
     <ClInclude Include="Offset.h" />
     <ClInclude Include="LeafNode.h" />
@@ -213,6 +216,7 @@
     <ClInclude Include="TypeQualifier.h" />
     <ClInclude Include="UIntType.h" />
     <ClInclude Include="Unspecified.h" />
+    <ClInclude Include="UnwantedTokenException.h" />
     <ClInclude Include="VoidType.h" />
   </ItemGroup>
   <ItemGroup>
@@ -229,19 +233,22 @@
     <ClCompile Include="..\Antlr4Generator\Cpp\Output\Sy2Parser.cpp" />
     <ClCompile Include="..\Antlr4Generator\Cpp\Output\Sy2Visitor.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="MissingTokenException.cpp" />
     <ClCompile Include="Sign2016CustomListener.cpp" />
     <ClCompile Include="Sign2016CustomVisitor.cpp" />
-    <ClCompile Include="Sign2016ErrorListener.cpp" />
+    <ClCompile Include="Sign2016CustomErrorListener.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Sy2CustomErrorStrategy.cpp" />
     <ClCompile Include="Sy2CustomListener.cpp" />
     <ClCompile Include="Sy2CustomVisitor.cpp" />
-    <ClCompile Include="Sy2ErrorListener.cpp" />
+    <ClCompile Include="Sy2CustomErrorListener.cpp" />
     <ClCompile Include="Sy2Parser.Cpp.cpp" />
+    <ClCompile Include="UnwantedTokenException.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
