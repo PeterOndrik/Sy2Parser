@@ -45,14 +45,14 @@ Figure 1: Sy2 AST Example
 
 ![alt text][Sign2016-1]
 
-[Sign2016-1]: https://production.github.bshg.com/ondrik/Sy2Parser/blob/master/doc/img/Sign2016-1.PNG "Figure 2: Sign2016 I32 AST Example"
+[Sign2016-1]: ./doc/img/Sign2016-1.PNG "Figure 2: Sign2016 I32 AST Example"
 Figure 2: Sign2016 "I32" AST Example
 </td>
 <td>
 
 ![alt text][Sign2016-2]
 
-[Sign2016-2]: https://production.github.bshg.com/ondrik/Sy2Parser/blob/master/doc/img/Sign2016-2.PNG "Figure 3: Sign2016 C-PTR32-UI8 AST Example"
+[Sign2016-2]: ./doc/img/Sign2016-2.PNG "Figure 3: Sign2016 C-PTR32-UI8 AST Example"
 Figure 3: Sign2016 "C-PTR32-UI8" AST Example
 </td>
 </tr>
