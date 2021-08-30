@@ -33,7 +33,7 @@ The Sy2 Parser generates following AST for example above:
 
 ![alt text][Sy2-1]
 
-[Sy2-1]: https://production.github.bshg.com/ondrik/Sy2Parser/blob/master/doc/img/Sy2-1.PNG "Figure 1: Sy2 AST Example"
+[Sy2-1]: ./doc/img/Sy2-1.PNG "Figure 1: Sy2 AST Example"
 Figure 1: Sy2 AST Example
 </td>
 </tr>
