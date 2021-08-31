@@ -1,6 +1,12 @@
 from sy2parser_wrapper import *
 from os import path
 
+# display of parsing progress
+def showProgress(handle, progress, callbackContext):
+	print("... progress: {}%".format(progress), end='\r')
+# create a callback function
+parsingProgressCallback = T_ParsingProgressCallback(showProgress)
+
 status = sy2dll.sy2GetApiVersion()
 print("The Sy2 API Version: " + hex(status))
 
@@ -33,7 +39,7 @@ if status == T_Sy2ParserStatusCode.SY2_SUCCESS:
 		status = sy2dll.sy2ReadNext(handle, byref(node))
 		while status != T_Sy2ParserStatusCode.SY2_EOF:
 			if node.type == T_Sy2NodeType.SY2_COMMAND:
-				print("")
+				print()
 			print("{}: {}".format(T_Sy2NodeType(node.type).name, node.value))
 			status = sy2dll.sy2ReadNext(handle, byref(node))
 

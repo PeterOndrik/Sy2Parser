@@ -82,14 +82,14 @@ class T_Sy2FileInfo(Structure):
                 ("lastWrite", T_FileDateTime)
                 ]
 
-# display of parsing progress
-def showProgress(handle, progress, callbackContext):
-	print("... progress: {}%".format(progress), end='\r')
 # the CFUNCTYPE() factory function creates types for callback functions using the cdecl calling convention
 # the WINFUNCTYPE() factory function creates types for callback functions using the stdcall calling convention
+
+# callback function which is called when parsing progress is changed
 T_ParsingProgressCallback = WINFUNCTYPE(c_void_p, c_uint, c_uint, c_void_p)
-# create a callback function
-parsingProgressCallback = T_ParsingProgressCallback(showProgress)
+
+# callback function which is called after a node is completely parsed
+T_ParsedNodeCallback = WINFUNCTYPE(c_void_p, c_uint, POINTER(T_Sy2Node), c_void_p)
 
 # status code definition
 status = c_uint()
