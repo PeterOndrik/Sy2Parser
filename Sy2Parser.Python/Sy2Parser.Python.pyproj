@@ -3,15 +3,17 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>ba9237ec-106c-4bc1-8d46-5fedd8ee9ac7</ProjectGuid>
-    <ProjectHome>.</ProjectHome>
-    <StartupFile>Sy2Parser.Python.ConsoleApp.py</StartupFile>
+    <ProjectHome>
+    </ProjectHome>
+    <StartupFile>reading_after_parsing.py</StartupFile>
     <SearchPath>
     </SearchPath>
-    <WorkingDirectory>..\bin\Debug\x64</WorkingDirectory>
+    <WorkingDirectory>..\bin\Release\Win32</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>Sy2Parser.Python.ConsoleApp</Name>
+    <Name>Sy2Parser.Python</Name>
     <RootNamespace>Sy2Parser.Python.ConsoleApp</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
+    <InterpreterId>Global|PythonCore|3.7-32</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,7 +24,16 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Sy2Parser.Python.ConsoleApp.py" />
+    <Compile Include="reading_during_parsing.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sy2parser_wrapper.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="reading_after_parsing.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|PythonCore|3.7-32" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

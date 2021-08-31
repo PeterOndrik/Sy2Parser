@@ -1,11 +1,10 @@
 from ctypes import *
-import os
 from enum import IntEnum, unique
 
 # the dll loader
 # windll libraries call functions using the stdcall calling convention
 # functions are accessed as attributes of the sy2dll object
-sy2dll = windll.LoadLibrary("sy2parser-db.dll")
+sy2dll = windll.LoadLibrary("sy2parser.dll")
 
 # Sy2 Parser status codes
 @unique
@@ -83,6 +82,15 @@ class T_Sy2FileInfo(Structure):
                 ("lastWrite", T_FileDateTime)
                 ]
 
+# display of parsing progress
+def showProgress(handle, progress, callbackContext):
+	print("... progress: {}%".format(progress), end='\r')
+# the CFUNCTYPE() factory function creates types for callback functions using the cdecl calling convention
+# the WINFUNCTYPE() factory function creates types for callback functions using the stdcall calling convention
+T_ParsingProgressCallback = WINFUNCTYPE(c_void_p, c_uint, c_uint, c_void_p)
+# create a callback function
+parsingProgressCallback = T_ParsingProgressCallback(showProgress)
+
 # status code definition
 status = c_uint()
 # file handle definition
@@ -91,34 +99,3 @@ handle = c_uint()
 fileInfo = T_Sy2FileInfo()
 # sy2 node
 node = T_Sy2Node()
-
-status = sy2dll.sy2GetApiVersion()
-print("The SY2 API Version: " + hex(status))
-
-status = sy2dll.sy2GetDllVersion()
-print("The SY2 Parser Version: " + hex(status))
-
-# initialization
-sy2file = create_string_buffer(256)
-sy2file.value = os.path.abspath("../../../Test/In/test.sy2").encode()
-status = sy2dll.sy2Open(sy2file, byref(handle))
-if status == T_Sy2ParserStatusCode.SY2_SUCCESS:
-	status = sy2dll.sy2GetFileInfo(handle, byref(fileInfo));
-	print("Size: {} B".format(fileInfo.size))
-	print("Creation: {}-{}-{}".format(fileInfo.creation.year, fileInfo.creation.month, fileInfo.creation.day))
-
-	# parsing
-	status = sy2dll.sy2Parse(handle);
-	if status == T_Sy2ParserStatusCode.SY2_SUCCESS:
-		# printing AST
-		status = sy2dll.sy2ReadNext(handle, byref(node))
-		while status != T_Sy2ParserStatusCode.SY2_EOF:
-			if node.type == T_Sy2NodeType.SY2_COMMAND:
-				print("")
-			print("{}: {}".format(T_Sy2NodeType(node.type).name, node.value))
-			status = sy2dll.sy2ReadNext(handle, byref(node))
-
-	# closing
-	status = sy2dll.sy2Close(handle)
-else:
-	print("sy2Open() failed: ", hex(status))
