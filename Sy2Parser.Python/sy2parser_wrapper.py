@@ -86,6 +86,9 @@ class T_Sy2FileInfo(Structure):
 # the WINFUNCTYPE() factory function creates types for callback functions using the stdcall calling convention
 
 # callback function which is called when parsing progress is changed
+T_ParsingErrorCallback = WINFUNCTYPE(c_void_p, c_uint, c_uint, c_uint, c_uint,  c_char_p, c_void_p)
+
+# callback function which is called when parsing progress is changed
 T_ParsingProgressCallback = WINFUNCTYPE(c_void_p, c_uint, c_uint, c_void_p)
 
 # callback function which is called after a node is completely parsed

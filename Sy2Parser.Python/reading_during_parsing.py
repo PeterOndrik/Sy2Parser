@@ -1,6 +1,18 @@
 from sy2parser_wrapper import *
 from os import path
 
+# display an error message
+def showError(handle, line, column, status, message, callbackContext):
+	print("Error: line {}, column {}, status {}, message {}\n".format(line, column, hex(status), message))
+# create a callback function
+errorCallback = T_ParsingErrorCallback(showError)
+
+# display of parsing progress
+def showProgress(handle, progress, callbackContext):
+	print("... progress: {}%".format(progress))
+# create a callback function
+parsingProgressCallback = T_ParsingProgressCallback(showProgress)
+
 # display of the parsed node
 def showNode(handle, addrNode, callbackContext):
 	node = cast(addrNode, POINTER(T_Sy2Node)).contents
@@ -33,6 +45,8 @@ if status == T_Sy2ParserStatusCode.SY2_SUCCESS:
 	print("Sy2 File Creation: {}-{}-{}".format(fileInfo.creation.year, fileInfo.creation.month, fileInfo.creation.day))
 	print()
 
+	status = sy2dll.sy2SetParsingErrorCallback(handle, errorCallback, None);
+	status = sy2dll.sy2SetParsingProgressCallback(handle, parsingProgressCallback, None)
 	status = sy2dll.sy2AddParsedNodeCallback(handle, T_Sy2NodeType.SY2_COMMAND, parsedNodeCallback, None)
 
 	# parsing

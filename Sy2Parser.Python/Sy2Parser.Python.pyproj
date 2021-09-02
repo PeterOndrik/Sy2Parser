@@ -8,12 +8,12 @@
     <StartupFile>reading_during_parsing.py</StartupFile>
     <SearchPath>
     </SearchPath>
-    <WorkingDirectory>..\bin\Release\Win32</WorkingDirectory>
+    <WorkingDirectory>..\bin\Release\x64</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>Sy2Parser.Python</Name>
     <RootNamespace>Sy2Parser.Python.ConsoleApp</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
-    <InterpreterId>Global|PythonCore|3.7-32</InterpreterId>
+    <InterpreterId>MSBuild|x64|$(MSBuildProjectFullPath)</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,6 +34,17 @@
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="Global|PythonCore|3.7-32" />
+  </ItemGroup>
+  <ItemGroup>
+    <Interpreter Include="x64\">
+      <Id>x64</Id>
+      <Version>3.7</Version>
+      <Description>x64 (Python 3.7 (64-bit))</Description>
+      <InterpreterPath>Scripts\python.exe</InterpreterPath>
+      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
+      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
+      <Architecture>X64</Architecture>
+    </Interpreter>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

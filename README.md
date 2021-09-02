@@ -88,9 +88,9 @@ void resetIndent(char *indent)
   memset(indent, 0, INDENT_SIZE);
 }
 
-void SY2PARSER_API_CALL errorCallback(Sy2ParserHandle handle, unsigned int line, unsigned int column, const char *message, void *callbackContext)
+void SY2PARSER_API_CALL errorCallback(Sy2ParserHandle handle, unsigned int line, unsigned int column, unsigned int code, const char *message, void *callbackContext)
 {
-  printf("Error: line %u, column %u, message %s\n", line, column, message);
+  printf("Error: line %u, column %u, code 0x%04X, message %s\n", line, column, code, message);
 }
 
 void SY2PARSER_API_CALL progressCallback(Sy2ParserHandle handle, unsigned int progress, void *callbackContext)
@@ -189,9 +189,9 @@ void resetIndent(char *indent)
   memset(indent, 0, INDENT_SIZE);
 }
 
-void SY2PARSER_API_CALL errorCallback(Sy2ParserHandle handle, unsigned int line, unsigned int column, const char *message, void *callbackContext)
+void SY2PARSER_API_CALL errorCallback(Sy2ParserHandle handle, unsigned int line, unsigned int column, unsigned int code, const char *message, void *callbackContext)
 {
-  printf("Error: line %u, column %u, message %s\n", line, column, message);
+  printf("Error: line %u, column %u, code 0x%04X, message %s\n", line, column, code, message);
 }
 
 void SY2PARSER_API_CALL progressCallback(Sy2ParserHandle handle, unsigned int progress, void *callbackContext)
